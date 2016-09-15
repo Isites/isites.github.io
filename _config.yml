@@ -5,7 +5,7 @@ logo: /static/img/avatar.png
 github: https://github.com/isites
 about: ShangHai
 
-baseurl: "https://isites.github.io/"
+baseurl: "https://isites.github.io"
 url: "https://isites.github.io"
 
 disqus_shortname: aboutashu
