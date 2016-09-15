@@ -4,7 +4,7 @@
 		"image": "placeholder.jpg",
 		"url": "#",
 		"date": "Jan 2014",
-		"tags": ["Angular JS","API"]
+		"tags": []
 	},
 	{
 		"name": "Cool project 2",
@@ -18,13 +18,13 @@
 		"image": "placeholder.jpg",
 		"url": "#",
 		"date": "June 2014",
-		"tags": ["HTML","JQuery","PHP"]
+		"tags": []
 	},
 	{
 		"name": "Cool project 4",
 		"image": "placeholder.jpg",
 		"date": "Oct 2016",
-		"tags": ["Android","nodejs"]
+		"tags": []
 	}
 
 ]

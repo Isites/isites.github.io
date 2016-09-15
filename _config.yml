@@ -1,12 +1,12 @@
-title: Isites Wxu
+title: Wxu
 description: My Personal Blog
 author: wxu
 logo: /static/img/avatar.png
 github: https://github.com/isites
-about: Freelance developer
+about: Freelance coder
 
-baseurl: "https://isites.github.io/"
-url: "https://isites.github.io/"
+baseurl: "/"
+url: "https://isites.github.io"
 
 disqus_shortname: aboutashu
 google_analytics: UA-72862926-1
