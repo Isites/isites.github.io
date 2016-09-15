@@ -1,12 +1,12 @@
-title: John Smith
+title: Isites Wxu
 description: My Personal Blog
-author: John Smith
-logo: /hcz-jekyll-blog/static/img/avatar.png
-github: https://github.com/ashutosh2k12
+author: wxu
+logo: /static/img/avatar.png
+github: https://github.com/isites
 about: Freelance developer
 
-baseurl: "http://aboutashu.com/hcz-jekyll-blog"
-url: "http://aboutashu.com/hcz-jekyll-blog"
+baseurl: "https://isites.github.io/"
+url: "https://isites.github.io/"
 
 disqus_shortname: aboutashu
 google_analytics: UA-72862926-1
