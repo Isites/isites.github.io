@@ -1,5 +1,5 @@
 ---
-layout: posts_by_category
+layout: page
 title: About
 permalink: /about/
 ---
