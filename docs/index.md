@@ -1,5 +1,0 @@
-# Java
-
-# Android
-
-# Bash
