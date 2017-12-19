@@ -140,4 +140,4 @@ db.mycol.find({},{"title":1,_id:0})
 -- limit, 如果
 db.COLLECTION_NAME.find().limit(NUMBER)
 ```
-
+[参考](http://www.yiibai.com/mongodb/mongodb_quick_guide.html)
