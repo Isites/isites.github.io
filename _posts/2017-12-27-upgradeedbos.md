@@ -1,3 +1,9 @@
+---
+layout: post
+title: aws rds维护
+categories: 运维
+---
+
 ### Amazon RDS维护
 
 Amazon RDS会定期对Amazon RDS资源执行维护. 维护最常设计对数据库实例或数据库集群的基础操作系统(os)的更新. 针对操作系统的大多数更新通常是因为安全问题而必须尽快进行的
