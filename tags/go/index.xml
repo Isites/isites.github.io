@@ -23,5 +23,32 @@
 上面仅是IPv4的不同表现方式，IPv6的地址也有三种不同表示方式。而这三种表现方式又可以有不同的写法。下面以IPv6中的回环地址0:0:0:0:0:0:0:1为例。</description>
     </item>
     
+    <item>
+      <title>码了2000多行代码就是为了讲清楚TLS握手流程（续）</title>
+      <link>https://isites.github.io/timeline/gotls1.2/</link>
+      <pubDate>Sun, 13 Dec 2020 23:47:48 +0800</pubDate>
+      
+      <guid>https://isites.github.io/timeline/gotls1.2/</guid>
+      <description>在“码了2000多行代码就是为了讲清楚TLS握手流程”这一篇文章的最后挖了一个坑，今天这篇文章就是为了填坑而来，因此本篇主要分析TLS1.2的握手流程。
+在写前一篇文章时，笔者的Demo只支持解析TLS1.3握手流程中发送的消息，写本篇时，笔者的Demo已经可以解析TLS1.x握手流程中的消息，有兴趣的读者请至文末获取Demo源码。
+结论先行 为保证各位读者对TLS1.2的握手流程有一个大概的框架，本篇依旧结论先行。
+单向认证 单向认证客户端不需要证书，客户端验证服务端证书合法即可访问。
+下面是笔者运行Demo打印的调试信息：
+根据调试信息知，TLS1.2单向认证中总共收发数据四次，Client和Server从这四次数据中分别读取不同的信息以达到握手的目的。
+笔者将调试信息转换为下述时序图，以方便各位读者理解。
+双向认证 双向认证不仅服务端要有证书，客户端也需要证书，只有客户端和服务端证书均合法才可继续访问（笔者的Demo如何开启双向认证请参考前一篇文章中HTTPS双向认证部分）。
+下面是笔者运行Demo打印的调试信息：
+同单向认证一样，笔者将调试信息转换为下述时序图。
+双向认证和单向认证相比，Server发消息给Client时会额外发送一个certificateRequestMsg消息，Client收到此消息后会将证书信息（certificateMsg）和签名信息（certificateVerifyMsg）发送给Server。
+双向认证中，Client和Server发送的消息变多了，但是总的数据收发仍然只有四次。
+总结 1、单向认证和双向认证中，总的数据收发仅四次（比TLS1.3多一次数据收发），单次发送的数据中包含一个或者多个消息。
+2、TLS1.2中除了finishedMsg其余消息均未加密。
+3、在TLS1.2中，ChangeCipherSpec消息之后的所有数据均会做加密处理，它的作用在TLS1.2中更像是一个开启加密的开关（TLS1.3中忽略此消息，并不做任何处理）。
+和TLS1.3的比较 消息格式的变化 对比本篇的时序图和前篇的时序图很容易发现部分消息格式发生了变化。下面是certificateMsg和certificateMsgTLS13的定义：
+// TLS1.2 type certificateMsg struct { raw []byte certificates [][]byte } // TLS1.3 type certificateMsgTLS13 struct { raw []byte certificate tls.Certificate ocspStapling bool scts bool } 其他消息的定义笔者就不一一列举了，这里仅列出格式发生变化的消息。
+   TLS1.2 TLS1.3     certificateRequestMsg certificateRequestMsgTLS13   certificateMsg certificateMsgTLS13    消息类型的变化 TLS1.2和TLS1.3有相同的消息类型也有各自独立的消息类型。下面是笔者例子中TLS1.2和TLS1.3各自独有的消息类型：
+   TLS1.</description>
+    </item>
+    
   </channel>
 </rss>

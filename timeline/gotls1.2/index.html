@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="author" content="">
+<meta name="description" content="在“码了2000多行代码就是为了讲清楚TLS握手流程”这一篇文章的最后挖了一个坑，今天这篇文章就是为了填坑而来，因此本篇主要分析TLS1.2的握手流程。
+在写前一篇文章时，笔者的Demo只支持解析TLS1.3握手流程中发送的消息，写本篇时，笔者的Demo已经可以解析TLS1.x握手流程中的消息，有兴趣的读者请至文末获取Demo源码。
+结论先行 为保证各位读者对TLS1.2的握手流程有一个大概的框架，本篇依旧结论先行。
+单向认证 单向认证客户端不需要证书，客户端验证服务端证书合法即可访问。
+下面是笔者运行Demo打印的调试信息：
+根据调试信息知，TLS1.2单向认证中总共收发数据四次，Client和Server从这四次数据中分别读取不同的信息以达到握手的目的。
+笔者将调试信息转换为下述时序图，以方便各位读者理解。
+双向认证 双向认证不仅服务端要有证书，客户端也需要证书，只有客户端和服务端证书均合法才可继续访问（笔者的Demo如何开启双向认证请参考前一篇文章中HTTPS双向认证部分）。
+下面是笔者运行Demo打印的调试信息：
+同单向认证一样，笔者将调试信息转换为下述时序图。
+双向认证和单向认证相比，Server发消息给Client时会额外发送一个certificateRequestMsg消息，Client收到此消息后会将证书信息（certificateMsg）和签名信息（certificateVerifyMsg）发送给Server。
+双向认证中，Client和Server发送的消息变多了，但是总的数据收发仍然只有四次。
+总结 1、单向认证和双向认证中，总的数据收发仅四次（比TLS1.3多一次数据收发），单次发送的数据中包含一个或者多个消息。
+2、TLS1.2中除了finishedMsg其余消息均未加密。
+3、在TLS1.2中，ChangeCipherSpec消息之后的所有数据均会做加密处理，它的作用在TLS1.2中更像是一个开启加密的开关（TLS1.3中忽略此消息，并不做任何处理）。
+和TLS1.3的比较 消息格式的变化 对比本篇的时序图和前篇的时序图很容易发现部分消息格式发生了变化。下面是certificateMsg和certificateMsgTLS13的定义：
+// TLS1.2 type certificateMsg struct { raw []byte certificates [][]byte } // TLS1.3 type certificateMsgTLS13 struct { raw []byte certificate tls.Certificate ocspStapling bool scts bool } 其他消息的定义笔者就不一一列举了，这里仅列出格式发生变化的消息。
+   TLS1.2 TLS1.3     certificateRequestMsg certificateRequestMsgTLS13   certificateMsg certificateMsgTLS13    消息类型的变化 TLS1.2和TLS1.3有相同的消息类型也有各自独立的消息类型。下面是笔者例子中TLS1.2和TLS1.3各自独有的消息类型：
+   TLS1." />
+<meta name="keywords" content=", Go, 网络篇" />
+<meta name="robots" content="noodp" />
+<meta name="theme-color" content="" />
+<link rel="canonical" href="https://isites.github.io/timeline/gotls1.2/" />
+
+
+    <title>
+        
+            码了2000多行代码就是为了讲清楚TLS握手流程（续） :: 新世界杂货铺 
+        
+    </title>
+
+
+
+<link href="https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/3.2.1/css/flag-icon.min.css" rel="stylesheet"
+    type="text/css"> 
+
+
+
+
+<link rel="stylesheet" href="/main.805b1025016494ee5fd67b55b8ecd5e2b7c4a9f0bdda42e300c62b85ddfef68f.css">
+
+
+  
+
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest">
+    <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#252627">
+    <link rel="shortcut icon" href="/favicon.ico">
+    <meta name="msapplication-TileColor" content="#252627">
+    <meta name="theme-color" content="#252627">
+
+
+
+<meta itemprop="name" content="码了2000多行代码就是为了讲清楚TLS握手流程（续）">
+<meta itemprop="description" content="在“码了2000多行代码就是为了讲清楚TLS握手流程”这一篇文章的最后挖了一个坑，今天这篇文章就是为了填坑而来，因此本篇主要分析TLS1.2的握手流程。
+在写前一篇文章时，笔者的Demo只支持解析TLS1.3握手流程中发送的消息，写本篇时，笔者的Demo已经可以解析TLS1.x握手流程中的消息，有兴趣的读者请至文末获取Demo源码。
+结论先行 为保证各位读者对TLS1.2的握手流程有一个大概的框架，本篇依旧结论先行。
+单向认证 单向认证客户端不需要证书，客户端验证服务端证书合法即可访问。
+下面是笔者运行Demo打印的调试信息：
+根据调试信息知，TLS1.2单向认证中总共收发数据四次，Client和Server从这四次数据中分别读取不同的信息以达到握手的目的。
+笔者将调试信息转换为下述时序图，以方便各位读者理解。
+双向认证 双向认证不仅服务端要有证书，客户端也需要证书，只有客户端和服务端证书均合法才可继续访问（笔者的Demo如何开启双向认证请参考前一篇文章中HTTPS双向认证部分）。
+下面是笔者运行Demo打印的调试信息：
+同单向认证一样，笔者将调试信息转换为下述时序图。
+双向认证和单向认证相比，Server发消息给Client时会额外发送一个certificateRequestMsg消息，Client收到此消息后会将证书信息（certificateMsg）和签名信息（certificateVerifyMsg）发送给Server。
+双向认证中，Client和Server发送的消息变多了，但是总的数据收发仍然只有四次。
+总结 1、单向认证和双向认证中，总的数据收发仅四次（比TLS1.3多一次数据收发），单次发送的数据中包含一个或者多个消息。
+2、TLS1.2中除了finishedMsg其余消息均未加密。
+3、在TLS1.2中，ChangeCipherSpec消息之后的所有数据均会做加密处理，它的作用在TLS1.2中更像是一个开启加密的开关（TLS1.3中忽略此消息，并不做任何处理）。
+和TLS1.3的比较 消息格式的变化 对比本篇的时序图和前篇的时序图很容易发现部分消息格式发生了变化。下面是certificateMsg和certificateMsgTLS13的定义：
+// TLS1.2 type certificateMsg struct { raw []byte certificates [][]byte } // TLS1.3 type certificateMsgTLS13 struct { raw []byte certificate tls.Certificate ocspStapling bool scts bool } 其他消息的定义笔者就不一一列举了，这里仅列出格式发生变化的消息。
+   TLS1.2 TLS1.3     certificateRequestMsg certificateRequestMsgTLS13   certificateMsg certificateMsgTLS13    消息类型的变化 TLS1.2和TLS1.3有相同的消息类型也有各自独立的消息类型。下面是笔者例子中TLS1.2和TLS1.3各自独有的消息类型：
+   TLS1.">
+<meta itemprop="datePublished" content="2020-12-13T23:47:48+08:00" />
+<meta itemprop="dateModified" content="2020-12-13T23:47:48+08:00" />
+<meta itemprop="wordCount" content="203">
+
+
+
+<meta itemprop="keywords" content="Go,网络篇," />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="码了2000多行代码就是为了讲清楚TLS握手流程（续）"/>
+<meta name="twitter:description" content="在“码了2000多行代码就是为了讲清楚TLS握手流程”这一篇文章的最后挖了一个坑，今天这篇文章就是为了填坑而来，因此本篇主要分析TLS1.2的握手流程。
+在写前一篇文章时，笔者的Demo只支持解析TLS1.3握手流程中发送的消息，写本篇时，笔者的Demo已经可以解析TLS1.x握手流程中的消息，有兴趣的读者请至文末获取Demo源码。
+结论先行 为保证各位读者对TLS1.2的握手流程有一个大概的框架，本篇依旧结论先行。
+单向认证 单向认证客户端不需要证书，客户端验证服务端证书合法即可访问。
+下面是笔者运行Demo打印的调试信息：
+根据调试信息知，TLS1.2单向认证中总共收发数据四次，Client和Server从这四次数据中分别读取不同的信息以达到握手的目的。
+笔者将调试信息转换为下述时序图，以方便各位读者理解。
+双向认证 双向认证不仅服务端要有证书，客户端也需要证书，只有客户端和服务端证书均合法才可继续访问（笔者的Demo如何开启双向认证请参考前一篇文章中HTTPS双向认证部分）。
+下面是笔者运行Demo打印的调试信息：
+同单向认证一样，笔者将调试信息转换为下述时序图。
+双向认证和单向认证相比，Server发消息给Client时会额外发送一个certificateRequestMsg消息，Client收到此消息后会将证书信息（certificateMsg）和签名信息（certificateVerifyMsg）发送给Server。
+双向认证中，Client和Server发送的消息变多了，但是总的数据收发仍然只有四次。
+总结 1、单向认证和双向认证中，总的数据收发仅四次（比TLS1.3多一次数据收发），单次发送的数据中包含一个或者多个消息。
+2、TLS1.2中除了finishedMsg其余消息均未加密。
+3、在TLS1.2中，ChangeCipherSpec消息之后的所有数据均会做加密处理，它的作用在TLS1.2中更像是一个开启加密的开关（TLS1.3中忽略此消息，并不做任何处理）。
+和TLS1.3的比较 消息格式的变化 对比本篇的时序图和前篇的时序图很容易发现部分消息格式发生了变化。下面是certificateMsg和certificateMsgTLS13的定义：
+// TLS1.2 type certificateMsg struct { raw []byte certificates [][]byte } // TLS1.3 type certificateMsgTLS13 struct { raw []byte certificate tls.Certificate ocspStapling bool scts bool } 其他消息的定义笔者就不一一列举了，这里仅列出格式发生变化的消息。
+   TLS1.2 TLS1.3     certificateRequestMsg certificateRequestMsgTLS13   certificateMsg certificateMsgTLS13    消息类型的变化 TLS1.2和TLS1.3有相同的消息类型也有各自独立的消息类型。下面是笔者例子中TLS1.2和TLS1.3各自独有的消息类型：
+   TLS1."/>
+
+
+
+
+
+
+
+    <meta property="article:published_time" content="2020-12-13 23:47:48 &#43;0800 CST" />
+
+
+
+
+
+
+
+
+    </head>
+
+    <body class="">
+        <div class="container">
+            <header class="header">
+    <span class="header__inner">
+        <a href="https://isites.github.io/" style="text-decoration: none;">
+    <div class="logo">
+        
+            <span class="logo__mark">新世界杂货铺</span>
+            <span class="logo__text"></span>
+            <span class="logo__cursor" style=
+                  "
+                   
+                   ">
+            </span>
+        
+    </div>
+</a>
+
+
+        <span class="header__right">
+             
+            <span class="theme-toggle unselectable"><svg class="theme-toggler" width="24" height="24" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <path d="M22 41C32.4934 41 41 32.4934 41 22C41 11.5066 32.4934 3 22
+  3C11.5066 3 3 11.5066 3 22C3 32.4934 11.5066 41 22 41ZM7 22C7
+  13.7157 13.7157 7 22 7V37C13.7157 37 7 30.2843 7 22Z"/>
+</svg>
+</span>
+        </span>
+    </span>
+</header>
+
+
+            <div class="content">
+                
+  <main class="post">
+
+    <div class="post-info">
+      <p>
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-clock">
+          <circle cx="12" cy="12" r="10"></circle>
+          <polyline points="12 6 12 12 16 14"></polyline>
+        </svg>
+        One minute
+
+        
+      </p>
+    </div>
+
+    <article>
+      <h1 class="post-title">
+        <a href="https://isites.github.io/timeline/gotls1.2/">码了2000多行代码就是为了讲清楚TLS握手流程（续）</a>
+      </h1>
+        <hr />
+        <aside id="toc">
+          <div class="toc-title">Table of Contents</div>
+          <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#结论先行">结论先行</a></li>
+        <li><a href="#和tls13的比较">和TLS1.3的比较</a></li>
+        <li><a href="#tls11和tls10不支持http2">TLS1.1和TLS1.0不支持HTTP2</a></li>
+        <li><a href="#写在最后">写在最后</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+        </aside>
+        <hr />
+
+      
+
+      <div class="post-content">
+        <p>在“<a href="https://mp.weixin.qq.com/s/ALmouugbrCHrNbyk3OTtSQ">码了2000多行代码就是为了讲清楚TLS握手流程</a>”这一篇文章的最后挖了一个坑，今天这篇文章就是为了填坑而来，因此本篇主要分析TLS1.2的握手流程。</p>
+<p>在写前一篇文章时，笔者的Demo只支持解析TLS1.3握手流程中发送的消息，写本篇时，笔者的Demo已经可以解析TLS1.x握手流程中的消息，有兴趣的读者请至文末获取Demo源码。</p>
+<h3 id="结论先行">结论先行</h3>
+<p>为保证各位读者对TLS1.2的握手流程有一个大概的框架，本篇依旧结论先行。</p>
+<h4 id="单向认证">单向认证</h4>
+<p>单向认证客户端不需要证书，客户端验证服务端证书合法即可访问。</p>
+<p>下面是笔者运行Demo打印的调试信息：</p>
+<p><img src="https://note.youdao.com/yws/api/personal/file/WEB7b4e407a4d300561e2889311bff03b7f?method=download&amp;shareKey=df9641649e598375a3c8bc5baaa93fe9" alt=""></p>
+<p>根据调试信息知，TLS1.2单向认证中总共收发数据<strong>四次</strong>，Client和Server从这四次数据中分别读取不同的信息以达到握手的目的。</p>
+<p>笔者将调试信息转换为下述时序图，以方便各位读者理解。</p>
+<p><img src="https://note.youdao.com/yws/api/personal/file/WEBe8229b8e38739b1e3cbe114c158d8a98?method=download&amp;shareKey=1a4a0f4fe5bd9d2b9e6406b4575fe312" alt=""></p>
+<h4 id="双向认证">双向认证</h4>
+<p>双向认证不仅服务端要有证书，客户端也需要证书，只有客户端和服务端证书均合法才可继续访问（笔者的Demo如何开启双向认证请参考前一篇文章中HTTPS双向认证部分）。</p>
+<p>下面是笔者运行Demo打印的调试信息：</p>
+<p><img src="https://note.youdao.com/yws/api/personal/file/WEB87df88f5543af04290af0c21dca8c17a?method=download&amp;shareKey=2fec2f1d33ffb7dd40c0b47a19c6eb83" alt=""></p>
+<p>同单向认证一样，笔者将调试信息转换为下述时序图。</p>
+<p><img src="https://note.youdao.com/yws/api/personal/file/WEB7cafa6a349cf1fff0e319767af00dfb1?method=download&amp;shareKey=df90677bde25f8ef809ddd93365759e2" alt=""></p>
+<p>双向认证和单向认证相比，Server发消息给Client时会额外发送一个<code>certificateRequestMsg</code>消息，Client收到此消息后会将证书信息（<code>certificateMsg</code>）和签名信息（<code>certificateVerifyMsg</code>）发送给Server。</p>
+<p>双向认证中，Client和Server发送的消息变多了，但是总的数据收发仍然只有<strong>四次</strong>。</p>
+<h4 id="总结">总结</h4>
+<p>1、单向认证和双向认证中，总的数据收发仅四次（比TLS1.3多一次数据收发），单次发送的数据中包含一个或者多个消息。</p>
+<p>2、TLS1.2中除了<code>finishedMsg</code>其余消息均未加密。</p>
+<p>3、在TLS1.2中，<code>ChangeCipherSpec</code>消息之后的所有数据均会做加密处理，它的作用在TLS1.2中更像是一个开启加密的开关（TLS1.3中忽略此消息，并不做任何处理）。</p>
+<h3 id="和tls13的比较">和TLS1.3的比较</h3>
+<h4 id="消息格式的变化">消息格式的变化</h4>
+<p>对比本篇的时序图和前篇的时序图很容易发现部分消息格式发生了变化。下面是<code>certificateMsg</code>和<code>certificateMsgTLS13</code>的定义：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#75715e">// TLS1.2
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">certificateMsg</span> <span style="color:#66d9ef">struct</span> {
+	<span style="color:#a6e22e">raw</span>          []<span style="color:#66d9ef">byte</span>
+	<span style="color:#a6e22e">certificates</span> [][]<span style="color:#66d9ef">byte</span>
+}
+<span style="color:#75715e">// TLS1.3
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">certificateMsgTLS13</span> <span style="color:#66d9ef">struct</span> {
+	<span style="color:#a6e22e">raw</span>          []<span style="color:#66d9ef">byte</span>
+	<span style="color:#a6e22e">certificate</span>  <span style="color:#a6e22e">tls</span>.<span style="color:#a6e22e">Certificate</span>
+	<span style="color:#a6e22e">ocspStapling</span> <span style="color:#66d9ef">bool</span>
+	<span style="color:#a6e22e">scts</span>         <span style="color:#66d9ef">bool</span>
+}
+</code></pre></div><p>其他消息的定义笔者就不一一列举了，这里仅列出格式发生变化的消息。</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">TLS1.2</th>
+<th style="text-align:left">TLS1.3</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">certificateRequestMsg</td>
+<td style="text-align:left">certificateRequestMsgTLS13</td>
+</tr>
+<tr>
+<td style="text-align:left">certificateMsg</td>
+<td style="text-align:left">certificateMsgTLS13</td>
+</tr>
+</tbody>
+</table>
+<h4 id="消息类型的变化">消息类型的变化</h4>
+<p>TLS1.2和TLS1.3有相同的消息类型也有各自独立的消息类型。下面是笔者例子中TLS1.2和TLS1.3各自独有的消息类型：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">TLS1.2</th>
+<th style="text-align:left">TLS1.3</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">serverKeyExchangeMsg</td>
+<td style="text-align:left">-</td>
+</tr>
+<tr>
+<td style="text-align:left">clientKeyExchangeMsg</td>
+<td style="text-align:left">-</td>
+</tr>
+<tr>
+<td style="text-align:left">serverHelloDoneMsg</td>
+<td style="text-align:left">-</td>
+</tr>
+<tr>
+<td style="text-align:left">-</td>
+<td style="text-align:left">encryptedExtensionsMsg</td>
+</tr>
+</tbody>
+</table>
+<h4 id="消息加密的变化">消息加密的变化</h4>
+<p>前篇中提到，TLS1.3中除了<code>clientHelloMsg</code>和<code>serverHelloMsg</code>其他消息均做了加密处理，且握手期间和应用数据使用不同的密钥加密。</p>
+<p>TLS1.2中仅有<code>finishedMsg</code>做了加密处理，且应用数据也使用该密钥加密。</p>
+<p>TLS1.3会计算两次密钥，Client和Server读取对方的<code>HelloMsg</code>和<code>finishedMsg</code>之后即可计算密钥。</p>
+<blockquote>
+<p>“Client和Server会各自计算两次密钥，计算时机分别是读取到对方的HelloMsg和finishedMsg之后”，这是前篇中的描述，计算时机描述不准确以上面为准。</p>
+</blockquote>
+<p>TLS1.2只计算一次密钥，Client和Server分别收到<code>serverKeyExchangeMsg</code>和<code>clientKeyExchangeMsg</code>之后即可计算密钥，和TLS1.3不同的是TLS1.2密钥计算后并不会立即对接下来发送的数据进行加密，只有当发送/接受<code>ChangeCipherSpec</code>消息后才会对接下来的数据进行加解密。</p>
+<h4 id="生成密钥过程">生成密钥过程</h4>
+<p>TLS1.2和TLS1.3生成密钥的过程还是比较相似的， 下图为Client读取<code>serverKeyExchangeMsg</code>之后的部分处理逻辑：</p>
+<p><img src="https://note.youdao.com/yws/api/personal/file/WEB931699839f1e500f2493ca4854c4443e?method=download&amp;shareKey=ffa6348e50fcedca417a2b9b3f3b2c36" alt=""></p>
+<p>图中<code>X25519</code>是椭圆曲线迪菲-赫尔曼（Elliptic-curve Diffie–Hellman ，缩写为ECDH）密钥交换方案之一，这在前篇已经提到过故本篇不再赘述。</p>
+<p>根据Debug结果，本例中<code>ka.preMasterSecret</code>和TLS1.3中的共享密钥生成逻辑完全一致。不仅如此，在后续的代码分析中，笔者发现TLS1.2也使用了<code>AEAD</code>加密算法对数据进行加解密（AEAD在前篇中已经提到过故本篇不再赘述）。</p>
+<p>下图为笔者Debug结果：</p>
+<p><img src="https://note.youdao.com/yws/api/personal/file/WEB46c9f6e0eebb4d6e53f69bc2715959e1?method=download&amp;shareKey=83cb14cdf13ea7c2968b6f55260741af" alt=""></p>
+<p>图中<code>prefixNonceAEAD</code>即为TLS1.2中AEAD加密算法的一种实现。</p>
+<p>这里需要注意的是TLS1.3也会计算<code>masterSecret</code>。为了方便理解，我们先回顾一下TLS1.3中生成<code>masterSecret</code>的部分源码：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#75715e">// 基于共享密钥派生hs.handshakeSecret
+</span><span style="color:#75715e"></span><span style="color:#a6e22e">hs</span>.<span style="color:#a6e22e">handshakeSecret</span> = <span style="color:#a6e22e">hs</span>.<span style="color:#a6e22e">suite</span>.<span style="color:#a6e22e">extract</span>(<span style="color:#a6e22e">hs</span>.<span style="color:#a6e22e">sharedKey</span>,
+    <span style="color:#a6e22e">hs</span>.<span style="color:#a6e22e">suite</span>.<span style="color:#a6e22e">deriveSecret</span>(<span style="color:#a6e22e">earlySecret</span>, <span style="color:#e6db74">&#34;derived&#34;</span>, <span style="color:#66d9ef">nil</span>))
+<span style="color:#75715e">// 基于hs.handshakeSecret 派生hs.masterSecret
+</span><span style="color:#75715e"></span><span style="color:#a6e22e">hs</span>.<span style="color:#a6e22e">masterSecret</span> = <span style="color:#a6e22e">hs</span>.<span style="color:#a6e22e">suite</span>.<span style="color:#a6e22e">extract</span>(<span style="color:#66d9ef">nil</span>,
+	<span style="color:#a6e22e">hs</span>.<span style="color:#a6e22e">suite</span>.<span style="color:#a6e22e">deriveSecret</span>(<span style="color:#a6e22e">hs</span>.<span style="color:#a6e22e">handshakeSecret</span>, <span style="color:#e6db74">&#34;derived&#34;</span>, <span style="color:#66d9ef">nil</span>))
+</code></pre></div><p>由上易知，TLS1.3先通过共享密钥派生出<code>handshakeSecret</code>，最后通过<code>handshakeSecret</code>派生出<code>masterSecret</code>。与此相比，TLS1.2生成<code>masterSecret</code>仅需一步：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#a6e22e">hs</span>.<span style="color:#a6e22e">masterSecret</span> = <span style="color:#a6e22e">masterFromPreMasterSecret</span>(<span style="color:#a6e22e">c</span>.<span style="color:#a6e22e">vers</span>, <span style="color:#a6e22e">hs</span>.<span style="color:#a6e22e">suite</span>, <span style="color:#a6e22e">preMasterSecret</span>, <span style="color:#a6e22e">hs</span>.<span style="color:#a6e22e">hello</span>.<span style="color:#a6e22e">random</span>, <span style="color:#a6e22e">hs</span>.<span style="color:#a6e22e">serverHello</span>.<span style="color:#a6e22e">random</span>)
+</code></pre></div><p><code>masterFromPreMasterSecret</code>函数的作用是利用<code>HMAC</code>（HMAC在前篇中已经提到故本篇不再赘述）算法对Client和Server的随机数以及共享密钥进行摘要，从而计算得到<code>masterSecret</code>。</p>
+<p><code>masterSecret</code>在后续的过程中并不会用于数据加密，下面笔者带各位读者分别看一下TLS1.3和TLS1.2生成数据加密密钥的过程。</p>
+<p>TLS1.3生成数据加密密钥（以Client计算serverSecret为例）：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#a6e22e">serverSecret</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">hs</span>.<span style="color:#a6e22e">suite</span>.<span style="color:#a6e22e">deriveSecret</span>(<span style="color:#a6e22e">hs</span>.<span style="color:#a6e22e">masterSecret</span>,
+	<span style="color:#a6e22e">serverApplicationTrafficLabel</span>, <span style="color:#a6e22e">hs</span>.<span style="color:#a6e22e">transcript</span>)
+<span style="color:#a6e22e">c</span>.<span style="color:#a6e22e">in</span>.<span style="color:#a6e22e">setTrafficSecret</span>(<span style="color:#a6e22e">hs</span>.<span style="color:#a6e22e">suite</span>, <span style="color:#a6e22e">serverSecret</span>)
+</code></pre></div><p>前篇中提到<code>hs.suite.deriveSecret</code>内部会通过<code>hs.transcript</code>计算出消息摘要从而重新得到一个<code>serverSecret</code>。<code>setTrafficSecret</code>方法内部会对<code>serverSecret</code>计算得到AEAD加密算法所需要的key和iv（初始向量：Initialization vector）。</p>
+<p>因此可知TLS1.3计算密钥和Client/Server生成的随机数无直接关系，而与Client/Server当前收发的所有消息的摘要有关。</p>
+<blockquote>
+<p>补充：
+IV通常是随机或者伪随机的。它和数据加密的密钥一起使用可以增加使用字典攻击的攻击者破解密码的难度。例如，如果加密数据中存在重复的序列，则攻击者可以假定消息中相应的序列也是相同的，而IV就是为了防止密文中出现相应的重复序列。</p>
+<p>参考：</p>
+<p><a href="https://whatis.techtarget.com/definition/initialization-vector-IV">https://whatis.techtarget.com/definition/initialization-vector-IV</a>
+<a href="https://en.wikipedia.org/wiki/Initialization_vector">https://en.wikipedia.org/wiki/Initialization_vector</a></p>
+</blockquote>
+<p>TLS1.2生成数据加密密钥：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#a6e22e">clientMAC</span>, <span style="color:#a6e22e">serverMAC</span>, <span style="color:#a6e22e">clientKey</span>, <span style="color:#a6e22e">serverKey</span>, <span style="color:#a6e22e">clientIV</span>, <span style="color:#a6e22e">serverIV</span> <span style="color:#f92672">:=</span>
+			<span style="color:#a6e22e">keysFromMasterSecret</span>(<span style="color:#a6e22e">tr</span>.<span style="color:#a6e22e">vers</span>, <span style="color:#a6e22e">suite</span>, <span style="color:#a6e22e">p</span>.<span style="color:#a6e22e">masterSecret</span>, <span style="color:#a6e22e">tr</span>.<span style="color:#a6e22e">clientHello</span>.<span style="color:#a6e22e">random</span>, <span style="color:#a6e22e">tr</span>.<span style="color:#a6e22e">serverHello</span>.<span style="color:#a6e22e">random</span>, <span style="color:#a6e22e">suite</span>.<span style="color:#a6e22e">macLen</span>, <span style="color:#a6e22e">suite</span>.<span style="color:#a6e22e">keyLen</span>, <span style="color:#a6e22e">suite</span>.<span style="color:#a6e22e">ivLen</span>)
+<span style="color:#a6e22e">serverCipher</span> = <span style="color:#a6e22e">hs</span>.<span style="color:#a6e22e">suite</span>.<span style="color:#a6e22e">aead</span>(<span style="color:#a6e22e">serverKey</span>, <span style="color:#a6e22e">serverIV</span>)
+<span style="color:#a6e22e">c</span>.<span style="color:#a6e22e">in</span>.<span style="color:#a6e22e">prepareCipherSpec</span>(<span style="color:#a6e22e">c</span>.<span style="color:#a6e22e">vers</span>, <span style="color:#a6e22e">serverCipher</span>, <span style="color:#a6e22e">serverHash</span>)
+</code></pre></div><p>前文中提到<code>masterSecret</code>的生成与Client和Server的随机数有关，而通过<code>keysFromMasterSecret</code>计算AEAD所需的key和iv依旧与随机数有关。</p>
+<p><strong>小结</strong>：</p>
+<p>1、本例中TLS1.2和TLS1.3均使用<code>X25519</code>算法计算共享密钥。</p>
+<p>2、本例中TLS1.2和TLS1.3均使用<code>AEAD</code>进行数据加解密。</p>
+<p>3、TLS1.3通过共享密钥派生两次才得到<code>masterSecret</code>，而TLS1.2以共享密钥、Client和Server的随机数一起计算得到<code>masterSecret</code>。</p>
+<p>4、TLS1.3通过消息的摘要再次计算得到一个数据加密密钥，而TLS1.2直接通过<code>masterSecret</code>计算得到AEAD所需的key和iv。</p>
+<h3 id="tls11和tls10不支持http2">TLS1.1和TLS1.0不支持HTTP2</h3>
+<p>在前面提到本文的例子已经支持解析TLS1.x的握手流程，这个时候笔者突然很好奇浏览器还支持那些版本的TLS协议。</p>
+<p>然后笔者在谷歌浏览器上首先测试了TLS1.1的服务，为了方便测试笔者改造了之前<a href="">服务器推送的案例</a>：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#a6e22e">server</span> <span style="color:#f92672">:=</span> <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">Server</span>{<span style="color:#a6e22e">Addr</span>: <span style="color:#e6db74">&#34;:8080&#34;</span>, <span style="color:#a6e22e">Handler</span>: <span style="color:#66d9ef">nil</span>}
+<span style="color:#a6e22e">server</span>.<span style="color:#a6e22e">TLSConfig</span> = new(<span style="color:#a6e22e">tls</span>.<span style="color:#a6e22e">Config</span>)
+<span style="color:#a6e22e">server</span>.<span style="color:#a6e22e">TLSConfig</span>.<span style="color:#a6e22e">PreferServerCipherSuites</span> = <span style="color:#66d9ef">true</span>
+<span style="color:#a6e22e">server</span>.<span style="color:#a6e22e">TLSConfig</span>.<span style="color:#a6e22e">NextProtos</span> = append(<span style="color:#a6e22e">server</span>.<span style="color:#a6e22e">TLSConfig</span>.<span style="color:#a6e22e">NextProtos</span>, <span style="color:#e6db74">&#34;h2&#34;</span>, <span style="color:#e6db74">&#34;http/1.1&#34;</span>)
+<span style="color:#75715e">// 服务端支持的最大tls版本调整为1.1
+</span><span style="color:#75715e"></span><span style="color:#a6e22e">server</span>.<span style="color:#a6e22e">TLSConfig</span>.<span style="color:#a6e22e">MaxVersion</span> = <span style="color:#a6e22e">tls</span>.<span style="color:#a6e22e">VersionTLS11</span>
+<span style="color:#a6e22e">server</span>.<span style="color:#a6e22e">ListenAndServeTLS</span>(<span style="color:#e6db74">&#34;ca.crt&#34;</span>, <span style="color:#e6db74">&#34;ca.key&#34;</span>)
+</code></pre></div><p>运行Demo后得到如下截图：</p>
+<p><img src="https://note.youdao.com/yws/api/personal/file/WEB2c8bf091ddf6f390b4a56357eb87fd2f?method=download&amp;shareKey=86fc79ae656452976818c5931a504bf8" alt=""></p>
+<p>图中红框部分<code>obsolete</code>的意思笔者也不知，正好学习一波（技术人的英语大概就是这样慢慢积累起来的吧）。</p>
+<p><img src="https://note.youdao.com/yws/api/personal/file/WEBab135aec59a8a4c6f59e89b5e1537686?method=download&amp;shareKey=fd9e75e79f9b3cccacfdc54e38e6193f" alt=""></p>
+<p>这下笔者明白了，TLS1.1已经不被支持所以页面才无法正常访问，然而事实真是如此嘛？</p>
+<p>直到几天后笔者开始写这篇文章时，内心仍是十分疑惑，于是使用了<code>curl</code>命令再次访问。</p>
+<p><img src="https://note.youdao.com/yws/api/personal/file/WEB5f9afe2142e28f4f2094daca63d5e17b?method=download&amp;shareKey=51250aff915a34a94c60da68ad7719cf" alt=""></p>
+<p>图中蓝框部分正是TLS1.1的握手流程，有兴趣的读者可以使用笔者的例子和<code>curl -v</code>命令进行双向验证。</p>
+<p>图中红框部分提示说“HTTP2的数据发送失败”，笔者才恍然大悟，将上述代码作如下微调后页面可正常访问。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#a6e22e">server</span>.<span style="color:#a6e22e">TLSConfig</span>.<span style="color:#a6e22e">NextProtos</span> = append(<span style="color:#a6e22e">server</span>.<span style="color:#a6e22e">TLSConfig</span>.<span style="color:#a6e22e">NextProtos</span>, <span style="color:#e6db74">&#34;http/1.1&#34;</span>)
+</code></pre></div><p>经过笔者的测试，TLS1.0同TLS1.1一样均不支持HTTP2协议，当然这两个协议也不推荐继续使用。</p>
+<h3 id="写在最后">写在最后</h3>
+<p>“纸上得来终觉浅，绝知此事需躬行”。笔者不敢保证把TLS握手流程的每个细节都讲的十分清楚，所以建议各位读者去github克隆代码，然后自己一步一步Debug必然能够加深印象并彻底理解。当然，顺便关注或者star一下这种随手为之的小事，笔者相信各位读者还是十分乐意的～</p>
+<p>最后，衷心希望本文能够对各位读者有一定的帮助。</p>
+<blockquote>
+<p><strong>注</strong>：</p>
+<ol>
+<li>写本文时， 笔者所用go版本为: go1.15.2</li>
+<li>文章中所用完整例子：https://github.com/Isites/go-coder/blob/master/http2/tls/main.go</li>
+</ol>
+</blockquote>
+<p>【关注公众号】</p>
+<p><img src="https://note.youdao.com/yws/api/personal/file/WEBa3ee67b2b867e98cb5c587f4adfa6801?method=download&amp;shareKey=0fbb95d0aec6170b854e7b890d50d559" alt=""></p>
+
+      </div>
+    </article>
+
+    <hr />
+
+    <div class="post-info">
+        <p>
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-tag meta-icon">
+            <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path>
+            <line x1="7" y1="7" x2="7" y2="7"></line>
+          </svg><span class="tag"><a href="https://isites.github.io/tags/go/">Go</a></span><span class="tag"><a href="https://isites.github.io/tags/%E7%BD%91%E7%BB%9C%E7%AF%87/">网络篇</a></span>
+        </p>
+
+      <p>
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file-text">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+          <polyline points="14 2 14 8 20 8"></polyline>
+          <line x1="16" y1="13" x2="8" y2="13"></line>
+          <line x1="16" y1="17" x2="8" y2="17"></line>
+          <polyline points="10 9 9 9 8 9"></polyline>
+        </svg>
+        203 Words
+      </p>
+
+      <p>
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-calendar">
+          <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+          <line x1="16" y1="2" x2="16" y2="6"></line>
+          <line x1="8" y1="2" x2="8" y2="6"></line>
+          <line x1="3" y1="10" x2="21" y2="10"></line>
+        </svg>
+        2020-12-13 23:47 &#43;0800
+      </p>
+ 
+    </div>
+
+    
+      <div class="pagination">
+        <div class="pagination__title">
+          <span class="pagination__title-h"></span>
+          <hr />
+        </div>
+
+        <div class="pagination__buttons">
+          
+            <span class="button previous">
+              <a href="https://isites.github.io/timeline/go-ssrf/">
+                <span class="button__icon">←</span>
+                <span class="button__text">Go中的SSRF攻防战</span>
+              </a>
+            </span>
+          
+
+          
+        </div>
+      </div>
+    
+
+
+    
+
+  </main>
+
+            </div>
+
+            
+                <footer class="footer">
+    <div class="footer__inner">
+        <div class="footer__content">
+            <span>&copy; 2021</span>
+            
+             
+        </div>
+    </div> 
+</footer>
+<script type="text/javascript">
+    $(function(){
+
+  window.sr = ScrollReveal();
+
+  if ($(window).width() < 768) {
+
+    if ($('.timeline-content').hasClass('js--fadeInLeft')) {
+        $('.timeline-content').removeClass('js--fadeInLeft').addClass('js--fadeInRight');
+    }
+
+    sr.reveal('.js--fadeInRight', {
+        origin: 'right',
+        distance: '300px',
+        easing: 'ease-in-out',
+        duration: 800,
+      });
+
+  } else {
+    
+    sr.reveal('.js--fadeInLeft', {
+        origin: 'left',
+        distance: '300px',
+          easing: 'ease-in-out',
+        duration: 800,
+      });
+
+      sr.reveal('.js--fadeInRight', {
+        origin: 'right',
+        distance: '300px',
+        easing: 'ease-in-out',
+        duration: 800,
+      });
+
+  }
+  
+  sr.reveal('.js--fadeInLeft', {
+        origin: 'left',
+        distance: '300px',
+          easing: 'ease-in-out',
+        duration: 800,
+      });
+
+      sr.reveal('.js--fadeInRight', {
+        origin: 'right',
+        distance: '300px',
+        easing: 'ease-in-out',
+        duration: 800,
+      });
+
+
+});
+
+</script>
+            
+        </div>
+
+        
+
+
+
+
+<script type="text/javascript" src="/bundle.min.dc716e9092c9820b77f96da294d0120aeeb189b5bcea9752309ebea27fd53bbe6b13cffb2aca8ecf32525647ceb7001f76091de4199ac5a3caa432c070247f5b.js" integrity="sha512-3HFukJLJggt3&#43;W2ilNASCu6xibW86pdSMJ6&#43;on/VO75rE8/7KsqOzzJSVkfOtwAfdgkd5BmaxaPKpDLAcCR/Ww=="></script>
+
+
+
+    </body>
+</html>
