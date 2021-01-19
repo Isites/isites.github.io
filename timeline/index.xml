@@ -1,0 +1,306 @@
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+    <channel>
+        <title>Timelines on 新世界杂货铺</title>
+        <link>https://isites.github.io/timeline/</link>
+        <description>Recent content in Timelines on 新世界杂货铺</description>
+        <generator>Hugo -- gohugo.io</generator>
+        <language>en-us</language>
+        <lastBuildDate>Tue, 19 Jan 2021 20:30:38 +0800</lastBuildDate>
+        <atom:link href="https://isites.github.io/timeline/index.xml" rel="self" type="application/rss+xml" />
+        
+        <item>
+            <title>Go中的SSRF攻防战</title>
+            <link>https://isites.github.io/timeline/go-ssrf/</link>
+            <pubDate>Tue, 19 Jan 2021 20:30:38 +0800</pubDate>
+            
+            <guid>https://isites.github.io/timeline/go-ssrf/</guid>
+            <description>写在最前面 “年年岁岁花相似，岁岁年年人不同”，没有什么是永恒的，很多东西都将成为过去式。比如，我以前在文章中自称“笔者”，细细想来这个称呼还是有一定的距离感，经过一番深思熟虑后，我打算将文章中的自称改为“老许”。
+关于自称，老许就不扯太远了，下面还是回到本篇的主旨。
+什么是SSRF SSRF英文全拼为Server Side Request Forgery，翻译为服务端请求伪造。攻击者在未能取得服务器权限时，利用服务器漏洞以服务器的身份发送一条构造好的请求给服务器所在内网。关于内网资源的访问控制，想必大家心里都有数。
+上面这个说法如果不好懂，那老许就直接举一个实际例子。现在很多写作平台都支持通过URL的方式上传图片，如果服务器对URL校验不严格，此时就为恶意攻击者提供了访问内网资源的可能。
+“千里之堤，溃于蚁穴”，任何可能造成风险的漏洞我们程序员都不应忽视，而且这类漏洞很有可能会成为别人绩效的垫脚石。为了不成为垫脚石，下面老许就和各位读者一起看一下SSRF的攻防回合。
+回合一：千变万化的内网地址 为什么用“千变万化”这个词？老许先不回答，请各位读者耐心往下看。下面，老许用182.61.200.7（www.baidu.com的一个IP地址）这个IP和各位读者一起复习一下IPv4的不同表示方式。
+   格式 值 描述     点分十进制 182.61.200.7 常规表现方式   点分八进制 0266.075.0310.07 每个字节被单独转换为八进制   点分十六进制 0xb6.0x3d.0xc8.0x7 每个字节被单独转换为十六进制   十进制 3057502215 用十进制写出的32位整数   八进制 026617344007 用八进制写出32位整数   十六进制 0xb63dc807 用十六进制写出32位整数   点分混合制（4） 182.0x3d.0310.7等 点分格式中，每个字节都可用任意的进制表达   点分混合制（3） 182.0x3d.0144007等 将后面16位用八进制表示   点分混合制（2） 182.4048903等 将后面24为用10进制表示    注意⚠️：点分混合制中，以点分割地每一部分均可以写作不同的进制（仅限于十、八和十六进制）。
+上面仅是IPv4的不同表现方式，IPv6的地址也有三种不同表示方式。而这三种表现方式又可以有不同的写法。下面以IPv6中的回环地址0:0:0:0:0:0:0:1为例。</description>
+            <content type="html"><![CDATA[<h3 id="写在最前面">写在最前面</h3>
+<p>“年年岁岁花相似，岁岁年年人不同”，没有什么是永恒的，很多东西都将成为过去式。比如，我以前在文章中自称“笔者”，细细想来这个称呼还是有一定的距离感，经过一番深思熟虑后，我打算将文章中的自称改为“老许”。</p>
+<p>关于自称，老许就不扯太远了，下面还是回到本篇的主旨。</p>
+<h3 id="什么是ssrf">什么是SSRF</h3>
+<p>SSRF英文全拼为<code>Server Side Request Forgery</code>，翻译为服务端请求伪造。攻击者在未能取得服务器权限时，利用服务器漏洞以服务器的身份发送一条构造好的请求给服务器所在内网。关于内网资源的访问控制，想必大家心里都有数。</p>
+<p><img src="https://note.youdao.com/yws/api/personal/file/WEB5e3f093a7664785b0c96e4d4a4fdd095?method=download&amp;shareKey=30bddd4078d8dbe0f8bd62c34814ad94" alt=""></p>
+<p>上面这个说法如果不好懂，那老许就直接举一个实际例子。现在很多写作平台都支持通过URL的方式上传图片，如果服务器对URL校验不严格，此时就为恶意攻击者提供了访问内网资源的可能。</p>
+<p>“千里之堤，溃于蚁穴”，任何可能造成风险的漏洞我们程序员都不应忽视，而且这类漏洞很有可能会成为别人绩效的垫脚石。为了不成为垫脚石，下面老许就和各位读者一起看一下SSRF的攻防回合。</p>
+<h3 id="回合一千变万化的内网地址">回合一：千变万化的内网地址</h3>
+<p>为什么用“千变万化”这个词？老许先不回答，请各位读者耐心往下看。下面，老许用<code>182.61.200.7</code>（www.baidu.com的一个IP地址）这个IP和各位读者一起复习一下IPv4的不同表示方式。</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">格式</th>
+<th style="text-align:left">值</th>
+<th style="text-align:left">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">点分十进制</td>
+<td style="text-align:left">182.61.200.7</td>
+<td style="text-align:left">常规表现方式</td>
+</tr>
+<tr>
+<td style="text-align:left">点分八进制</td>
+<td style="text-align:left">0266.075.0310.07</td>
+<td style="text-align:left">每个字节被单独转换为八进制</td>
+</tr>
+<tr>
+<td style="text-align:left">点分十六进制</td>
+<td style="text-align:left">0xb6.0x3d.0xc8.0x7</td>
+<td style="text-align:left">每个字节被单独转换为十六进制</td>
+</tr>
+<tr>
+<td style="text-align:left">十进制</td>
+<td style="text-align:left">3057502215</td>
+<td style="text-align:left">用十进制写出的32位整数</td>
+</tr>
+<tr>
+<td style="text-align:left">八进制</td>
+<td style="text-align:left">026617344007</td>
+<td style="text-align:left">用八进制写出32位整数</td>
+</tr>
+<tr>
+<td style="text-align:left">十六进制</td>
+<td style="text-align:left">0xb63dc807</td>
+<td style="text-align:left">用十六进制写出32位整数</td>
+</tr>
+<tr>
+<td style="text-align:left">点分混合制（4）</td>
+<td style="text-align:left">182.0x3d.0310.7等</td>
+<td style="text-align:left">点分格式中，每个字节都可用任意的进制表达</td>
+</tr>
+<tr>
+<td style="text-align:left">点分混合制（3）</td>
+<td style="text-align:left">182.0x3d.0144007等</td>
+<td style="text-align:left">将后面16位用八进制表示</td>
+</tr>
+<tr>
+<td style="text-align:left">点分混合制（2）</td>
+<td style="text-align:left">182.4048903等</td>
+<td style="text-align:left">将后面24为用10进制表示</td>
+</tr>
+</tbody>
+</table>
+<p><strong>注意⚠️</strong>：点分混合制中，以点分割地每一部分均可以写作不同的进制（仅限于十、八和十六进制）。</p>
+<p>上面仅是IPv4的不同表现方式，IPv6的地址也有三种不同表示方式。而这三种表现方式又可以有不同的写法。下面以IPv6中的回环地址<code>0:0:0:0:0:0:0:1</code>为例。</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">格式</th>
+<th style="text-align:left">值</th>
+<th style="text-align:left">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">冒分十六进制表示法</td>
+<td style="text-align:left">0:0:0:0:0:0:0:1</td>
+<td style="text-align:left">格式为X:X:X:X:X:X:X:X，其中每个X表示地址中的16b，每个X的前导0是可以省略</td>
+</tr>
+<tr>
+<td style="text-align:left">0位压缩表示法</td>
+<td style="text-align:left">::1</td>
+<td style="text-align:left">连续的一段0可以压缩为“::”，但”::”只能出现一次</td>
+</tr>
+<tr>
+<td style="text-align:left">内嵌IPv4地址表示法</td>
+<td style="text-align:left">0:0:0:0:0:0:0.0.0.1</td>
+<td style="text-align:left">X:X:X:X:X:X:d.d.d.d（前96b使用冒分十六进制，最后32b地址则使用IPv4的点分十进制表示）</td>
+</tr>
+</tbody>
+</table>
+<p><strong>注意⚠️</strong>：冒分十六进制表示法中每个X的前导0是可以省略的，那么我可以部分省略，部分不省略，从而将一个IPv6地址写出不同的表现形式。0位压缩表示法和内嵌IPv4地址表示法同理也可以将一个IPv6地址写出不同的表现形式。</p>
+<p>讲了这么多，老许已经无法统计一个IP可以有多少种不同的写法，麻烦数学好的算一下。</p>
+<p>内网IP你以为到这儿就完了嘛？当然不！不知道各位读者有没有听过<code>xip.io</code>这个域名。<code>xip</code>可以帮你做自定义的DNS解析，并且可以解析到任意IP地址（包括内网）。</p>
+<p><img src="https://note.youdao.com/yws/api/personal/file/WEB85b07b5da343c8b1be8be6bdd19869f5?method=download&amp;shareKey=a3ffcab0e1c03fbfa6383c5d736f3ea4" alt=""></p>
+<p>我们通过<code>xip</code>提供的域名解析，还可以将内网IP通过域名的方式进行访问。</p>
+<p>关于内网IP的访问到这儿仍将继续！搞过Basic验证的应该都知道，可以通过<code>http://user:passwd@hostname/</code>进行资源访问。如果攻击者换一种写法或许可以绕过部分不够严谨的逻辑，如下所示。</p>
+<p><img src="https://note.youdao.com/yws/api/personal/file/WEBac6328b4d92be511501ea6d4d2a7042d?method=download&amp;shareKey=86a8308849c419d602d621b2bab1c93d" alt=""></p>
+<p>关于内网地址，老许掏空了所有的知识储备总结出上述内容，因此老许说一句千变万化的内网地址不过分吧！</p>
+<p>此时此刻，老许只想问一句，当恶意攻击者用这些不同表现形式的内网地址进行图片上传时，你怎么将其识别出来并拒绝访问。不会真的有大佬用正则表达式完成上述过滤吧，如果有请留言告诉我让小弟学习一下。</p>
+<p>花样百出的内网地址我们已经基本了解，那么现在的问题是怎么将其转为一个我们可以进行判断的IP。总结上面的内网地址可分为三类：一、本身就是IP地址，仅表现形式不统一；二、一个指向内网IP的域名；三、一个包含Basic验证信息和内网IP的地址。根据这三类特征，在发起请求之前按照如下步骤可以识别内网地址并拒绝访问。</p>
+<ol>
+<li>解析出地址中的HostName。</li>
+<li>发起DNS解析，获得IP。</li>
+<li>判断IP是否是内网地址。</li>
+</ol>
+<p>上述步骤中关于内网地址的判断，请不要忽略IPv6的回环地址和IPv6的唯一本地地址。下面是老许判断IP是否为内网IP的逻辑。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#75715e">// IsLocalIP 判断是否是内网ip
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">IsLocalIP</span>(<span style="color:#a6e22e">ip</span> <span style="color:#a6e22e">net</span>.<span style="color:#a6e22e">IP</span>) <span style="color:#66d9ef">bool</span> {
+	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">ip</span> <span style="color:#f92672">==</span> <span style="color:#66d9ef">nil</span> {
+		<span style="color:#66d9ef">return</span> <span style="color:#66d9ef">false</span>
+	}
+	<span style="color:#75715e">// 判断是否是回环地址, ipv4时是127.0.0.1；ipv6时是::1
+</span><span style="color:#75715e"></span>	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">ip</span>.<span style="color:#a6e22e">IsLoopback</span>() {
+		<span style="color:#66d9ef">return</span> <span style="color:#66d9ef">true</span>
+	}
+	<span style="color:#75715e">// 判断ipv4是否是内网
+</span><span style="color:#75715e"></span>	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">ip4</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">ip</span>.<span style="color:#a6e22e">To4</span>(); <span style="color:#a6e22e">ip4</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+		<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">ip4</span>[<span style="color:#ae81ff">0</span>] <span style="color:#f92672">==</span> <span style="color:#ae81ff">10</span> <span style="color:#f92672">||</span> <span style="color:#75715e">// 10.0.0.0/8
+</span><span style="color:#75715e"></span>			(<span style="color:#a6e22e">ip4</span>[<span style="color:#ae81ff">0</span>] <span style="color:#f92672">==</span> <span style="color:#ae81ff">172</span> <span style="color:#f92672">&amp;&amp;</span> <span style="color:#a6e22e">ip4</span>[<span style="color:#ae81ff">1</span>] <span style="color:#f92672">&gt;=</span> <span style="color:#ae81ff">16</span> <span style="color:#f92672">&amp;&amp;</span> <span style="color:#a6e22e">ip4</span>[<span style="color:#ae81ff">1</span>] <span style="color:#f92672">&lt;=</span> <span style="color:#ae81ff">31</span>) <span style="color:#f92672">||</span> <span style="color:#75715e">// 172.16.0.0/12
+</span><span style="color:#75715e"></span>			(<span style="color:#a6e22e">ip4</span>[<span style="color:#ae81ff">0</span>] <span style="color:#f92672">==</span> <span style="color:#ae81ff">192</span> <span style="color:#f92672">&amp;&amp;</span> <span style="color:#a6e22e">ip4</span>[<span style="color:#ae81ff">1</span>] <span style="color:#f92672">==</span> <span style="color:#ae81ff">168</span>) <span style="color:#75715e">// 192.168.0.0/16
+</span><span style="color:#75715e"></span>	}
+	<span style="color:#75715e">// 判断ipv6是否是内网
+</span><span style="color:#75715e"></span>	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">ip16</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">ip</span>.<span style="color:#a6e22e">To16</span>(); <span style="color:#a6e22e">ip16</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+		<span style="color:#75715e">// 参考 https://tools.ietf.org/html/rfc4193#section-3
+</span><span style="color:#75715e"></span>		<span style="color:#75715e">// 参考 https://en.wikipedia.org/wiki/Private_network#Private_IPv6_addresses
+</span><span style="color:#75715e"></span>		<span style="color:#75715e">// 判断ipv6唯一本地地址
+</span><span style="color:#75715e"></span>		<span style="color:#66d9ef">return</span> <span style="color:#ae81ff">0xfd</span> <span style="color:#f92672">==</span> <span style="color:#a6e22e">ip16</span>[<span style="color:#ae81ff">0</span>]
+	}
+	<span style="color:#75715e">// 不是ip直接返回false
+</span><span style="color:#75715e"></span>	<span style="color:#66d9ef">return</span> <span style="color:#66d9ef">false</span>
+}
+
+</code></pre></div><p>下图为按照上述步骤检测请求是否是内网请求的结果。</p>
+<p><img src="https://note.youdao.com/yws/api/personal/file/WEB733788caa1f3e7307a0eb6eaf237db5e?method=download&amp;shareKey=5df8b437bde3f8a6b40eb03f66e15d57" alt=""></p>
+<p><strong>小结</strong>：URL形式多样，可以使用DNS解析获取规范的IP，从而判断是否是内网资源。</p>
+<h3 id="回合二url跳转">回合二：URL跳转</h3>
+<p>如果恶意攻击者仅通过IP的不同写法进行攻击，那我们自然可以高枕无忧，然而这场矛与盾的较量才刚刚开局。</p>
+<p>我们回顾一下回合一的防御策略，检测请求是否是内网资源是在正式发起请求之前，如果攻击者在请求过程中通过URL跳转进行内网资源访问则完全可以绕过回合一中的防御策略。具体攻击流程如下。</p>
+<p><img src="https://note.youdao.com/yws/api/personal/file/WEBe9de4e2a016b1d1f9b0d2dfa09ba7811?method=download&amp;shareKey=65a87ed928726fc6c7fc34d362b1824d" alt=""></p>
+<p>如图所示，通过URL跳转攻击者可获得内网资源。在介绍如何防御URL跳转攻击之前，老许和各位读者先一起复习一下HTTP重定向状态码——3xx。</p>
+<p>根据维基百科的资料，3xx重定向码范围从300到308共9个。老许特意瞧了一眼go的源码，发现官方的<code>http.Client</code>发出的请求仅支持如下几个重定向码。</p>
+<p><code>301</code>：请求的资源已永久移动到新位置；该响应可缓存；重定向请求一定是GET请求。</p>
+<p><code>302</code>：要求客户端执行临时重定向；只有在Cache-Control或Expires中进行指定的情况下，这个响应才是可缓存的；重定向请求一定是GET请求。</p>
+<p><code>303</code>：当POST（或PUT / DELETE）请求的响应在另一个URI能被找到时可用此code，这个code存在主要是为了允许由脚本激活的POST请求输出重定向到一个新的资源；303响应禁止被缓存；重定向请求一定是GET请求。</p>
+<p><code>307</code>：临时重定向；不可更改请求方法，如果原请求是POST，则重定向请求也是POST。</p>
+<p><code>308</code>：永久重定向；不可更改请求方法，如果原请求是POST，则重定向请求也是POST。</p>
+<p>3xx状态码复习就到这里，我们继续SSRF的攻防回合讨论。既然服务端的URL跳转可能带来风险，那我们只要禁用URL跳转就完全可以规避此类风险。然而我们并不能这么做，这个做法在规避风险的同时也极有可能误伤正常的请求。那到底该如何防范此类攻击手段呢？</p>
+<p>看过老许“<a href="https://mp.weixin.qq.com/s/6WYhwaRrjv6W6NZCNw2CeA">Go中的HTTP请求之——HTTP1.1请求流程分析</a>”这篇文章的读者应该知道，对于重定向有业务需求时，可以自定义http.Client的<code>CheckRedirect</code>。下面我们先看一下<code>CheckRedirect</code>的定义。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#a6e22e">CheckRedirect</span> <span style="color:#66d9ef">func</span>(<span style="color:#a6e22e">req</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">Request</span>, <span style="color:#a6e22e">via</span> []<span style="color:#f92672">*</span><span style="color:#a6e22e">Request</span>) <span style="color:#66d9ef">error</span>
+</code></pre></div><p>这里特别说明一下，<code>req</code>是即将发出的请求且请求中包含前一次请求的响应，<code>via</code>是已经发出的请求。在知晓这些条件后，防御URL跳转攻击就变得十分容易了。</p>
+<ol>
+<li>根据前一次请求的响应直接拒绝<code>307</code>和<code>308</code>的跳转（此类跳转可以是POST请求，风险极高）。</li>
+<li>解析出请求的IP，并判断是否是内网IP。</li>
+</ol>
+<p>根据上述步骤，可如下定义<code>http.Client</code>。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#a6e22e">client</span> <span style="color:#f92672">:=</span> <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">Client</span>{
+	<span style="color:#a6e22e">CheckRedirect</span>: <span style="color:#66d9ef">func</span>(<span style="color:#a6e22e">req</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">Request</span>, <span style="color:#a6e22e">via</span> []<span style="color:#f92672">*</span><span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">Request</span>) <span style="color:#66d9ef">error</span> {
+		<span style="color:#75715e">// 跳转超过10次，也拒绝继续跳转
+</span><span style="color:#75715e"></span>		<span style="color:#66d9ef">if</span> len(<span style="color:#a6e22e">via</span>) <span style="color:#f92672">&gt;=</span> <span style="color:#ae81ff">10</span> {
+			<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Errorf</span>(<span style="color:#e6db74">&#34;redirect too much&#34;</span>)
+		}
+		<span style="color:#a6e22e">statusCode</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">req</span>.<span style="color:#a6e22e">Response</span>.<span style="color:#a6e22e">StatusCode</span>
+		<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">statusCode</span> <span style="color:#f92672">==</span> <span style="color:#ae81ff">307</span> <span style="color:#f92672">||</span> <span style="color:#a6e22e">statusCode</span> <span style="color:#f92672">==</span> <span style="color:#ae81ff">308</span> {
+			<span style="color:#75715e">// 拒绝跳转访问
+</span><span style="color:#75715e"></span>			<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Errorf</span>(<span style="color:#e6db74">&#34;unsupport redirect method&#34;</span>)
+		}
+		<span style="color:#75715e">// 判断ip
+</span><span style="color:#75715e"></span>		<span style="color:#a6e22e">ips</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">net</span>.<span style="color:#a6e22e">LookupIP</span>(<span style="color:#a6e22e">req</span>.<span style="color:#a6e22e">URL</span>.<span style="color:#a6e22e">Host</span>)
+		<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+			<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">err</span>
+		}
+		<span style="color:#66d9ef">for</span> <span style="color:#a6e22e">_</span>, <span style="color:#a6e22e">ip</span> <span style="color:#f92672">:=</span> <span style="color:#66d9ef">range</span> <span style="color:#a6e22e">ips</span> {
+			<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">IsLocalIP</span>(<span style="color:#a6e22e">ip</span>) {
+				<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Errorf</span>(<span style="color:#e6db74">&#34;have local ip&#34;</span>)
+			}
+			<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Printf</span>(<span style="color:#e6db74">&#34;%s -&gt; %s is localip?: %v\n&#34;</span>, <span style="color:#a6e22e">req</span>.<span style="color:#a6e22e">URL</span>, <span style="color:#a6e22e">ip</span>.<span style="color:#a6e22e">String</span>(), <span style="color:#a6e22e">IsLocalIP</span>(<span style="color:#a6e22e">ip</span>))
+		}
+		<span style="color:#66d9ef">return</span> <span style="color:#66d9ef">nil</span>
+	},
+}
+</code></pre></div><p>如上自定义CheckRedirect可以防范URL跳转攻击，但此方式会进行多次DNS解析，效率不佳。后文会结合其他攻击方式介绍更加有效率的防御措施。</p>
+<p><strong>小结</strong>：通过自定义<code>http.Client</code>的<code>CheckRedirect</code>可以防范URL跳转攻击。</p>
+<h3 id="回合三dns-rebinding">回合三：DNS Rebinding</h3>
+<p>众所周知，发起一次HTTP请求需要先请求DNS服务获取域名对应的IP地址。如果攻击者有可控的DNS服务，就可以通过DNS重绑定绕过前面的防御策略进行攻击。</p>
+<p>具体流程如下图所示。</p>
+<p><img src="https://note.youdao.com/yws/api/personal/file/WEBa90ecbaeb18110063a5e91d1704f4c8a?method=download&amp;shareKey=fc64d48577f5e66e69ea10616cd28344" alt=""></p>
+<p>验证资源是是否合法时，服务器进行了第一次DNS解析，获得了一个非内网的IP且TTL为0。对解析的IP进行判断，发现非内网IP可以后续请求。由于攻击者的DNS Server将TTL设置为0，所以正式发起请求时需要再次进行DNS解析。此时DNS Server返回内网地址，由于已经进入请求资源阶段再无防御措施，所以攻击者可获得内网资源。</p>
+<blockquote>
+<p>额外提一嘴，老许特意看了Go中DNS解析的部分源码，发现Go并没有对DNS的结果作缓存，所以即使TTL不为0也存在DNS重绑定的风险。</p>
+</blockquote>
+<p>在发起请求的过程中有DNS解析才让攻击者有机可乘。如果我们能对该过程进行控制，就可以避免DNS重绑定的风险。对HTTP请求控制可以通过自定义<code>http.Transport</code>来实现，而自定义<code>http.Transport</code>也有两个方案。</p>
+<p><strong>方案一</strong>：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#a6e22e">dialer</span> <span style="color:#f92672">:=</span> <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">net</span>.<span style="color:#a6e22e">Dialer</span>{}
+<span style="color:#a6e22e">transport</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">DefaultTransport</span>.(<span style="color:#f92672">*</span><span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">Transport</span>).<span style="color:#a6e22e">Clone</span>()
+<span style="color:#a6e22e">transport</span>.<span style="color:#a6e22e">DialContext</span> = <span style="color:#66d9ef">func</span>(<span style="color:#a6e22e">ctx</span> <span style="color:#a6e22e">context</span>.<span style="color:#a6e22e">Context</span>, <span style="color:#a6e22e">network</span>, <span style="color:#a6e22e">addr</span> <span style="color:#66d9ef">string</span>) (<span style="color:#a6e22e">net</span>.<span style="color:#a6e22e">Conn</span>, <span style="color:#66d9ef">error</span>) {
+	<span style="color:#a6e22e">host</span>, <span style="color:#a6e22e">port</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">net</span>.<span style="color:#a6e22e">SplitHostPort</span>(<span style="color:#a6e22e">addr</span>)
+	<span style="color:#75715e">// 解析host和 端口
+</span><span style="color:#75715e"></span>	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+		<span style="color:#66d9ef">return</span> <span style="color:#66d9ef">nil</span>, <span style="color:#a6e22e">err</span>
+	}
+	<span style="color:#75715e">// dns解析域名
+</span><span style="color:#75715e"></span>	<span style="color:#a6e22e">ips</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">net</span>.<span style="color:#a6e22e">LookupIP</span>(<span style="color:#a6e22e">host</span>)
+	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+		<span style="color:#66d9ef">return</span> <span style="color:#66d9ef">nil</span>, <span style="color:#a6e22e">err</span>
+	}
+	<span style="color:#75715e">// 对所有的ip串行发起请求
+</span><span style="color:#75715e"></span>	<span style="color:#66d9ef">for</span> <span style="color:#a6e22e">_</span>, <span style="color:#a6e22e">ip</span> <span style="color:#f92672">:=</span> <span style="color:#66d9ef">range</span> <span style="color:#a6e22e">ips</span> {
+		<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Printf</span>(<span style="color:#e6db74">&#34;%v -&gt; %v is localip?: %v\n&#34;</span>, <span style="color:#a6e22e">addr</span>, <span style="color:#a6e22e">ip</span>.<span style="color:#a6e22e">String</span>(), <span style="color:#a6e22e">IsLocalIP</span>(<span style="color:#a6e22e">ip</span>))
+		<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">IsLocalIP</span>(<span style="color:#a6e22e">ip</span>) {
+			<span style="color:#66d9ef">continue</span>
+		}
+		<span style="color:#75715e">// 非内网IP可继续访问
+</span><span style="color:#75715e"></span>		<span style="color:#75715e">// 拼接地址
+</span><span style="color:#75715e"></span>		<span style="color:#a6e22e">addr</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">net</span>.<span style="color:#a6e22e">JoinHostPort</span>(<span style="color:#a6e22e">ip</span>.<span style="color:#a6e22e">String</span>(), <span style="color:#a6e22e">port</span>)
+		<span style="color:#75715e">// 此时的addr仅包含IP和端口信息
+</span><span style="color:#75715e"></span>		<span style="color:#a6e22e">con</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">dialer</span>.<span style="color:#a6e22e">DialContext</span>(<span style="color:#a6e22e">ctx</span>, <span style="color:#a6e22e">network</span>, <span style="color:#a6e22e">addr</span>)
+		<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">==</span> <span style="color:#66d9ef">nil</span> {
+			<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">con</span>, <span style="color:#66d9ef">nil</span>
+		}
+		<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">err</span>)
+	}
+
+	<span style="color:#66d9ef">return</span> <span style="color:#66d9ef">nil</span>, <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Errorf</span>(<span style="color:#e6db74">&#34;connect failed&#34;</span>)
+}
+<span style="color:#75715e">// 使用此client请求，可避免DNS重绑定风险
+</span><span style="color:#75715e"></span><span style="color:#a6e22e">client</span> <span style="color:#f92672">:=</span> <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">Client</span>{
+	<span style="color:#a6e22e">Transport</span>: <span style="color:#a6e22e">transport</span>,
+}
+</code></pre></div><p><code>transport.DialContext</code>的作用是创建未加密的TCP连接，我们通过自定义此函数可规避DNS重绑定风险。另外特别说明一下，如果传递给<code>dialer.DialContext</code>方法的地址是常规IP格式则可使用net包中的<code>parseIPZone</code>函数直接解析成功，否则会继续发起DNS解析请求。</p>
+<p><strong>方案二</strong>：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#a6e22e">dialer</span> <span style="color:#f92672">:=</span> <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">net</span>.<span style="color:#a6e22e">Dialer</span>{}
+<span style="color:#a6e22e">dialer</span>.<span style="color:#a6e22e">Control</span> = <span style="color:#66d9ef">func</span>(<span style="color:#a6e22e">network</span>, <span style="color:#a6e22e">address</span> <span style="color:#66d9ef">string</span>, <span style="color:#a6e22e">c</span> <span style="color:#a6e22e">syscall</span>.<span style="color:#a6e22e">RawConn</span>) <span style="color:#66d9ef">error</span> {
+    <span style="color:#75715e">// address 已经是ip:port的格式
+</span><span style="color:#75715e"></span>	<span style="color:#a6e22e">host</span>, <span style="color:#a6e22e">_</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">net</span>.<span style="color:#a6e22e">SplitHostPort</span>(<span style="color:#a6e22e">address</span>)
+	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+		<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">err</span>
+	}
+	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Printf</span>(<span style="color:#e6db74">&#34;%v is localip?: %v\n&#34;</span>, <span style="color:#a6e22e">address</span>, <span style="color:#a6e22e">IsLocalIP</span>(<span style="color:#a6e22e">net</span>.<span style="color:#a6e22e">ParseIP</span>(<span style="color:#a6e22e">host</span>)))
+	<span style="color:#66d9ef">return</span> <span style="color:#66d9ef">nil</span>
+}
+<span style="color:#a6e22e">transport</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">DefaultTransport</span>.(<span style="color:#f92672">*</span><span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">Transport</span>).<span style="color:#a6e22e">Clone</span>()
+<span style="color:#75715e">// 使用官方库的实现创建TCP连接
+</span><span style="color:#75715e"></span><span style="color:#a6e22e">transport</span>.<span style="color:#a6e22e">DialContext</span> = <span style="color:#a6e22e">dialer</span>.<span style="color:#a6e22e">DialContext</span>
+<span style="color:#75715e">// 使用此client请求，可避免DNS重绑定风险
+</span><span style="color:#75715e"></span><span style="color:#a6e22e">client</span> <span style="color:#f92672">:=</span> <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">Client</span>{
+	<span style="color:#a6e22e">Transport</span>: <span style="color:#a6e22e">transport</span>,
+}
+</code></pre></div><p><code>dialer.Control</code>在创建网络连接之后实际拨号之前调用，且仅在go版本大于等于1.11时可用，其具体调用位置在<code>sock_posix.go</code>中的<code>(*netFD).dial</code>方法里。</p>
+<p><img src="https://note.youdao.com/yws/api/personal/file/WEB149c44c0f615142a792ed61dc8ef81d2?method=download&amp;shareKey=a215bcf6853fe43b9a3d1f6b74a8fb3a" alt=""></p>
+<p>上述两个防御方案不仅仅可以防范DNS重绑定攻击，也同样可以防范其他攻击方式。事实上，老许更加推荐方案二，简直一劳永逸！</p>
+<p><strong>小结</strong>：</p>
+<ol>
+<li>攻击者可以通过自己的DNS服务进行DNS重绑定攻击。</li>
+<li>通过自定义<code>http.Transport</code>可以防范DNS重绑定攻击。</li>
+</ol>
+<h3 id="个人经验">个人经验</h3>
+<p>1、不要下发详细的错误信息！不要下发详细的错误信息！不要下发详细的错误信息！</p>
+<p>如果是为了开发调试，请将错误信息打进日志文件里。强调这一点不仅仅是为了防范SSRF攻击，更是为了避免敏感信息泄漏。例如，DB操作失败后直接将error信息下发，而这个error信息很有可能包含SQL语句。</p>
+<blockquote>
+<p>再额外多说一嘴，老许的公司对打进日志文件的某些信息还要求脱敏，可谓是十分严格了。</p>
+</blockquote>
+<p>2、限制请求端口。</p>
+<p>在结束之前特别说明一下，SSRF漏洞并不只针对HTTP协议。本篇只讨论HTTP协议是因为go中通过<code>http.Client</code>发起请求时会检测协议类型，某P*P语言这方面检测就会弱很多。虽然<code>http.Client</code>会检测协议类型，但是攻击者仍然可以通过漏洞不断更换端口进行内网端口探测。</p>
+<p>最后，衷心希望本文能够对各位读者有一定的帮助。</p>
+<blockquote>
+<p><strong>注</strong>：</p>
+<ol>
+<li>写本文时， 笔者所用go版本为: go1.15.2</li>
+<li>文章中所用完整例子：https://github.com/Isites/go-coder/blob/master/ssrf/main.go</li>
+</ol>
+</blockquote>
+<p>【关注公众号】</p>
+<p><img src="https://note.youdao.com/yws/api/personal/file/WEBa3ee67b2b867e98cb5c587f4adfa6801?method=download&amp;shareKey=0fbb95d0aec6170b854e7b890d50d559" alt=""></p>
+]]></content>
+        </item>
+        
+    </channel>
+</rss>
