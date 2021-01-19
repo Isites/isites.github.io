@@ -50,5 +50,22 @@
    TLS1.</description>
     </item>
     
+    <item>
+      <title>深入剖析go中字符串的编码问题——特殊字符的string怎么转byte？</title>
+      <link>https://isites.github.io/timeline/go-string-encode/</link>
+      <pubDate>Mon, 24 Aug 2020 23:47:48 +0800</pubDate>
+      
+      <guid>https://isites.github.io/timeline/go-string-encode/</guid>
+      <description>前言 前段时间发表了Go中的HTTP请求之——HTTP1.1请求流程分析，所以这两天本来打算研究HTTP2.0的请求源码，结果发现太复杂就跑去逛知乎了，然后就发现了一个非常有意思的提问“golang 特殊字符的string怎么转成[]byte?”。为了转换一下心情， 便有了此篇文章。
+问题 原问题我就不码字了，直接上图： 看到问题，我的第一反应是ASCII码值范围应该是0~127呀，怎么会超过127呢？直到实际运行的时候才发现上图的特殊字符是‘’（如果无法展示，记住该特殊字符的unicode是\u0081），并不是英文中的句号。
+unicode和utf-8的恩怨纠葛 百度百科已经把unicode和utf-8介绍的很详细了，所以这里就不做过多的阐述，仅摘抄部分和本文相关的定义：
+ Unicode为每个字符设定了统一并且唯一的二进制编码，通常用两个字节表示一个字符。 UTF-8是针对Unicode的一种可变长度字符编码。它可以用来表示Unicode标准中的任何字符。UTF-8的特点是对不同范围的字符使用不同长度的编码。对于0x00-0x7F之间的字符，UTF-8编码与ASCII编码完全相同。  go中的字符 众所周知，go中能表示字符的有两种类型，分别是byte和rune，byte和rune的定义分别是：type byte = uint8和type rune = int32。
+uint8范围是0-255，只能够表示有限个unicode字符，超过255的范围就会编译报错。根据上述关于unicode的定义，4字节的rune完全兼容两字节的unicode。
+我们用下面的代码来验证：
+var ( c1 byte = &amp;#39;a&amp;#39; c2 byte = &amp;#39;新&amp;#39; c3 rune = &amp;#39;新&amp;#39; ) fmt.Println(c1, c2, c3) 上述的程序根本无法运行，因为第二行编译会报错，vscode给到了十分详细的提示：&#39;新&#39; (untyped rune constant 26032) overflows byte。
+接下来，我们通过下面的代码来验证字符和unicode和整型的等价关系：
+fmt.Printf(&amp;#34;0x%x, %d\n&amp;#34;, &amp;#39;&amp;#39;, &amp;#39;&amp;#39;) //输出：0x81, 129 	fmt.Println(0x81 == &amp;#39;&amp;#39;, &amp;#39;\u0081&amp;#39; == &amp;#39;&amp;#39;, 129 == &amp;#39;&amp;#39;) // 输出：true true true 	//\u0081输出到屏幕上后不展示， 所以换了大写字母A来输出 	fmt.</description>
+    </item>
+    
   </channel>
 </rss>

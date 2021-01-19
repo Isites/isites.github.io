@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="author" content="">
+<meta name="description" content="前言 前段时间发表了Go中的HTTP请求之——HTTP1.1请求流程分析，所以这两天本来打算研究HTTP2.0的请求源码，结果发现太复杂就跑去逛知乎了，然后就发现了一个非常有意思的提问“golang 特殊字符的string怎么转成[]byte?”。为了转换一下心情， 便有了此篇文章。
+问题 原问题我就不码字了，直接上图： 看到问题，我的第一反应是ASCII码值范围应该是0~127呀，怎么会超过127呢？直到实际运行的时候才发现上图的特殊字符是‘’（如果无法展示，记住该特殊字符的unicode是\u0081），并不是英文中的句号。
+unicode和utf-8的恩怨纠葛 百度百科已经把unicode和utf-8介绍的很详细了，所以这里就不做过多的阐述，仅摘抄部分和本文相关的定义：
+ Unicode为每个字符设定了统一并且唯一的二进制编码，通常用两个字节表示一个字符。 UTF-8是针对Unicode的一种可变长度字符编码。它可以用来表示Unicode标准中的任何字符。UTF-8的特点是对不同范围的字符使用不同长度的编码。对于0x00-0x7F之间的字符，UTF-8编码与ASCII编码完全相同。  go中的字符 众所周知，go中能表示字符的有两种类型，分别是byte和rune，byte和rune的定义分别是：type byte = uint8和type rune = int32。
+uint8范围是0-255，只能够表示有限个unicode字符，超过255的范围就会编译报错。根据上述关于unicode的定义，4字节的rune完全兼容两字节的unicode。
+我们用下面的代码来验证：
+var ( c1 byte = &amp;#39;a&amp;#39; c2 byte = &amp;#39;新&amp;#39; c3 rune = &amp;#39;新&amp;#39; ) fmt.Println(c1, c2, c3) 上述的程序根本无法运行，因为第二行编译会报错，vscode给到了十分详细的提示：&#39;新&#39; (untyped rune constant 26032) overflows byte。
+接下来，我们通过下面的代码来验证字符和unicode和整型的等价关系：
+fmt.Printf(&amp;#34;0x%x, %d\n&amp;#34;, &amp;#39;&amp;#39;, &amp;#39;&amp;#39;) //输出：0x81, 129 	fmt.Println(0x81 == &amp;#39;&amp;#39;, &amp;#39;\u0081&amp;#39; == &amp;#39;&amp;#39;, 129 == &amp;#39;&amp;#39;) // 输出：true true true 	//\u0081输出到屏幕上后不展示， 所以换了大写字母A来输出 	fmt." />
+<meta name="keywords" content=", Go" />
+<meta name="robots" content="noodp" />
+<meta name="theme-color" content="" />
+<link rel="canonical" href="https://isites.github.io/timeline/go-string-encode/" />
+
+
+    <title>
+        
+            深入剖析go中字符串的编码问题——特殊字符的string怎么转byte？ :: 新世界杂货铺 
+        
+    </title>
+
+
+
+<link href="https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/3.2.1/css/flag-icon.min.css" rel="stylesheet"
+    type="text/css"> 
+
+
+
+
+<link rel="stylesheet" href="/main.805b1025016494ee5fd67b55b8ecd5e2b7c4a9f0bdda42e300c62b85ddfef68f.css">
+
+
+  
+
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest">
+    <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#252627">
+    <link rel="shortcut icon" href="/favicon.ico">
+    <meta name="msapplication-TileColor" content="#252627">
+    <meta name="theme-color" content="#252627">
+
+
+
+<meta itemprop="name" content="深入剖析go中字符串的编码问题——特殊字符的string怎么转byte？">
+<meta itemprop="description" content="前言 前段时间发表了Go中的HTTP请求之——HTTP1.1请求流程分析，所以这两天本来打算研究HTTP2.0的请求源码，结果发现太复杂就跑去逛知乎了，然后就发现了一个非常有意思的提问“golang 特殊字符的string怎么转成[]byte?”。为了转换一下心情， 便有了此篇文章。
+问题 原问题我就不码字了，直接上图： 看到问题，我的第一反应是ASCII码值范围应该是0~127呀，怎么会超过127呢？直到实际运行的时候才发现上图的特殊字符是‘’（如果无法展示，记住该特殊字符的unicode是\u0081），并不是英文中的句号。
+unicode和utf-8的恩怨纠葛 百度百科已经把unicode和utf-8介绍的很详细了，所以这里就不做过多的阐述，仅摘抄部分和本文相关的定义：
+ Unicode为每个字符设定了统一并且唯一的二进制编码，通常用两个字节表示一个字符。 UTF-8是针对Unicode的一种可变长度字符编码。它可以用来表示Unicode标准中的任何字符。UTF-8的特点是对不同范围的字符使用不同长度的编码。对于0x00-0x7F之间的字符，UTF-8编码与ASCII编码完全相同。  go中的字符 众所周知，go中能表示字符的有两种类型，分别是byte和rune，byte和rune的定义分别是：type byte = uint8和type rune = int32。
+uint8范围是0-255，只能够表示有限个unicode字符，超过255的范围就会编译报错。根据上述关于unicode的定义，4字节的rune完全兼容两字节的unicode。
+我们用下面的代码来验证：
+var ( c1 byte = &#39;a&#39; c2 byte = &#39;新&#39; c3 rune = &#39;新&#39; ) fmt.Println(c1, c2, c3) 上述的程序根本无法运行，因为第二行编译会报错，vscode给到了十分详细的提示：&#39;新&#39; (untyped rune constant 26032) overflows byte。
+接下来，我们通过下面的代码来验证字符和unicode和整型的等价关系：
+fmt.Printf(&#34;0x%x, %d\n&#34;, &#39;&#39;, &#39;&#39;) //输出：0x81, 129 	fmt.Println(0x81 == &#39;&#39;, &#39;\u0081&#39; == &#39;&#39;, 129 == &#39;&#39;) // 输出：true true true 	//\u0081输出到屏幕上后不展示， 所以换了大写字母A来输出 	fmt.">
+<meta itemprop="datePublished" content="2020-08-24T23:47:48+08:00" />
+<meta itemprop="dateModified" content="2020-08-24T23:47:48+08:00" />
+<meta itemprop="wordCount" content="446">
+
+
+
+<meta itemprop="keywords" content="Go," />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="深入剖析go中字符串的编码问题——特殊字符的string怎么转byte？"/>
+<meta name="twitter:description" content="前言 前段时间发表了Go中的HTTP请求之——HTTP1.1请求流程分析，所以这两天本来打算研究HTTP2.0的请求源码，结果发现太复杂就跑去逛知乎了，然后就发现了一个非常有意思的提问“golang 特殊字符的string怎么转成[]byte?”。为了转换一下心情， 便有了此篇文章。
+问题 原问题我就不码字了，直接上图： 看到问题，我的第一反应是ASCII码值范围应该是0~127呀，怎么会超过127呢？直到实际运行的时候才发现上图的特殊字符是‘’（如果无法展示，记住该特殊字符的unicode是\u0081），并不是英文中的句号。
+unicode和utf-8的恩怨纠葛 百度百科已经把unicode和utf-8介绍的很详细了，所以这里就不做过多的阐述，仅摘抄部分和本文相关的定义：
+ Unicode为每个字符设定了统一并且唯一的二进制编码，通常用两个字节表示一个字符。 UTF-8是针对Unicode的一种可变长度字符编码。它可以用来表示Unicode标准中的任何字符。UTF-8的特点是对不同范围的字符使用不同长度的编码。对于0x00-0x7F之间的字符，UTF-8编码与ASCII编码完全相同。  go中的字符 众所周知，go中能表示字符的有两种类型，分别是byte和rune，byte和rune的定义分别是：type byte = uint8和type rune = int32。
+uint8范围是0-255，只能够表示有限个unicode字符，超过255的范围就会编译报错。根据上述关于unicode的定义，4字节的rune完全兼容两字节的unicode。
+我们用下面的代码来验证：
+var ( c1 byte = &#39;a&#39; c2 byte = &#39;新&#39; c3 rune = &#39;新&#39; ) fmt.Println(c1, c2, c3) 上述的程序根本无法运行，因为第二行编译会报错，vscode给到了十分详细的提示：&#39;新&#39; (untyped rune constant 26032) overflows byte。
+接下来，我们通过下面的代码来验证字符和unicode和整型的等价关系：
+fmt.Printf(&#34;0x%x, %d\n&#34;, &#39;&#39;, &#39;&#39;) //输出：0x81, 129 	fmt.Println(0x81 == &#39;&#39;, &#39;\u0081&#39; == &#39;&#39;, 129 == &#39;&#39;) // 输出：true true true 	//\u0081输出到屏幕上后不展示， 所以换了大写字母A来输出 	fmt."/>
+
+
+
+
+
+
+
+    <meta property="article:published_time" content="2020-08-24 23:47:48 &#43;0800 CST" />
+
+
+
+
+
+
+
+
+    </head>
+
+    <body class="">
+        <div class="container">
+            <header class="header">
+    <span class="header__inner">
+        <a href="https://isites.github.io/" style="text-decoration: none;">
+    <div class="logo">
+        
+            <span class="logo__mark">新世界杂货铺</span>
+            <span class="logo__text"></span>
+            <span class="logo__cursor" style=
+                  "
+                   
+                   ">
+            </span>
+        
+    </div>
+</a>
+
+
+        <span class="header__right">
+             
+            <span class="theme-toggle unselectable"><svg class="theme-toggler" width="24" height="24" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <path d="M22 41C32.4934 41 41 32.4934 41 22C41 11.5066 32.4934 3 22
+  3C11.5066 3 3 11.5066 3 22C3 32.4934 11.5066 41 22 41ZM7 22C7
+  13.7157 13.7157 7 22 7V37C13.7157 37 7 30.2843 7 22Z"/>
+</svg>
+</span>
+        </span>
+    </span>
+</header>
+
+
+            <div class="content">
+                
+  <main class="post">
+
+    <div class="post-info">
+      <p>
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-clock">
+          <circle cx="12" cy="12" r="10"></circle>
+          <polyline points="12 6 12 12 16 14"></polyline>
+        </svg>
+        3 minutes
+
+        
+      </p>
+    </div>
+
+    <article>
+      <h1 class="post-title">
+        <a href="https://isites.github.io/timeline/go-string-encode/">深入剖析go中字符串的编码问题——特殊字符的string怎么转byte？</a>
+      </h1>
+        <hr />
+        <aside id="toc">
+          <div class="toc-title">Table of Contents</div>
+          <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#前言">前言</a></li>
+        <li><a href="#问题">问题</a></li>
+        <li><a href="#unicode和utf-8的恩怨纠葛">unicode和utf-8的恩怨纠葛</a></li>
+        <li><a href="#go中的字符">go中的字符</a></li>
+        <li><a href="#go中的字符串是utf8编码的">go中的字符串是utf8编码的</a></li>
+        <li><a href="#go中的rune">go中的rune</a></li>
+        <li><a href="#理解go中的字符串其实是字节切片">理解go中的字符串其实是字节切片</a></li>
+        <li><a href="#字符串的多种表示方式">字符串的多种表示方式</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+        </aside>
+        <hr />
+
+      
+
+      <div class="post-content">
+        <h3 id="前言">前言</h3>
+<p>前段时间发表了<a href="https://mp.weixin.qq.com/s/6WYhwaRrjv6W6NZCNw2CeA">Go中的HTTP请求之——HTTP1.1请求流程分析</a>，所以这两天本来打算研究HTTP2.0的请求源码，结果发现太复杂就跑去逛知乎了，然后就发现了一个非常有意思的提问“golang 特殊字符的string怎么转成[]byte?”。为了转换一下心情， 便有了此篇文章。</p>
+<h3 id="问题">问题</h3>
+<p>原问题我就不码字了，直接上图：
+<img src="https://note.youdao.com/yws/api/personal/file/WEB33623d72a9ae4985e77f6c9247854c20?method=download&amp;shareKey=575343bfecd80b0d40ef4f53ed002e8b" alt=""></p>
+<p>看到问题，我的第一反应是ASCII码值范围应该是<code>0~127</code>呀，怎么会超过127呢？直到实际运行的时候才发现上图的特殊字符是‘’（如果无法展示，记住该特殊字符的unicode是<code>\u0081</code>），并不是英文中的句号。</p>
+<h3 id="unicode和utf-8的恩怨纠葛">unicode和utf-8的恩怨纠葛</h3>
+<p>百度百科已经把unicode和utf-8介绍的很详细了，所以这里就不做过多的阐述，仅摘抄部分和本文相关的定义：</p>
+<ul>
+<li>Unicode为每个字符设定了统一并且唯一的二进制编码，<strong>通常用两个字节表示一个字符</strong>。</li>
+<li>UTF-8是针对Unicode的一种可变长度字符编码。它可以用来表示Unicode标准中的任何字符。UTF-8的特点是对不同范围的字符使用不同长度的编码。<strong>对于0x00-0x7F之间的字符，UTF-8编码与ASCII编码完全相同</strong>。</li>
+</ul>
+<h3 id="go中的字符">go中的字符</h3>
+<p>众所周知，go中能表示字符的有两种类型，分别是<code>byte</code>和<code>rune</code>，byte和rune的定义分别是：<code>type byte = uint8</code>和<code>type rune = int32</code>。</p>
+<p>uint8范围是0-255，只能够表示有限个unicode字符，超过255的范围就会编译报错。根据上述关于unicode的定义，4字节的rune完全兼容两字节的unicode。</p>
+<p>我们用下面的代码来验证：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">var</span> (
+		<span style="color:#a6e22e">c1</span> <span style="color:#66d9ef">byte</span> = <span style="color:#e6db74">&#39;a&#39;</span>
+		<span style="color:#a6e22e">c2</span> <span style="color:#66d9ef">byte</span> = <span style="color:#e6db74">&#39;新&#39;</span>
+		<span style="color:#a6e22e">c3</span> <span style="color:#66d9ef">rune</span> = <span style="color:#e6db74">&#39;新&#39;</span>
+	)
+	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">c1</span>, <span style="color:#a6e22e">c2</span>, <span style="color:#a6e22e">c3</span>)
+</code></pre></div><p>上述的程序根本无法运行，因为第二行编译会报错，vscode给到了十分详细的提示：<code>'新' (untyped rune constant 26032) overflows byte</code>。</p>
+<p>接下来，我们通过下面的代码来验证<code>字符</code>和<code>unicode</code>和整型的等价关系：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Printf</span>(<span style="color:#e6db74">&#34;0x%x, %d\n&#34;</span>, <span style="color:#e6db74">&#39;&#39;</span>, <span style="color:#e6db74">&#39;&#39;</span>) <span style="color:#75715e">//输出：0x81, 129
+</span><span style="color:#75715e"></span>	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#ae81ff">0x81</span> <span style="color:#f92672">==</span> <span style="color:#e6db74">&#39;&#39;</span>, <span style="color:#e6db74">&#39;\u0081&#39;</span> <span style="color:#f92672">==</span> <span style="color:#e6db74">&#39;&#39;</span>, <span style="color:#ae81ff">129</span> <span style="color:#f92672">==</span> <span style="color:#e6db74">&#39;&#39;</span>) <span style="color:#75715e">// 输出：true true true
+</span><span style="color:#75715e"></span>	<span style="color:#75715e">//\u0081输出到屏幕上后不展示， 所以换了大写字母A来输出
+</span><span style="color:#75715e"></span>	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Printf</span>(<span style="color:#e6db74">&#34;%c\n&#34;</span>, <span style="color:#ae81ff">65</span>) <span style="color:#75715e">// 输出：A
+</span></code></pre></div><p>根据上面的代码输出的3个<code>true</code>可以知道，<strong>字符和unicode和整形是等价</strong>，并且整型也能转回字符的表现形式。</p>
+<h3 id="go中的字符串是utf8编码的">go中的字符串是utf8编码的</h3>
+<p>根据golang官方博客<a href="https://blog.golang.org/strings">https://blog.golang.org/strings</a>的原文：</p>
+<pre><code>
+Go source code is always UTF-8.
+A string holds arbitrary bytes.
+A string literal, absent byte-level escapes, always holds valid UTF-8 sequences.
+
+</code></pre><p>翻译整理过来其实也就是两点：</p>
+<ol>
+<li>go中的代码总是用utf8编码，并且字符串能够存储任何字节。</li>
+<li>没有经过字节级别的转义，那么字符串是一个标准的utf8序列。</li>
+</ol>
+<p>有了前面的基础知识和字符串是一个标准的utf8序列这一结论后我们接下来对字符串“”（如果无法展示，记住该特殊字符的unicode是<code>\u0081</code>）手动编码。</p>
+<p>Unicode到UTF-8的编码方对照表：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">Unicode编码(十六进制)</th>
+<th style="text-align:left">UTF-8 字节流(二进制)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">000000-00007F</td>
+<td style="text-align:left">0xxxxxxx</td>
+</tr>
+<tr>
+<td style="text-align:left">000080-0007FF</td>
+<td style="text-align:left">110xxxxx 10xxxxxx</td>
+</tr>
+<tr>
+<td style="text-align:left">000800-00FFFF</td>
+<td style="text-align:left">1110xxxx 10xxxxxx 10xxxxxx</td>
+</tr>
+<tr>
+<td style="text-align:left">010000-10FFFF</td>
+<td style="text-align:left">11110xxx 10xxxxxx 10xxxxxx 10xxxxxx</td>
+</tr>
+</tbody>
+</table>
+<p>字符‘’（如果无法展示，记住该特殊字符的unicode是<code>\u0081</code>）的二进制表示为<code>10000001</code>，16进制表示为<code>0x81</code>。</p>
+<p>根据unicode转utf8的对照表，0x7f &lt; 0x81 &lt; 0x7ff，所以此特殊字符需占两个字节，并且要套用的utf8模版是<code>110xxxxx 10xxxxxx</code>。</p>
+<p>我们按照下面的步骤对<code>10000001</code>转为utf8的二进制序列：</p>
+<p>第一步：根据x数量对特殊字符的高位补0。x的数量是11，所以需要对特殊字符的高位补3个0，此时特殊字符的二进制表示为：<code>00010000001</code>。</p>
+<p>第二步：x有两个部分，且长度分别是5和6，所以对<code>00010000001</code>由底位向高位分别截取6位和5位，得到<code>000001</code>和<code>00010</code>。</p>
+<p>第三步：将<code>000001</code>和<code>00010</code>由低位向高位填充至模版<code>110xxxxx 10xxxxxx</code>，可得到utf8的二进制序列为：<code>11000010 10000001</code>。</p>
+<p>我们通过go对二进制转为整型：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Printf</span>(<span style="color:#e6db74">&#34;%d, %d\n&#34;</span>, <span style="color:#ae81ff">0</span><span style="color:#a6e22e">b11000010</span>, <span style="color:#ae81ff">0</span><span style="color:#a6e22e">b10000001</span>)
+<span style="color:#75715e">// 输出：194, 129
+</span></code></pre></div><p><strong>综上</strong>：当用字符转字节时输出的是字符本身的整型值，当用字符串转字节切片时，实际上是输出的是utf8的字节切片序列(go中的字符串存储的就是utf8字节切片)。此时，我们回顾一下最开始的问题，就会发现输出是完全符合预期的。</p>
+<h3 id="go中的rune">go中的rune</h3>
+<p>笔者在这里猜测提问者期望的结果是“字符串转字节切片和字符转字节的结果保持一致”，这时<code>rune</code>就派上用场了，我们看看使用rune的效果：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>([]rune(<span style="color:#e6db74">&#34;&#34;</span>))
+<span style="color:#75715e">// 输出：[129]
+</span></code></pre></div><p>由上可知用rune切片去转字符串时，它是直接将每个字符转为对应的unicode。</p>
+<p>我们通过下面的代码模拟字符串转为[]rune切片和[]rune切片转为字符串的过程：</p>
+<p>字符串转为rune切片:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">    <span style="color:#75715e">// 字符串直接转为[]rune切片
+</span><span style="color:#75715e"></span>	<span style="color:#66d9ef">for</span> <span style="color:#a6e22e">_</span>, <span style="color:#a6e22e">v</span> <span style="color:#f92672">:=</span> <span style="color:#66d9ef">range</span> []rune(<span style="color:#e6db74">&#34;新世界杂货铺&#34;</span>) {
+		<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Printf</span>(<span style="color:#e6db74">&#34;%x &#34;</span>, <span style="color:#a6e22e">v</span>)
+	}
+	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>()
+	<span style="color:#a6e22e">bs</span> <span style="color:#f92672">:=</span> []byte(<span style="color:#e6db74">&#34;新世界杂货铺&#34;</span>)
+	<span style="color:#66d9ef">for</span> len(<span style="color:#a6e22e">bs</span>) &gt; <span style="color:#ae81ff">0</span> {
+		<span style="color:#a6e22e">r</span>, <span style="color:#a6e22e">w</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">utf8</span>.<span style="color:#a6e22e">DecodeRune</span>(<span style="color:#a6e22e">bs</span>)
+		<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Printf</span>(<span style="color:#e6db74">&#34;%x &#34;</span>, <span style="color:#a6e22e">r</span>)
+		<span style="color:#a6e22e">bs</span> = <span style="color:#a6e22e">bs</span>[<span style="color:#a6e22e">w</span>:]
+	}
+	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>()
+	<span style="color:#75715e">// 输出:
+</span><span style="color:#75715e"></span>	<span style="color:#75715e">// 65b0 4e16 754c 6742 8d27 94fa
+</span><span style="color:#75715e"></span>	<span style="color:#75715e">// 65b0 4e16 754c 6742 8d27 94fa
+</span></code></pre></div><p>上述代码中<code>utf8.DecodeRune</code>的作用是通过传入的utf8字节序列转为一个rune即unicode。</p>
+<p>rune切片转为字符串:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">    <span style="color:#75715e">// rune切片转为字符串
+</span><span style="color:#75715e"></span>	<span style="color:#a6e22e">rs</span> <span style="color:#f92672">:=</span> []<span style="color:#66d9ef">rune</span>{<span style="color:#ae81ff">0x65b0</span>, <span style="color:#ae81ff">0x4e16</span>, <span style="color:#ae81ff">0x754c</span>, <span style="color:#ae81ff">0x6742</span>, <span style="color:#ae81ff">0x8d27</span>, <span style="color:#ae81ff">0x94fa</span>}
+	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(string(<span style="color:#a6e22e">rs</span>))
+	<span style="color:#a6e22e">utf8bs</span> <span style="color:#f92672">:=</span> make([]<span style="color:#66d9ef">byte</span>, <span style="color:#ae81ff">0</span>)
+	<span style="color:#66d9ef">for</span> <span style="color:#a6e22e">_</span>, <span style="color:#a6e22e">r</span> <span style="color:#f92672">:=</span> <span style="color:#66d9ef">range</span> <span style="color:#a6e22e">rs</span> {
+		<span style="color:#a6e22e">bs</span> <span style="color:#f92672">:=</span> make([]<span style="color:#66d9ef">byte</span>, <span style="color:#ae81ff">4</span>)
+		<span style="color:#a6e22e">w</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">utf8</span>.<span style="color:#a6e22e">EncodeRune</span>(<span style="color:#a6e22e">bs</span>, <span style="color:#a6e22e">r</span>)
+		<span style="color:#a6e22e">utf8bs</span> = append(<span style="color:#a6e22e">utf8bs</span>, <span style="color:#a6e22e">bs</span>[:<span style="color:#a6e22e">w</span>]<span style="color:#f92672">...</span>)
+	}
+	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(string(<span style="color:#a6e22e">utf8bs</span>))
+	<span style="color:#75715e">// 输出:
+</span><span style="color:#75715e"></span>	<span style="color:#75715e">// 新世界杂货铺
+</span><span style="color:#75715e"></span>	<span style="color:#75715e">// 新世界杂货铺
+</span></code></pre></div><p>上述代码中<code>utf8.EncodeRune</code>的作用是将一个rune转为utf8字节序列。</p>
+<p><strong>综上</strong>：对于无法确定字符串中仅有单字节的字符的情况， 请使用<code>rune</code>，每一个rune类型代表一个unicode字符，并且它可以和字符串做无缝切换。</p>
+<h3 id="理解go中的字符串其实是字节切片">理解go中的字符串其实是字节切片</h3>
+<p>前面已经提到了字符串能够存储任意字节数据，而且是一个标准的utf8格式的字节切片。那么本节将会通过代码来加深印象。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>([]byte(<span style="color:#e6db74">&#34;新世界杂货铺&#34;</span>))
+	<span style="color:#a6e22e">s</span> <span style="color:#f92672">:=</span> <span style="color:#e6db74">&#34;新世界杂货铺&#34;</span>
+	<span style="color:#66d9ef">for</span> <span style="color:#a6e22e">i</span> <span style="color:#f92672">:=</span> <span style="color:#ae81ff">0</span>; <span style="color:#a6e22e">i</span> &lt; len(<span style="color:#a6e22e">s</span>); <span style="color:#a6e22e">i</span><span style="color:#f92672">++</span> {
+		<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Print</span>(<span style="color:#a6e22e">s</span>[<span style="color:#a6e22e">i</span>], <span style="color:#e6db74">&#34; &#34;</span>)
+	}
+	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>()
+	<span style="color:#75715e">// 输出：
+</span><span style="color:#75715e"></span>	<span style="color:#75715e">// [230 150 176 228 184 150 231 149 140 230 157 130 232 180 167 233 147 186]
+</span><span style="color:#75715e"></span>	<span style="color:#75715e">// 230 150 176 228 184 150 231 149 140 230 157 130 232 180 167 233 147 186
+</span></code></pre></div><p>由上述的代码可知，我们通过游标按字节访问字符串得到的结果和字符串转为字节切片是一样的，因此可以再次确认字符串和字节切片是等价的。</p>
+<p>通常情况下我们的字符串都是标准utf8格式的字节切片，但这并不是说明字符串只能存储utf8格式的字节切片，<strong>go中的字符串可以存储任意的字节数据</strong>。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">
+	<span style="color:#a6e22e">bs</span> <span style="color:#f92672">:=</span> []<span style="color:#66d9ef">byte</span>{<span style="color:#ae81ff">65</span>, <span style="color:#ae81ff">73</span>, <span style="color:#ae81ff">230</span>, <span style="color:#ae81ff">150</span>, <span style="color:#ae81ff">176</span>, <span style="color:#ae81ff">255</span>}
+	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(string(<span style="color:#a6e22e">bs</span>))         <span style="color:#75715e">// 将随机的字节切片转为字符串
+</span><span style="color:#75715e"></span>	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>([]byte(string(<span style="color:#a6e22e">bs</span>))) <span style="color:#75715e">// 将字符串再次转回字节切片
+</span><span style="color:#75715e"></span>
+	<span style="color:#a6e22e">rs</span> <span style="color:#f92672">:=</span> []rune(string(<span style="color:#a6e22e">bs</span>)) <span style="color:#75715e">// 将字符串转为字节rune切片
+</span><span style="color:#75715e"></span>	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">rs</span>)          <span style="color:#75715e">// 输出rune切片
+</span><span style="color:#75715e"></span>	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(string(<span style="color:#a6e22e">rs</span>))  <span style="color:#75715e">// 将rune切片转为字符串
+</span><span style="color:#75715e"></span>
+	<span style="color:#66d9ef">for</span> len(<span style="color:#a6e22e">bs</span>) &gt; <span style="color:#ae81ff">0</span> {
+		<span style="color:#a6e22e">r</span>, <span style="color:#a6e22e">w</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">utf8</span>.<span style="color:#a6e22e">DecodeRune</span>(<span style="color:#a6e22e">bs</span>)
+		<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Printf</span>(<span style="color:#e6db74">&#34;%d: 0x%x &#34;</span>, <span style="color:#a6e22e">r</span>, <span style="color:#a6e22e">r</span>) <span style="color:#75715e">// 输出rune的值和其对应的16进制
+</span><span style="color:#75715e"></span>		<span style="color:#a6e22e">bs</span> = <span style="color:#a6e22e">bs</span>[<span style="color:#a6e22e">w</span>:]
+	}
+	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>()
+	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>([]byte(string(<span style="color:#a6e22e">rs</span>))) <span style="color:#75715e">// 将rune切片转为字符串后再次转为字节切片
+</span><span style="color:#75715e"></span>	<span style="color:#75715e">// 输出：
+</span><span style="color:#75715e"></span>	<span style="color:#75715e">// AI新�
+</span><span style="color:#75715e"></span>    <span style="color:#75715e">// [65 73 230 150 176 255]
+</span><span style="color:#75715e"></span>    <span style="color:#75715e">// [65 73 26032 65533]
+</span><span style="color:#75715e"></span>    <span style="color:#75715e">// AI新�
+</span><span style="color:#75715e"></span>    <span style="color:#75715e">// 65: 0x41 73: 0x49 26032: 0x65b0 65533: 0xfffd 
+</span><span style="color:#75715e"></span>    <span style="color:#75715e">// [65 73 230 150 176 239 191 189]
+</span><span style="color:#75715e"></span>
+</code></pre></div><p>仔细阅读上面的代码和输出，前5行的输出应该是没有疑问的。但是第6行输出却和预期有出入。</p>
+<p>前面提到了字符串可以存储任意的字节数据，那如果存储的字节数据不是标准的utf8字节切片就会出现上面的问题。</p>
+<p>我们已经知道通过<code>utf8.DecodeRune</code>可以将字节切片转为rune。那如果碰到不符合utf8编码规范的字节切片时，utf8.DecodeRune会返回一个容错的unicode<code>\uFFFD</code>，这个unicode对应上面输出的16进制<code>0xfffd</code>。</p>
+<p>问题也就出现在这个容错的unicode<code>\uFFFD</code>上，因为字节切片不符合utf8编码规范无法得到正确的unicode，既<code>\uFFFD</code>占据了本应该是正确的unicode所在的位置。这个时候再将已经含有容错字符的rune切片转为字符串时，字符串存储的就是合法的utf8字节切片了，因此第六行输出的是含有<code>\uFFFD</code>的合法utf8字节切片，也就产生了和最初始的字节切片不一致的情况了。</p>
+<p>⚠️：<strong>在平时的开发中要注意rune切片和byte切片的相互转换一定要基于没有乱码的字符串(内部是符合utf8编码规则的字节切片)，否则容易出现上述类似的错误</strong>。</p>
+<h3 id="字符串的多种表示方式">字符串的多种表示方式</h3>
+<p>本节算是扩展了，在开发中还是尽量别用这种特殊的表示方式，虽然看起来很高级但是可读性太差。</p>
+<p>下面直接看代码：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">	<span style="color:#a6e22e">bs</span> <span style="color:#f92672">:=</span> []byte([]byte(<span style="color:#e6db74">&#34;新&#34;</span>))
+	<span style="color:#66d9ef">for</span> <span style="color:#a6e22e">i</span> <span style="color:#f92672">:=</span> <span style="color:#ae81ff">0</span>; <span style="color:#a6e22e">i</span> &lt; len(<span style="color:#a6e22e">bs</span>); <span style="color:#a6e22e">i</span><span style="color:#f92672">++</span> {
+		<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Printf</span>(<span style="color:#e6db74">&#34;0x%x &#34;</span>, <span style="color:#a6e22e">bs</span>[<span style="color:#a6e22e">i</span>])
+	}
+	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>()
+	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;\xe6\x96\xb0&#34;</span>)
+	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;\xe6\x96\xb0世界杂货铺&#34;</span> <span style="color:#f92672">==</span> <span style="color:#e6db74">&#34;新世界杂货铺&#34;</span>)
+	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#39;\u65b0&#39;</span> <span style="color:#f92672">==</span> <span style="color:#e6db74">&#39;新&#39;</span>)
+	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;\u65b0世界杂货铺&#34;</span> <span style="color:#f92672">==</span> <span style="color:#e6db74">&#34;新世界杂货铺&#34;</span>)
+	<span style="color:#75715e">// 输出:
+</span><span style="color:#75715e"></span>	<span style="color:#75715e">// 0xe6 0x96 0xb0 
+</span><span style="color:#75715e"></span>    <span style="color:#75715e">// 新
+</span><span style="color:#75715e"></span>    <span style="color:#75715e">// true
+</span><span style="color:#75715e"></span>    <span style="color:#75715e">// true
+</span><span style="color:#75715e"></span>    <span style="color:#75715e">// true
+</span></code></pre></div><p>目前笔者仅发现unicode和单字节的16进制可以直接用在字符串中， 欢迎读者提供更多的表示方式以供交流。</p>
+<p>最后，祝大家读完此篇文章后能够有所收获。</p>
+<p>【关注公众号】</p>
+<p><img src="https://note.youdao.com/yws/api/personal/file/WEBa3ee67b2b867e98cb5c587f4adfa6801?method=download&amp;shareKey=0fbb95d0aec6170b854e7b890d50d559" alt=""></p>
+
+      </div>
+    </article>
+
+    <hr />
+
+    <div class="post-info">
+        <p>
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-tag meta-icon">
+            <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path>
+            <line x1="7" y1="7" x2="7" y2="7"></line>
+          </svg><span class="tag"><a href="https://isites.github.io/tags/go/">Go</a></span>
+        </p>
+
+      <p>
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file-text">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+          <polyline points="14 2 14 8 20 8"></polyline>
+          <line x1="16" y1="13" x2="8" y2="13"></line>
+          <line x1="16" y1="17" x2="8" y2="17"></line>
+          <polyline points="10 9 9 9 8 9"></polyline>
+        </svg>
+        446 Words
+      </p>
+
+      <p>
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-calendar">
+          <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+          <line x1="16" y1="2" x2="16" y2="6"></line>
+          <line x1="8" y1="2" x2="8" y2="6"></line>
+          <line x1="3" y1="10" x2="21" y2="10"></line>
+        </svg>
+        2020-08-24 23:47 &#43;0800
+      </p>
+ 
+    </div>
+
+    
+      <div class="pagination">
+        <div class="pagination__title">
+          <span class="pagination__title-h"></span>
+          <hr />
+        </div>
+
+        <div class="pagination__buttons">
+          
+            <span class="button previous">
+              <a href="https://isites.github.io/timeline/gotls1.2/">
+                <span class="button__icon">←</span>
+                <span class="button__text">码了2000多行代码就是为了讲清楚TLS握手流程（续）</span>
+              </a>
+            </span>
+          
+
+          
+        </div>
+      </div>
+    
+
+
+    
+
+  </main>
+
+            </div>
+
+            
+                <footer class="footer">
+    <div class="footer__inner">
+        <div class="footer__content">
+            <span>&copy; 2021</span>
+            
+             
+        </div>
+    </div> 
+</footer>
+<script type="text/javascript">
+    $(function(){
+
+  window.sr = ScrollReveal();
+
+  if ($(window).width() < 768) {
+
+    if ($('.timeline-content').hasClass('js--fadeInLeft')) {
+        $('.timeline-content').removeClass('js--fadeInLeft').addClass('js--fadeInRight');
+    }
+
+    sr.reveal('.js--fadeInRight', {
+        origin: 'right',
+        distance: '300px',
+        easing: 'ease-in-out',
+        duration: 800,
+      });
+
+  } else {
+    
+    sr.reveal('.js--fadeInLeft', {
+        origin: 'left',
+        distance: '300px',
+          easing: 'ease-in-out',
+        duration: 800,
+      });
+
+      sr.reveal('.js--fadeInRight', {
+        origin: 'right',
+        distance: '300px',
+        easing: 'ease-in-out',
+        duration: 800,
+      });
+
+  }
+  
+  sr.reveal('.js--fadeInLeft', {
+        origin: 'left',
+        distance: '300px',
+          easing: 'ease-in-out',
+        duration: 800,
+      });
+
+      sr.reveal('.js--fadeInRight', {
+        origin: 'right',
+        distance: '300px',
+        easing: 'ease-in-out',
+        duration: 800,
+      });
+
+
+});
+
+</script>
+            
+        </div>
+
+        
+
+
+
+
+<script type="text/javascript" src="/bundle.min.dc716e9092c9820b77f96da294d0120aeeb189b5bcea9752309ebea27fd53bbe6b13cffb2aca8ecf32525647ceb7001f76091de4199ac5a3caa432c070247f5b.js" integrity="sha512-3HFukJLJggt3&#43;W2ilNASCu6xibW86pdSMJ6&#43;on/VO75rE8/7KsqOzzJSVkfOtwAfdgkd5BmaxaPKpDLAcCR/Ww=="></script>
+
+
+
+    </body>
+</html>
