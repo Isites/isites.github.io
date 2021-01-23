@@ -51,6 +51,25 @@
     </item>
     
     <item>
+      <title>区分Protobuf 3中缺失值和默认值</title>
+      <link>https://isites.github.io/timeline/gopb3/</link>
+      <pubDate>Tue, 01 Dec 2020 12:20:38 +0800</pubDate>
+      
+      <guid>https://isites.github.io/timeline/gopb3/</guid>
+      <description>这两天翻了翻以前的项目，发现不同项目中关于Protobuf 3缺失值和默认值的区分居然有好几种实现。今天笔者冷饭新炒，结合项目中的实现以及切身经验共总结出如下六种方案。
+增加标识字段 众所周知，在Go中数字类型的默认值为0（这里仅以数字类型举例），这在某些场景下往往会引起一定的歧义。
+ 以is_show字段为例，如果没有该字段表示不更新DB中的数据，如果有该字段且值为0则表示更新DB中的数据为不可见，如果有该字段且值为1则表示更新DB中的数据为可见。
+ 上述场景中，实际要解决的问题是如何区分默认值和缺失字段。增加标识字段是通过额外增加一个字段来达到区分的目的。
+例如：增加一个has_show_field字段标识is_show是否为有效值。如果has_show_field为true则is_show为有效值，否则认为is_show未设置值。
+此方案虽然直白，但每次设置is_show的值时还需设置has_show_field的值，甚是麻烦故笔者十分不推荐。
+字段含义和默认值区分 字段含义和默认值区分即不使用对应类型的默认值作为该字段的有效值。接着前面的例子继续描述，is_show为1时表示展示，is_show为2时表示不展示，其他情况则认为is_show未设置值。
+此方案笔者还是比较认可的，唯一问题就是和开发者的默认习惯略微不符。
+使用oneof oneof 的用意是达到 C 语言 union 数据类型的效果，但是诸多大佬还是发现它可以标识缺失字段。
+message Status { oneof show { int32 is_show = 1; } } message Test { int32 bar = 1; Status st = 2; } 上述proto文件生成对应go文件后，Test.St为Status的指针类型，故通过此方案可以区分默认值和缺失字段。但是笔者认为此方案做json序列化时十分不友好，下面是笔者的例子：
+// oneof to json ot1 := oneof.Test{ Bar: 1, St: &amp;amp;oneof.Status{ Show: &amp;amp;oneof.Status_IsShow{ IsShow: 1, }, }, } bts, err := json.Marshal(ot1) fmt.Println(string(bts), err) // json to oneof failed jsonStr := `{&amp;#34;bar&amp;#34;:1,&amp;#34;st&amp;#34;:{&amp;#34;Show&amp;#34;:{&amp;#34;is_show&amp;#34;:1}}}` var ot2 oneof.</description>
+    </item>
+    
+    <item>
       <title>深入剖析go中字符串的编码问题——特殊字符的string怎么转byte？</title>
       <link>https://isites.github.io/timeline/go-string-encode/</link>
       <pubDate>Mon, 24 Aug 2020 23:47:48 +0800</pubDate>
