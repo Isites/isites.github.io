@@ -6,7 +6,27 @@
     <description>Recent content on 新世界杂货铺</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Tue, 19 Jan 2021 20:30:38 +0800</lastBuildDate><atom:link href="https://isites.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Mon, 01 Feb 2021 20:30:38 +0800</lastBuildDate><atom:link href="https://isites.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>1分钟内的Linux性能分析法</title>
+      <link>https://isites.github.io/timeline/60-linux/</link>
+      <pubDate>Mon, 01 Feb 2021 20:30:38 +0800</pubDate>
+      
+      <guid>https://isites.github.io/timeline/60-linux/</guid>
+      <description>本着“拿来主义”的精神，吸收他人长处为己用。老许翻译一篇Linux性能分析相关的文章分享给各位读者，同时也加深自己的印象。
+ 你登录到具有性能问题的Linux服务器时，第一分钟要检查什么？
+在Netflix，我们拥有庞大的Linux EC2云实例，以及大量的性能分析工具来监视和调查它们的性能。这些工具包括Atlas和Vector。Atlas用于全云监控，Vector用于按需实例分析。这些工具能帮助我们解决大部分问题，但有时候我们仍需登录实例并运行一些标准的Linux性能工具。
+ Atlas：根据github上面的文档老许简单说一下自己的认知。一个可以管理基于时间维度数据的后端，同时具有内存存储功能可以非常快速地收集和报告大量指标。
+Vector：Vector是一个主机上的性能监视框架，它可以将各种指标展示在工程师的浏览器上面。
+ 总结 在这篇文章中，Netflix性能工程团队将向您展示通过命令行进行性能分析是，前60秒应该使用那些Linux标准工具。在60秒内，你可以通过以下10个命令来全面了解系统资源使用情况和正在运行的进程。首先寻找错误和饱和指标，因为他们很容易理解，然后是资源利用率。饱和是指资源负载超出其处理能力，其可以表现为一个请求队列的长度或者等待时间。
+uptime dmesg | tail vmstat 1 mpstat -P ALL 1 pidstat 1 iostat -xz 1 free -m sar -n DEV 1 sar -n TCP,ETCP 1 top 其中一些命令需要安装sysstat软件包。这些命令暴露的指标是一种帮助你完成USE Method（Utilization Saturation and Errors Method）——一种查找性能瓶颈的方法。这涉及检查所有资源（CPU、内存、磁盘等）利用率，饱和度和错误等指标。同时还需注意通过排除法可以逐步缩小资源检查范围。
+以下各节通过生产系统中的示例总结了这些命令。这些命令的更多信息，请参考使用手册。
+uptime $ uptime 23:51:26 up 21:31, 1 user, load average: 30.02, 26.43, 19.02 这是一种快速查看平均负载的方法，它指示了等待运行的进程数量。在Linux系统上，这些数字包括要在CPU上运行的进程以及处于I/O（通常是磁盘I/O）阻塞的进程。这提供了资源负载的大概状态，没有其他工具就无法理解更多。仅值得一看。
+这三个数字分别代表着1分钟、5分钟和15分钟内的平均负载。这三个指标让我们了解负载是如何随时间变化的。例如，你被要求检查有问题的服务器，而1分钟的值远低于15分钟的值，则意味着你可能登录的太晚而错过了问题现场。
+在上面的例子中，最近的平均负载增加，一分钟值达到30，而15分钟值达到19。数字如此之大意味着很多：可能是CPU需求（可以通过后文中介绍的vmstat或mpstat命令来确认）。
+dmesg | tail $ dmesg | tail [1880957.563150] perl invoked oom-killer: gfp_mask=0x280da, order=0, oom_score_adj=0 [.</description>
+    </item>
+    
     <item>
       <title>Go中的SSRF攻防战</title>
       <link>https://isites.github.io/timeline/go-ssrf/</link>

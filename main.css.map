@@ -1,7 +1,7 @@
 {
 	"version": 3,
 	"file": "main.css",
-	"sourceRoot": "/opt/myJob/repos/workspace/goblog/src",
+	"sourceRoot": "/opt/repos/projects/goblog/src",
 	"sources": [
 		"themes/timeline/assets/scss/main.scss",
 		"themes/timeline/assets/scss/_normalize.scss",
