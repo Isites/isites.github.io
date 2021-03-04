@@ -6,7 +6,27 @@
     <description>Recent content on Gopher指北</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Mon, 01 Feb 2021 20:30:38 +0800</lastBuildDate><atom:link href="https://isites.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Thu, 04 Mar 2021 18:53:38 +0800</lastBuildDate><atom:link href="https://isites.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>白话Go内存模型&amp;Happen-Before</title>
+      <link>https://isites.github.io/timeline/go-memory-model/</link>
+      <pubDate>Thu, 04 Mar 2021 18:53:38 +0800</pubDate>
+      
+      <guid>https://isites.github.io/timeline/go-memory-model/</guid>
+      <description>Go内存模型明确指出，一个goroutine如何才能观察到其他goroutine对同一变量的写操作。
+当多个goroutine并发同时存取同一个数据时必须把并发的存取操作序列化。在Go中保证读写的序列化可以通过channel通信或者其他同步原语（例如sync包中的互斥锁、读写锁和sync/atomic中的原子操作）。
+Happens Before 在单goroutine中，读取和写入的行为一定是和程序指定的执行顺序表现一致。换言之，编译器和处理器在不改变语言规范所定义的行为前提下才可以对单个goroutine中的指令进行重排序。
+a := 1 b := 2 由于指令重排序，b := 2可能先于a := 1执行。单goroutine中，该执行顺序的调整并不会影响最终结果。但多个goroutine场景下可能就会出现问题。
+var a, b int // goroutine A go func() { a := 5 b := 1 }() // goroutine B go func() { for b == 1 {} fmt.Println(a) }() 执行上述代码时，预期goroutine B能够正常输出5，但因为指令重排序，b := 1可能先于a := 5执行，最终goroutine B可能输出0。
+ 注：上述例子是个不正确的示例，仅作说明用。
+ 为了明确读写的操作的要求，Go中引入了happens before，它表示执行内存操作的一种偏序关系。
+happens-before的作用 多个goroutine访问共享变量时，它们必须建立同步事件来确保happens-before条件，以此确保读能够观察预期的写。
+什么是Happens Before 如果事件e1发生在事件e2之前，那么我们说e2发生在e1之后。 同样，如果e1不在e2之前发生也没有在e2之后发生，那么我们说e1和e2同时发生。
+在单个goroutine中，happens-before的顺序就是程序执行的顺序。那happens-before到底是什么顺序呢？我们看看下面的条件。
+如果对于一个变量v的读操作r和写操作w满足下述两个条件，r才允许观察到w：
+ r没有发生在w之前。 没有其他写操作发生在w之后和r之前。  为了保证变量v的一个读操作r能够观察到一个特定的写操作w，需要确保w是唯一允许被r观察的写操作。那么，如果 r、w 都满足以下条件，r就能确保观察到w：</description>
+    </item>
+    
     <item>
       <title>1分钟内的Linux性能分析法</title>
       <link>https://isites.github.io/timeline/60-linux/</link>
