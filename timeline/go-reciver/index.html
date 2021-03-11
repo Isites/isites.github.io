@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="author" content="">
+<meta name="description" content="前言 在日常的开发中我们除了定义函数以外， 我们还会定义一些方法。这本来没有什么， 但是一些从PHP或者其他面向对象语言转GO的同学往往会把receiver name命名为this, self, me等。
+笔者在实际项目开发中也遇到类似的同学， 屡次提醒却没有效果，于是决心写下这篇文章以便好好说服这些同学。
+CR标准做法 首先我们来看一下GO推荐的标准命名Receiver Names，以下内容摘抄自https://github.com/golang/go/wiki/CodeReviewComments#receiver-names：
+The name of a method&#39;s receiver should be a reflection of its identity; often a one or two letter abbreviation of its type suffices (such as &amp;quot;c&amp;quot; or &amp;quot;cl&amp;quot; for &amp;quot;Client&amp;quot;). Don&#39;t use generic names such as &amp;quot;me&amp;quot;, &amp;quot;this&amp;quot; or &amp;quot;self&amp;quot;, identifiers typical of object-oriented languages that gives the method a special meaning. In Go, the receiver of a method is just another parameter and therefore, should be named accordingly." />
+<meta name="keywords" content=", Go" />
+<meta name="robots" content="noodp" />
+<meta name="theme-color" content="" />
+<link rel="canonical" href="https://isites.github.io/timeline/go-reciver/" />
+
+
+    <title>
+        
+            为什么go中的receiver name不推荐使用this或者self :: Gopher指北 
+        
+    </title>
+
+
+
+<link href="https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/3.2.1/css/flag-icon.min.css" rel="stylesheet"
+    type="text/css"> 
+
+
+
+
+<link rel="stylesheet" href="/main.805b1025016494ee5fd67b55b8ecd5e2b7c4a9f0bdda42e300c62b85ddfef68f.css">
+
+
+  
+
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest">
+    <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#252627">
+    <link rel="shortcut icon" href="/favicon.ico">
+    <meta name="msapplication-TileColor" content="#252627">
+    <meta name="theme-color" content="#252627">
+
+
+
+<meta itemprop="name" content="为什么go中的receiver name不推荐使用this或者self">
+<meta itemprop="description" content="前言 在日常的开发中我们除了定义函数以外， 我们还会定义一些方法。这本来没有什么， 但是一些从PHP或者其他面向对象语言转GO的同学往往会把receiver name命名为this, self, me等。
+笔者在实际项目开发中也遇到类似的同学， 屡次提醒却没有效果，于是决心写下这篇文章以便好好说服这些同学。
+CR标准做法 首先我们来看一下GO推荐的标准命名Receiver Names，以下内容摘抄自https://github.com/golang/go/wiki/CodeReviewComments#receiver-names：
+The name of a method&#39;s receiver should be a reflection of its identity; often a one or two letter abbreviation of its type suffices (such as &quot;c&quot; or &quot;cl&quot; for &quot;Client&quot;). Don&#39;t use generic names such as &quot;me&quot;, &quot;this&quot; or &quot;self&quot;, identifiers typical of object-oriented languages that gives the method a special meaning. In Go, the receiver of a method is just another parameter and therefore, should be named accordingly.">
+<meta itemprop="datePublished" content="2020-08-29T12:20:38+08:00" />
+<meta itemprop="dateModified" content="2020-08-29T12:20:38+08:00" />
+<meta itemprop="wordCount" content="248">
+
+
+
+<meta itemprop="keywords" content="Go," />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="为什么go中的receiver name不推荐使用this或者self"/>
+<meta name="twitter:description" content="前言 在日常的开发中我们除了定义函数以外， 我们还会定义一些方法。这本来没有什么， 但是一些从PHP或者其他面向对象语言转GO的同学往往会把receiver name命名为this, self, me等。
+笔者在实际项目开发中也遇到类似的同学， 屡次提醒却没有效果，于是决心写下这篇文章以便好好说服这些同学。
+CR标准做法 首先我们来看一下GO推荐的标准命名Receiver Names，以下内容摘抄自https://github.com/golang/go/wiki/CodeReviewComments#receiver-names：
+The name of a method&#39;s receiver should be a reflection of its identity; often a one or two letter abbreviation of its type suffices (such as &quot;c&quot; or &quot;cl&quot; for &quot;Client&quot;). Don&#39;t use generic names such as &quot;me&quot;, &quot;this&quot; or &quot;self&quot;, identifiers typical of object-oriented languages that gives the method a special meaning. In Go, the receiver of a method is just another parameter and therefore, should be named accordingly."/>
+
+
+
+
+
+
+
+    <meta property="article:published_time" content="2020-08-29 12:20:38 &#43;0800 CST" />
+
+
+
+
+
+
+
+
+    </head>
+
+    <body class="">
+        <div class="container">
+            <header class="header">
+    <span class="header__inner">
+        <a href="https://isites.github.io/" style="text-decoration: none;">
+    <div class="logo">
+        
+            <span class="logo__mark">Gopher指北</span>
+            <span class="logo__text"></span>
+            <span class="logo__cursor" style=
+                  "
+                   
+                   ">
+            </span>
+        
+    </div>
+</a>
+
+
+        <span class="header__right">
+             
+            <span class="theme-toggle unselectable"><svg class="theme-toggler" width="24" height="24" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <path d="M22 41C32.4934 41 41 32.4934 41 22C41 11.5066 32.4934 3 22
+  3C11.5066 3 3 11.5066 3 22C3 32.4934 11.5066 41 22 41ZM7 22C7
+  13.7157 13.7157 7 22 7V37C13.7157 37 7 30.2843 7 22Z"/>
+</svg>
+</span>
+        </span>
+    </span>
+</header>
+
+
+            <div class="content">
+                
+  <main class="post">
+
+    <div class="post-info">
+      <p>
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-clock">
+          <circle cx="12" cy="12" r="10"></circle>
+          <polyline points="12 6 12 12 16 14"></polyline>
+        </svg>
+        2 minutes
+
+        
+      </p>
+    </div>
+
+    <article>
+      <h1 class="post-title">
+        <a href="https://isites.github.io/timeline/go-reciver/">为什么go中的receiver name不推荐使用this或者self</a>
+      </h1>
+        <hr />
+        <aside id="toc">
+          <div class="toc-title">Table of Contents</div>
+          <nav id="TableOfContents">
+  <ul>
+    <li><a href="#前言">前言</a></li>
+    <li><a href="#cr标准做法">CR标准做法</a></li>
+    <li><a href="#receiver是方法的第一个参数">Receiver是方法的第一个参数！</a></li>
+    <li><a href="#receiver是可以为nil的">Receiver是可以为nil的！！！</a></li>
+  </ul>
+</nav>
+        </aside>
+        <hr />
+
+      
+
+      <div class="post-content">
+        <h2 id="前言">前言</h2>
+<p>在日常的开发中我们除了定义函数以外， 我们还会定义一些方法。这本来没有什么， 但是一些从PHP或者其他面向对象语言转GO的同学往往会把receiver name命名为<code>this</code>, <code>self</code>, <code>me</code>等。</p>
+<p>笔者在实际项目开发中也遇到类似的同学， 屡次提醒却没有效果，于是决心写下这篇文章以便好好说服这些同学。</p>
+<h2 id="cr标准做法">CR标准做法</h2>
+<p>首先我们来看一下GO推荐的标准命名<code>Receiver Names</code>，以下内容摘抄自https://github.com/golang/go/wiki/CodeReviewComments#receiver-names：</p>
+<pre><code>The name of a method's receiver should be a reflection of its identity;
+often a one or two letter abbreviation of its type suffices (such as &quot;c&quot; or &quot;cl&quot; for &quot;Client&quot;). 
+Don't use generic names such as &quot;me&quot;, &quot;this&quot; or &quot;self&quot;, identifiers typical of object-oriented languages that gives the method a special meaning. 
+In Go, the receiver of a method is just another parameter and therefore, should be named accordingly. 
+...
+</code></pre><p>简单翻译总结有如下2点：</p>
+<ol>
+<li>方法接受者名称应反映其身份， 并且不要使用<code>me</code>, <code>this</code>, <code>self</code>这些面向对象语言的典型标志符。</li>
+<li>在go中方法接受者其实就是方法的另一个参数。</li>
+</ol>
+<h2 id="receiver是方法的第一个参数">Receiver是方法的第一个参数！</h2>
+<p>上面的第二点， 可能不是很好理解，所以我们直接看下面的demo：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#75715e">// T ...
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">T</span> <span style="color:#66d9ef">int</span>
+
+<span style="color:#75715e">// Println ...
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">t</span> <span style="color:#a6e22e">T</span>) <span style="color:#a6e22e">Println</span>() {
+	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;value: %v&#34;</span>, <span style="color:#a6e22e">t</span>)
+}
+
+<span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
+	<span style="color:#a6e22e">t</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">T</span>(<span style="color:#ae81ff">1</span>)
+	<span style="color:#a6e22e">t</span>.<span style="color:#a6e22e">Println</span>()
+	<span style="color:#a6e22e">T</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">t</span>) <span style="color:#75715e">// receiver作为函数的第一个参数，这个时候发生值拷贝，所以方法内部的t变量只是真实t变量的一个拷贝，这和this的含义是不相符的
+</span><span style="color:#75715e"></span>}
+<span style="color:#75715e">// output:
+</span><span style="color:#75715e"></span><span style="color:#a6e22e">value</span>: <span style="color:#ae81ff">1</span>
+<span style="color:#a6e22e">value</span>: <span style="color:#ae81ff">1</span>
+</code></pre></div><p>通过上面的demo， 我们知道接受者可以直接作为第一个参数传递给方法的。而<code>t.Println()</code>应该就是Go中的一种语法糖了。</p>
+<p>到这里可能有同学又要问了， 既然Go提供了这种语糖，那我们这样命名有什么问题呢？笔者先不着急解释， 我们继续看下面的demo：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#75715e">// Test ...
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">Test</span> <span style="color:#66d9ef">struct</span> {
+	<span style="color:#a6e22e">A</span> <span style="color:#66d9ef">int</span>
+}
+
+<span style="color:#75715e">// SetA ...
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">t</span> <span style="color:#a6e22e">Test</span>) <span style="color:#a6e22e">SetA</span>(<span style="color:#a6e22e">a</span> <span style="color:#66d9ef">int</span>) {
+	<span style="color:#a6e22e">t</span>.<span style="color:#a6e22e">A</span> = <span style="color:#a6e22e">a</span>
+}
+
+<span style="color:#75715e">// SetA1 ...
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">t</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">Test</span>) <span style="color:#a6e22e">SetA1</span>(<span style="color:#a6e22e">a</span> <span style="color:#66d9ef">int</span>) {
+	<span style="color:#a6e22e">t</span>.<span style="color:#a6e22e">A</span> = <span style="color:#a6e22e">a</span>
+}
+
+<span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
+	<span style="color:#a6e22e">t</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">Test</span>{
+		<span style="color:#a6e22e">A</span>: <span style="color:#ae81ff">3</span>,
+	}
+	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;demo1:&#34;</span>)
+	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">t</span>.<span style="color:#a6e22e">A</span>)
+	<span style="color:#a6e22e">t</span>.<span style="color:#a6e22e">SetA</span>(<span style="color:#ae81ff">5</span>)
+	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">t</span>.<span style="color:#a6e22e">A</span>)
+	<span style="color:#a6e22e">t1</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">Test</span>{
+		<span style="color:#a6e22e">A</span>: <span style="color:#ae81ff">4</span>,
+	}
+	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;demo2:&#34;</span>)
+	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">t1</span>.<span style="color:#a6e22e">A</span>)
+	(<span style="color:#f92672">&amp;</span><span style="color:#a6e22e">t1</span>).<span style="color:#a6e22e">SetA1</span>(<span style="color:#ae81ff">6</span>)
+	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">t1</span>.<span style="color:#a6e22e">A</span>)
+}
+<span style="color:#75715e">// output:
+</span><span style="color:#75715e"></span><span style="color:#a6e22e">demo1</span>:
+<span style="color:#ae81ff">3</span>
+<span style="color:#ae81ff">3</span>
+<span style="color:#a6e22e">demo2</span>:
+<span style="color:#ae81ff">4</span>
+<span style="color:#ae81ff">6</span>
+</code></pre></div><p>看上面的demo我们知道， 当receiver不是指针时调用<code>SetA</code>其值根本没有改变。</p>
+<p>因为Go中都是值传递，所以你如果对SetA的receiver的名称命名为<code>this</code>, <code>self</code>等，它就已经失去了本身的意义——“调用一个对象的方法就是向该对象传递一条消息”。而且对象本身的属性也并不一定会发生改变。</p>
+<p><strong>综上</strong>: 请各位读者在对receiver命名时不要再用<code>this</code>, <code>self</code>等具有特殊含义的名称啦。</p>
+<h2 id="receiver是可以为nil的">Receiver是可以为nil的！！！</h2>
+<p>最近在研读<code>h2_bundle.go</code>的时候，发现了一段特殊的代码，顿时惊出一身冷汗，姑在本文补充一下，以防止自己和各位读者踩坑。</p>
+<p>源代码截图如下：
+<img src="https://note.youdao.com/yws/api/personal/file/WEBf28c8ce7424f4cc7a7620f735a83b9f1?method=download&amp;shareKey=829323e04d513a68e5cfe3c9d61d2a45" alt=""></p>
+<p>惊出我一身冷汗的正是图中标红的部分，<strong>receiver居然还要判断为nil</strong>！在我的潜意识里一直是这样认为的，receiver默认都是有值的，直接使用就行了。这简直颠覆我的认知，吓得我赶紧写了个demo验证一下：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">A</span> <span style="color:#66d9ef">struct</span> {
+	<span style="color:#a6e22e">v</span> <span style="color:#66d9ef">int</span>
+}
+
+<span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">a</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">A</span>) <span style="color:#a6e22e">test</span>() {
+	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">a</span> <span style="color:#f92672">==</span> <span style="color:#66d9ef">nil</span>)
+}
+
+<span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">a</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">A</span>) <span style="color:#a6e22e">testV</span>() {
+	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">a</span>.<span style="color:#a6e22e">v</span>)
+}
+
+
+<span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
+	<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">a</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">A</span>
+	<span style="color:#a6e22e">a</span>.<span style="color:#a6e22e">test</span>()
+	<span style="color:#a6e22e">a</span>.<span style="color:#a6e22e">testV</span>()
+}
+
+</code></pre></div><p>上述输出如下：</p>
+<p><img src="https://note.youdao.com/yws/api/personal/file/WEBf867c728b16230b0a82d6f9cd9d134ab?method=download&amp;shareKey=bc9e10dedff781d0406ed40e850a8b22" alt=""></p>
+<p><code>a.test()</code>能够正常输出，只有在处理变量结构体内部变量<code>v</code>才报出panic！！！还好本文前面已经介绍了<code>Receiver是方法的第一个参数</code>。正因为是第一个参数所以仅仅作为参数传递时即使是<code>nil</code>也能够正常调用函数，而在真正使用的地方报出panic。</p>
+<p>鉴于receiver如此特殊，所以特意在本文完成之后补充后续内容以时刻提醒自己和各位读者。</p>
+<blockquote>
+<p>本部分于20200827日晚补充。</p>
+</blockquote>
+<p>【关注公众号】</p>
+<p><img src="https://note.youdao.com/yws/api/personal/file/WEBa3ee67b2b867e98cb5c587f4adfa6801?method=download&amp;shareKey=0fbb95d0aec6170b854e7b890d50d559" alt=""></p>
+
+      </div>
+    </article>
+
+    <hr />
+
+    <div class="post-info">
+        <p>
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-tag meta-icon">
+            <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path>
+            <line x1="7" y1="7" x2="7" y2="7"></line>
+          </svg><span class="tag"><a href="https://isites.github.io/tags/go/">Go</a></span>
+        </p>
+
+      <p>
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file-text">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+          <polyline points="14 2 14 8 20 8"></polyline>
+          <line x1="16" y1="13" x2="8" y2="13"></line>
+          <line x1="16" y1="17" x2="8" y2="17"></line>
+          <polyline points="10 9 9 9 8 9"></polyline>
+        </svg>
+        248 Words
+      </p>
+
+      <p>
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-calendar">
+          <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+          <line x1="16" y1="2" x2="16" y2="6"></line>
+          <line x1="8" y1="2" x2="8" y2="6"></line>
+          <line x1="3" y1="10" x2="21" y2="10"></line>
+        </svg>
+        2020-08-29 12:20 &#43;0800
+      </p>
+ 
+    </div>
+
+    
+      <div class="pagination">
+        <div class="pagination__title">
+          <span class="pagination__title-h"></span>
+          <hr />
+        </div>
+
+        <div class="pagination__buttons">
+          
+            <span class="button previous">
+              <a href="https://isites.github.io/timeline/gopb3/">
+                <span class="button__icon">←</span>
+                <span class="button__text">区分Protobuf 3中缺失值和默认值</span>
+              </a>
+            </span>
+          
+
+          
+            <span class="button next">
+              <a href="https://isites.github.io/timeline/go-string-encode/">
+                <span class="button__text">深入剖析go中字符串的编码问题——特殊字符的string怎么转byte？</span>
+                <span class="button__icon">→</span>
+              </a>
+            </span>
+          
+        </div>
+      </div>
+    
+
+
+    
+
+  </main>
+
+            </div>
+
+            
+                <footer class="footer">
+    <div class="footer__inner">
+        <div class="footer__content">
+            <span>&copy; 2021</span>
+            
+             
+        </div>
+    </div> 
+</footer>
+<script type="text/javascript">
+    $(function(){
+
+  window.sr = ScrollReveal();
+
+  if ($(window).width() < 768) {
+
+    if ($('.timeline-content').hasClass('js--fadeInLeft')) {
+        $('.timeline-content').removeClass('js--fadeInLeft').addClass('js--fadeInRight');
+    }
+
+    sr.reveal('.js--fadeInRight', {
+        origin: 'right',
+        distance: '300px',
+        easing: 'ease-in-out',
+        duration: 800,
+      });
+
+  } else {
+    
+    sr.reveal('.js--fadeInLeft', {
+        origin: 'left',
+        distance: '300px',
+          easing: 'ease-in-out',
+        duration: 800,
+      });
+
+      sr.reveal('.js--fadeInRight', {
+        origin: 'right',
+        distance: '300px',
+        easing: 'ease-in-out',
+        duration: 800,
+      });
+
+  }
+  
+  sr.reveal('.js--fadeInLeft', {
+        origin: 'left',
+        distance: '300px',
+          easing: 'ease-in-out',
+        duration: 800,
+      });
+
+      sr.reveal('.js--fadeInRight', {
+        origin: 'right',
+        distance: '300px',
+        easing: 'ease-in-out',
+        duration: 800,
+      });
+
+
+});
+
+</script>
+            
+        </div>
+
+        
+
+
+
+
+<script type="text/javascript" src="/bundle.min.dc716e9092c9820b77f96da294d0120aeeb189b5bcea9752309ebea27fd53bbe6b13cffb2aca8ecf32525647ceb7001f76091de4199ac5a3caa432c070247f5b.js" integrity="sha512-3HFukJLJggt3&#43;W2ilNASCu6xibW86pdSMJ6&#43;on/VO75rE8/7KsqOzzJSVkfOtwAfdgkd5BmaxaPKpDLAcCR/Ww=="></script>
+
+
+
+    </body>
+</html>

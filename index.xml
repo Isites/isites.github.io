@@ -141,6 +141,18 @@ message Status { oneof show { int32 is_show = 1; } } message Test { int32 bar = 
     </item>
     
     <item>
+      <title>为什么go中的receiver name不推荐使用this或者self</title>
+      <link>https://isites.github.io/timeline/go-reciver/</link>
+      <pubDate>Sat, 29 Aug 2020 12:20:38 +0800</pubDate>
+      
+      <guid>https://isites.github.io/timeline/go-reciver/</guid>
+      <description>前言 在日常的开发中我们除了定义函数以外， 我们还会定义一些方法。这本来没有什么， 但是一些从PHP或者其他面向对象语言转GO的同学往往会把receiver name命名为this, self, me等。
+笔者在实际项目开发中也遇到类似的同学， 屡次提醒却没有效果，于是决心写下这篇文章以便好好说服这些同学。
+CR标准做法 首先我们来看一下GO推荐的标准命名Receiver Names，以下内容摘抄自https://github.com/golang/go/wiki/CodeReviewComments#receiver-names：
+The name of a method&#39;s receiver should be a reflection of its identity; often a one or two letter abbreviation of its type suffices (such as &amp;quot;c&amp;quot; or &amp;quot;cl&amp;quot; for &amp;quot;Client&amp;quot;). Don&#39;t use generic names such as &amp;quot;me&amp;quot;, &amp;quot;this&amp;quot; or &amp;quot;self&amp;quot;, identifiers typical of object-oriented languages that gives the method a special meaning. In Go, the receiver of a method is just another parameter and therefore, should be named accordingly.</description>
+    </item>
+    
+    <item>
       <title>深入剖析go中字符串的编码问题——特殊字符的string怎么转byte？</title>
       <link>https://isites.github.io/timeline/go-string-encode/</link>
       <pubDate>Mon, 24 Aug 2020 23:47:48 +0800</pubDate>

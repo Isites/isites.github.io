@@ -1140,6 +1140,128 @@ json: cannot unmarshal object into Go struct field Status.st.Show of type oneof.
         </item>
         
         <item>
+            <title>为什么go中的receiver name不推荐使用this或者self</title>
+            <link>https://isites.github.io/timeline/go-reciver/</link>
+            <pubDate>Sat, 29 Aug 2020 12:20:38 +0800</pubDate>
+            
+            <guid>https://isites.github.io/timeline/go-reciver/</guid>
+            <description>前言 在日常的开发中我们除了定义函数以外， 我们还会定义一些方法。这本来没有什么， 但是一些从PHP或者其他面向对象语言转GO的同学往往会把receiver name命名为this, self, me等。
+笔者在实际项目开发中也遇到类似的同学， 屡次提醒却没有效果，于是决心写下这篇文章以便好好说服这些同学。
+CR标准做法 首先我们来看一下GO推荐的标准命名Receiver Names，以下内容摘抄自https://github.com/golang/go/wiki/CodeReviewComments#receiver-names：
+The name of a method&#39;s receiver should be a reflection of its identity; often a one or two letter abbreviation of its type suffices (such as &amp;quot;c&amp;quot; or &amp;quot;cl&amp;quot; for &amp;quot;Client&amp;quot;). Don&#39;t use generic names such as &amp;quot;me&amp;quot;, &amp;quot;this&amp;quot; or &amp;quot;self&amp;quot;, identifiers typical of object-oriented languages that gives the method a special meaning. In Go, the receiver of a method is just another parameter and therefore, should be named accordingly.</description>
+            <content type="html"><![CDATA[<h2 id="前言">前言</h2>
+<p>在日常的开发中我们除了定义函数以外， 我们还会定义一些方法。这本来没有什么， 但是一些从PHP或者其他面向对象语言转GO的同学往往会把receiver name命名为<code>this</code>, <code>self</code>, <code>me</code>等。</p>
+<p>笔者在实际项目开发中也遇到类似的同学， 屡次提醒却没有效果，于是决心写下这篇文章以便好好说服这些同学。</p>
+<h2 id="cr标准做法">CR标准做法</h2>
+<p>首先我们来看一下GO推荐的标准命名<code>Receiver Names</code>，以下内容摘抄自https://github.com/golang/go/wiki/CodeReviewComments#receiver-names：</p>
+<pre><code>The name of a method's receiver should be a reflection of its identity;
+often a one or two letter abbreviation of its type suffices (such as &quot;c&quot; or &quot;cl&quot; for &quot;Client&quot;). 
+Don't use generic names such as &quot;me&quot;, &quot;this&quot; or &quot;self&quot;, identifiers typical of object-oriented languages that gives the method a special meaning. 
+In Go, the receiver of a method is just another parameter and therefore, should be named accordingly. 
+...
+</code></pre><p>简单翻译总结有如下2点：</p>
+<ol>
+<li>方法接受者名称应反映其身份， 并且不要使用<code>me</code>, <code>this</code>, <code>self</code>这些面向对象语言的典型标志符。</li>
+<li>在go中方法接受者其实就是方法的另一个参数。</li>
+</ol>
+<h2 id="receiver是方法的第一个参数">Receiver是方法的第一个参数！</h2>
+<p>上面的第二点， 可能不是很好理解，所以我们直接看下面的demo：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#75715e">// T ...
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">T</span> <span style="color:#66d9ef">int</span>
+
+<span style="color:#75715e">// Println ...
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">t</span> <span style="color:#a6e22e">T</span>) <span style="color:#a6e22e">Println</span>() {
+	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;value: %v&#34;</span>, <span style="color:#a6e22e">t</span>)
+}
+
+<span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
+	<span style="color:#a6e22e">t</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">T</span>(<span style="color:#ae81ff">1</span>)
+	<span style="color:#a6e22e">t</span>.<span style="color:#a6e22e">Println</span>()
+	<span style="color:#a6e22e">T</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">t</span>) <span style="color:#75715e">// receiver作为函数的第一个参数，这个时候发生值拷贝，所以方法内部的t变量只是真实t变量的一个拷贝，这和this的含义是不相符的
+</span><span style="color:#75715e"></span>}
+<span style="color:#75715e">// output:
+</span><span style="color:#75715e"></span><span style="color:#a6e22e">value</span>: <span style="color:#ae81ff">1</span>
+<span style="color:#a6e22e">value</span>: <span style="color:#ae81ff">1</span>
+</code></pre></div><p>通过上面的demo， 我们知道接受者可以直接作为第一个参数传递给方法的。而<code>t.Println()</code>应该就是Go中的一种语法糖了。</p>
+<p>到这里可能有同学又要问了， 既然Go提供了这种语糖，那我们这样命名有什么问题呢？笔者先不着急解释， 我们继续看下面的demo：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#75715e">// Test ...
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">Test</span> <span style="color:#66d9ef">struct</span> {
+	<span style="color:#a6e22e">A</span> <span style="color:#66d9ef">int</span>
+}
+
+<span style="color:#75715e">// SetA ...
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">t</span> <span style="color:#a6e22e">Test</span>) <span style="color:#a6e22e">SetA</span>(<span style="color:#a6e22e">a</span> <span style="color:#66d9ef">int</span>) {
+	<span style="color:#a6e22e">t</span>.<span style="color:#a6e22e">A</span> = <span style="color:#a6e22e">a</span>
+}
+
+<span style="color:#75715e">// SetA1 ...
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">t</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">Test</span>) <span style="color:#a6e22e">SetA1</span>(<span style="color:#a6e22e">a</span> <span style="color:#66d9ef">int</span>) {
+	<span style="color:#a6e22e">t</span>.<span style="color:#a6e22e">A</span> = <span style="color:#a6e22e">a</span>
+}
+
+<span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
+	<span style="color:#a6e22e">t</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">Test</span>{
+		<span style="color:#a6e22e">A</span>: <span style="color:#ae81ff">3</span>,
+	}
+	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;demo1:&#34;</span>)
+	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">t</span>.<span style="color:#a6e22e">A</span>)
+	<span style="color:#a6e22e">t</span>.<span style="color:#a6e22e">SetA</span>(<span style="color:#ae81ff">5</span>)
+	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">t</span>.<span style="color:#a6e22e">A</span>)
+	<span style="color:#a6e22e">t1</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">Test</span>{
+		<span style="color:#a6e22e">A</span>: <span style="color:#ae81ff">4</span>,
+	}
+	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;demo2:&#34;</span>)
+	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">t1</span>.<span style="color:#a6e22e">A</span>)
+	(<span style="color:#f92672">&amp;</span><span style="color:#a6e22e">t1</span>).<span style="color:#a6e22e">SetA1</span>(<span style="color:#ae81ff">6</span>)
+	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">t1</span>.<span style="color:#a6e22e">A</span>)
+}
+<span style="color:#75715e">// output:
+</span><span style="color:#75715e"></span><span style="color:#a6e22e">demo1</span>:
+<span style="color:#ae81ff">3</span>
+<span style="color:#ae81ff">3</span>
+<span style="color:#a6e22e">demo2</span>:
+<span style="color:#ae81ff">4</span>
+<span style="color:#ae81ff">6</span>
+</code></pre></div><p>看上面的demo我们知道， 当receiver不是指针时调用<code>SetA</code>其值根本没有改变。</p>
+<p>因为Go中都是值传递，所以你如果对SetA的receiver的名称命名为<code>this</code>, <code>self</code>等，它就已经失去了本身的意义——“调用一个对象的方法就是向该对象传递一条消息”。而且对象本身的属性也并不一定会发生改变。</p>
+<p><strong>综上</strong>: 请各位读者在对receiver命名时不要再用<code>this</code>, <code>self</code>等具有特殊含义的名称啦。</p>
+<h2 id="receiver是可以为nil的">Receiver是可以为nil的！！！</h2>
+<p>最近在研读<code>h2_bundle.go</code>的时候，发现了一段特殊的代码，顿时惊出一身冷汗，姑在本文补充一下，以防止自己和各位读者踩坑。</p>
+<p>源代码截图如下：
+<img src="https://note.youdao.com/yws/api/personal/file/WEBf28c8ce7424f4cc7a7620f735a83b9f1?method=download&amp;shareKey=829323e04d513a68e5cfe3c9d61d2a45" alt=""></p>
+<p>惊出我一身冷汗的正是图中标红的部分，<strong>receiver居然还要判断为nil</strong>！在我的潜意识里一直是这样认为的，receiver默认都是有值的，直接使用就行了。这简直颠覆我的认知，吓得我赶紧写了个demo验证一下：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">A</span> <span style="color:#66d9ef">struct</span> {
+	<span style="color:#a6e22e">v</span> <span style="color:#66d9ef">int</span>
+}
+
+<span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">a</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">A</span>) <span style="color:#a6e22e">test</span>() {
+	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">a</span> <span style="color:#f92672">==</span> <span style="color:#66d9ef">nil</span>)
+}
+
+<span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">a</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">A</span>) <span style="color:#a6e22e">testV</span>() {
+	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">a</span>.<span style="color:#a6e22e">v</span>)
+}
+
+
+<span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
+	<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">a</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">A</span>
+	<span style="color:#a6e22e">a</span>.<span style="color:#a6e22e">test</span>()
+	<span style="color:#a6e22e">a</span>.<span style="color:#a6e22e">testV</span>()
+}
+
+</code></pre></div><p>上述输出如下：</p>
+<p><img src="https://note.youdao.com/yws/api/personal/file/WEBf867c728b16230b0a82d6f9cd9d134ab?method=download&amp;shareKey=bc9e10dedff781d0406ed40e850a8b22" alt=""></p>
+<p><code>a.test()</code>能够正常输出，只有在处理变量结构体内部变量<code>v</code>才报出panic！！！还好本文前面已经介绍了<code>Receiver是方法的第一个参数</code>。正因为是第一个参数所以仅仅作为参数传递时即使是<code>nil</code>也能够正常调用函数，而在真正使用的地方报出panic。</p>
+<p>鉴于receiver如此特殊，所以特意在本文完成之后补充后续内容以时刻提醒自己和各位读者。</p>
+<blockquote>
+<p>本部分于20200827日晚补充。</p>
+</blockquote>
+<p>【关注公众号】</p>
+<p><img src="https://note.youdao.com/yws/api/personal/file/WEBa3ee67b2b867e98cb5c587f4adfa6801?method=download&amp;shareKey=0fbb95d0aec6170b854e7b890d50d559" alt=""></p>
+]]></content>
+        </item>
+        
+        <item>
             <title>深入剖析go中字符串的编码问题——特殊字符的string怎么转byte？</title>
             <link>https://isites.github.io/timeline/go-string-encode/</link>
             <pubDate>Mon, 24 Aug 2020 23:47:48 +0800</pubDate>
