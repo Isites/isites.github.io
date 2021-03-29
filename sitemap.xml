@@ -4,22 +4,32 @@
   
   <url>
     <loc>https://isites.github.io/tags/go/</loc>
-    <lastmod>2021-03-04T18:53:38+08:00</lastmod>
+    <lastmod>2021-03-29T19:36:38+08:00</lastmod>
   </url>
   
   <url>
     <loc>https://isites.github.io/</loc>
-    <lastmod>2021-03-04T18:53:38+08:00</lastmod>
+    <lastmod>2021-03-29T19:36:38+08:00</lastmod>
   </url>
   
   <url>
     <loc>https://isites.github.io/tags/</loc>
-    <lastmod>2021-03-04T18:53:38+08:00</lastmod>
+    <lastmod>2021-03-29T19:36:38+08:00</lastmod>
   </url>
   
   <url>
     <loc>https://isites.github.io/timeline/</loc>
-    <lastmod>2021-03-04T18:53:38+08:00</lastmod>
+    <lastmod>2021-03-29T19:36:38+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://isites.github.io/timeline/get-full-url/</loc>
+    <lastmod>2021-03-29T19:36:38+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://isites.github.io/tags/%E7%BD%91%E7%BB%9C%E7%AF%87/</loc>
+    <lastmod>2021-03-29T19:36:38+08:00</lastmod>
   </url>
   
   <url>
@@ -39,11 +49,6 @@
   
   <url>
     <loc>https://isites.github.io/timeline/go-ssrf/</loc>
-    <lastmod>2021-01-19T20:30:38+08:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://isites.github.io/tags/%E7%BD%91%E7%BB%9C%E7%AF%87/</loc>
     <lastmod>2021-01-19T20:30:38+08:00</lastmod>
   </url>
   

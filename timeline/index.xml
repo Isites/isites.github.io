@@ -5,8 +5,153 @@
         <description>Recent content in Timelines on Gopher指北</description>
         <generator>Hugo -- gohugo.io</generator>
         <language>en-us</language>
-        <lastBuildDate>Thu, 04 Mar 2021 18:53:38 +0800</lastBuildDate>
+        <lastBuildDate>Mon, 29 Mar 2021 19:36:38 +0800</lastBuildDate>
         <atom:link href="https://isites.github.io/timeline/index.xml" rel="self" type="application/rss+xml" />
+        
+        <item>
+            <title>有趣！一行代码居然无法获取请求的完整URL</title>
+            <link>https://isites.github.io/timeline/get-full-url/</link>
+            <pubDate>Mon, 29 Mar 2021 19:36:38 +0800</pubDate>
+            
+            <guid>https://isites.github.io/timeline/get-full-url/</guid>
+            <description>缘起 做Web服务的时候，可能会有这样一个业务场景，获取一个HTTP请求的完整URL。很巧，老许就碰到了这样的业务场景。面对如此简单的需求，CV大法根本没有展示才能的机会。啪啪啪，获取请求的完整URL代码就出来了。
+当时离验证只差一步，老许信心满满，很快，打脸来得很快就像龙卷风。。。
+从图中可以知道，req.URL中的Scheme和Host均为空，所以r.URL.String()无法得到完整的请求连接。这个结果让老许一阵激动，万万没想到有一天我也有机会发现Go源码中可能遗漏的赋值。老许强行按耐住心中的激动，准备好好研究一番，万一成为了Go的Contributor呢^ω^。最后发现官方实现没有问题，因此就有了今天这篇文章。
+HTTP1.1中为什么无法获取完整的连接 HTTP1.1的Server读取请求并构建Request.URL对象的逻辑在request.go文件的readRequest方法中，下面老许对其源码做一个简单分析总结。
+ 读取请求的第一行，HTTP请求的第一行又称为请求行。  // First line: GET /index.html HTTP/1.0 var s string if s, err = tp.ReadLine(); err != nil { return nil, err } 将请求行的内容分别解析为req.Method、req.RequestURI和req.Proto。  var ok bool req.Method, req.RequestURI, req.Proto, ok = parseRequestLine(s) 将req.RequestURI解析为req.URL。  rawurl := req.RequestURI if req.URL, err = url.ParseRequestURI(rawurl); err != nil { return nil, err }  注：当请求方法是CONNECT时，上述流程略有变化
+ 通过上面的流程我们知道req.URL的数据来源为req.RequestURI，而req.RequestURI到底是什么让我们继续阅读后文。
+请求资源 根据rfc7230中的定义， 请求行分为请求方法、请求资源和HTTP版本，分别对应上述的req.Method、req.RequestURI和req.Proto（request-target在本文均被译作请求资源）。
+关于请求方法有哪些想必不用老许在这儿科普了吧。至于常用的HTTP版本无非就是HTTP1.1和HTTP2。 下面主要介绍请求资源的几种形式。
+origin-form 这种形式是请求资源中最常见的形式，其格式定义如下。</description>
+            <content type="html"><![CDATA[<h2 id="缘起">缘起</h2>
+<p>做Web服务的时候，可能会有这样一个业务场景，获取一个HTTP请求的完整URL。很巧，老许就碰到了这样的业务场景。面对如此简单的需求，CV大法根本没有展示才能的机会。啪啪啪，获取请求的完整URL代码就出来了。</p>
+<p><img src="https://note.youdao.com/yws/api/personal/file/WEB1b388f6771a1db510b40ef8a8d5eebae?method=download&amp;shareKey=9cb4b3dffe79b0a2eaa385a09947d7a6" alt=""></p>
+<p>当时离验证只差一步，老许信心满满，很快，打脸来得很快就像龙卷风。。。</p>
+<p><img src="https://note.youdao.com/yws/api/personal/file/WEB996f7f766dd31e910911a18f8b86fa44?method=download&amp;shareKey=25f35485c3812f561c3da580916f7f4d" alt=""></p>
+<p>从图中可以知道，<code>req.URL</code>中的<code>Scheme</code>和<code>Host</code>均为空，所以<code>r.URL.String()</code>无法得到完整的请求连接。这个结果让老许一阵激动，万万没想到有一天我也有机会发现Go源码中可能遗漏的赋值。老许强行按耐住心中的激动，准备好好研究一番，万一成为了Go的Contributor呢^ω^。最后发现官方实现没有问题，因此就有了今天这篇文章。</p>
+<h2 id="http11中为什么无法获取完整的连接">HTTP1.1中为什么无法获取完整的连接</h2>
+<p>HTTP1.1的Server读取请求并构建<code>Request.URL</code>对象的逻辑在request.go文件的<code>readRequest</code>方法中，下面老许对其源码做一个简单分析总结。</p>
+<ol>
+<li>读取请求的第一行，HTTP请求的第一行又称为请求行。</li>
+</ol>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#75715e">// First line: GET /index.html HTTP/1.0
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">var</span> <span style="color:#a6e22e">s</span> <span style="color:#66d9ef">string</span>
+<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">s</span>, <span style="color:#a6e22e">err</span> = <span style="color:#a6e22e">tp</span>.<span style="color:#a6e22e">ReadLine</span>(); <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+	<span style="color:#66d9ef">return</span> <span style="color:#66d9ef">nil</span>, <span style="color:#a6e22e">err</span>
+}
+</code></pre></div><ol start="2">
+<li>将请求行的内容分别解析为<code>req.Method</code>、<code>req.RequestURI</code>和<code>req.Proto</code>。</li>
+</ol>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">var</span> <span style="color:#a6e22e">ok</span> <span style="color:#66d9ef">bool</span>
+<span style="color:#a6e22e">req</span>.<span style="color:#a6e22e">Method</span>, <span style="color:#a6e22e">req</span>.<span style="color:#a6e22e">RequestURI</span>, <span style="color:#a6e22e">req</span>.<span style="color:#a6e22e">Proto</span>, <span style="color:#a6e22e">ok</span> = <span style="color:#a6e22e">parseRequestLine</span>(<span style="color:#a6e22e">s</span>)
+</code></pre></div><ol start="3">
+<li>将<code>req.RequestURI</code>解析为<code>req.URL</code>。</li>
+</ol>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#a6e22e">rawurl</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">req</span>.<span style="color:#a6e22e">RequestURI</span>
+<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">req</span>.<span style="color:#a6e22e">URL</span>, <span style="color:#a6e22e">err</span> = <span style="color:#a6e22e">url</span>.<span style="color:#a6e22e">ParseRequestURI</span>(<span style="color:#a6e22e">rawurl</span>); <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+	<span style="color:#66d9ef">return</span> <span style="color:#66d9ef">nil</span>, <span style="color:#a6e22e">err</span>
+}
+</code></pre></div><blockquote>
+<p>注：当请求方法是CONNECT时，上述流程略有变化</p>
+</blockquote>
+<p>通过上面的流程我们知道<code>req.URL</code>的数据来源为<code>req.RequestURI</code>，而<code>req.RequestURI</code>到底是什么让我们继续阅读后文。</p>
+<h3 id="请求资源">请求资源</h3>
+<p>根据rfc7230中的定义， 请求行分为请求方法、请求资源和HTTP版本，分别对应上述的<code>req.Method</code>、<code>req.RequestURI</code>和<code>req.Proto</code>（request-target在本文均被译作请求资源）。</p>
+<p><img src="https://note.youdao.com/yws/api/personal/file/WEB8fcef32e2e58798269cc3809e45c75c4?method=download&amp;shareKey=5b2a53ff2aff6ebbed544e692d92c85d" alt=""></p>
+<p>关于请求方法有哪些想必不用老许在这儿科普了吧。至于常用的HTTP版本无非就是HTTP1.1和HTTP2。 下面主要介绍请求资源的几种形式。</p>
+<h4 id="origin-form">origin-form</h4>
+<p>这种形式是请求资源中最常见的形式，其格式定义如下。</p>
+<pre><code>origin-form    = absolute-path [ &quot;?&quot; query ]
+</code></pre><p>当直接向服务器发起请求时，除开CONNECT和OPTIONS请求，只允许发送path和query作为请求资源。如果请求链接的path为空，则必须发送<code>/</code>作为请求资源。请求链接中的Host信息以Header头的形式发送。</p>
+<p>以<code>http://www.example.org/where?q=now</code>为例，请求行和Host请求头信息如下</p>
+<pre><code>GET /where?q=now HTTP/1.1
+Host: www.example.org
+</code></pre><h4 id="absolute-form">absolute-form</h4>
+<p>这种形式目前仅在向代理发起请求时使用，其格式定义如下。</p>
+<pre><code>absolute-form  = absolute-URI
+</code></pre><p>根据rfc7230中的定义，目前client仅会向代理发送这种形式的请求资源，但为了将来某个HTTP版本可能会转换为这种形式的请求资源所以server需要支持这种形式的请求资源。这大概就是为什么<code>req.URL</code>中大部分字段值为空却仍然将URL各部分定义完整的原因。</p>
+<p>一个<code>absolute-form</code>形式的请求行例子如下。</p>
+<pre><code>GET http://www.example.org/pub/WWW/TheProject.html HTTP/1.1
+</code></pre><h4 id="authority-form">authority-form</h4>
+<p><code>authority-form</code>形式的请求资源仅用于<code>CONNECT</code>请求中，其格式定义如下。</p>
+<pre><code>authority-form = authority
+</code></pre><p>发送<code>CONNECT</code>请求时，client只能发送URI的authority部分（不包含userinfo和@定界符）作为请求资源。这样讲比较抽象， 我们先来看看<code>http-URI</code>的定义。</p>
+<p><img src="https://note.youdao.com/yws/api/personal/file/WEB9a1f70183935d70850b51956403b3d96?method=download&amp;shareKey=34a7404d25c494cd9c889216ed50819e" alt=""></p>
+<p>通过上面这张图大概能够猜出来<code>authority</code>应该是指Host信息。Very Good！你没有猜错！</p>
+<pre><code>The origin server for an &quot;http&quot; URI is identified by the authority component, which includes a host identifier and optional TCP port.
+</code></pre><p>上面是rfc7230对于authority的解释。老许根据自己的翻译，在这里单方面宣布<code>authority</code>包括主机标识符和可选的端口信息。一个<code>authority-form</code>形式的请求行例子如下。</p>
+<pre><code>CONNECT www.example.com:80 HTTP/1.1
+</code></pre><h4 id="asterisk-form">asterisk-form</h4>
+<p><code>asterisk-form</code>形式的请求资源仅适用于<code>OPTIONS</code>请求且只能为<code>*</code>，其格式定义如下。</p>
+<pre><code>asterisk-form  = &quot;*&quot;
+</code></pre><p>一个<code>asterisk-form</code>形式的请求行例子如下。</p>
+<pre><code>OPTIONS * HTTP/1.1
+</code></pre><p>对上面几种形式的请求资源有所了解后，我们再次回到获取请求的完整URL这一问题本身。以最常用的<code>absolute-form</code>为例（其他形式的请求资源我们在开发中几乎不用考虑），请求资源中本身就缺少<code>Host</code>和<code>Scheme</code>信息，所以一行代码自然无法获取请求的完整URL。难道我们就无法获取到请求的完整URL嘛？当然不是，我们还可以通过以下两种方案得到完整的URL。</p>
+<p><strong>方案一</strong>：</p>
+<ol>
+<li>通过<code>req.Host</code>得到Host相关信息。</li>
+<li>如果<code>req.TLS == nil</code>则为HTTP请求，否则为HTTPS请求。</li>
+<li>通过步骤1、步骤2并结合请求行信息即可得到完整的URL。</li>
+</ol>
+<p><strong>方案二</strong>：
+在配置文件中配置好服务的Host信息，获取完整请求时只需要读取配置文件并拼接<code>req.RequestURI</code>即可。事实上老许采用的就是方案二，因为很多服务都在网关后面。当客户端使用HTTPS请求网关，网关以HTTP请求服务时使用<code>req.TLS == nil</code>判断就不合理了。</p>
+<h2 id="http2中为什么无法获取完整的连接">HTTP2中为什么无法获取完整的连接</h2>
+<p>需要注意的是在HTTP2中已经没有请求行的概念了，取而代之的是请求伪标头，这一点老许在<a href="https://mp.weixin.qq.com/s/HTGg5HYRSVY-4-H9Sf1zww">Go发起HTTP2.0请求流程分析(后篇)——标头压缩</a>这篇文章中提到过。</p>
+<p>下图为一次HTTP2请求的部分Header信息。</p>
+<p><img src="https://note.youdao.com/yws/api/personal/file/WEB21b6c46dfb68ab42e0f5f00830a3cda5?method=download&amp;shareKey=444b90bc7502a0befde80ba2a08ae545" alt=""></p>
+<p>从图中可以发现，HTTP1.1中的请求行已经没有了。根据rfc7540中的定义，请求的伪标头字段有<code>:method</code>、<code>:scheme</code>、<code>:authority</code>和<code>:path</code>。</p>
+<p><code>:method</code>和<code>:scheme</code>不需要老许多说，看英文单词的意思就可以了。</p>
+<p><code>:authority</code>: 根据前文的解释，其值为主机标识符和可选的端口信息。另外需要注意的是HTTP2中没有<code>Host</code>请求头。</p>
+<p><code>:path</code>: 如果是<code>OPTIONS</code>请求，则其值为<code>*</code>。其他情况该值为请求URI的path和query，如果path为空则其值为<code>/</code>。</p>
+<p>在对HTTP2请求的伪标头有了一个基本了解后，下面我们来看一下<code>Request.URL</code>的赋值过程。HTTP2的Server读取请求并构建<code>Request.URL</code>对象的逻辑在h2_bundle.go文件的<code>(*http2serverConn).newWriterAndRequestNoBody</code>方法中。</p>
+<ol>
+<li>如果是<code>CONNECT</code>请求通过<code>:authority</code>构建<code>url_</code>，否则通过<code>:path</code>构建<code>url_</code>。</li>
+</ol>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">if</span> <span style="color:#a6e22e">rp</span>.<span style="color:#a6e22e">method</span> <span style="color:#f92672">==</span> <span style="color:#e6db74">&#34;CONNECT&#34;</span> {
+	<span style="color:#a6e22e">url_</span> = <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">url</span>.<span style="color:#a6e22e">URL</span>{<span style="color:#a6e22e">Host</span>: <span style="color:#a6e22e">rp</span>.<span style="color:#a6e22e">authority</span>}
+	<span style="color:#a6e22e">requestURI</span> = <span style="color:#a6e22e">rp</span>.<span style="color:#a6e22e">authority</span> <span style="color:#75715e">// mimic HTTP/1 server behavior
+</span><span style="color:#75715e"></span>} <span style="color:#66d9ef">else</span> {
+	<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">err</span> <span style="color:#66d9ef">error</span>
+	<span style="color:#a6e22e">url_</span>, <span style="color:#a6e22e">err</span> = <span style="color:#a6e22e">url</span>.<span style="color:#a6e22e">ParseRequestURI</span>(<span style="color:#a6e22e">rp</span>.<span style="color:#a6e22e">path</span>)
+	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+		<span style="color:#66d9ef">return</span> <span style="color:#66d9ef">nil</span>, <span style="color:#66d9ef">nil</span>, <span style="color:#a6e22e">http2streamError</span>(<span style="color:#a6e22e">st</span>.<span style="color:#a6e22e">id</span>, <span style="color:#a6e22e">http2ErrCodeProtocol</span>)
+	}
+	<span style="color:#a6e22e">requestURI</span> = <span style="color:#a6e22e">rp</span>.<span style="color:#a6e22e">path</span>
+}
+</code></pre></div><ol start="2">
+<li>将<code>url_</code>赋值给<code>req.URL</code>。</li>
+</ol>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#a6e22e">req</span> <span style="color:#f92672">:=</span> <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">Request</span>{
+	<span style="color:#a6e22e">Method</span>:     <span style="color:#a6e22e">rp</span>.<span style="color:#a6e22e">method</span>,
+	<span style="color:#a6e22e">URL</span>:        <span style="color:#a6e22e">url_</span>,
+	<span style="color:#a6e22e">RemoteAddr</span>: <span style="color:#a6e22e">sc</span>.<span style="color:#a6e22e">remoteAddrStr</span>,
+	<span style="color:#a6e22e">Header</span>:     <span style="color:#a6e22e">rp</span>.<span style="color:#a6e22e">header</span>,
+	<span style="color:#a6e22e">RequestURI</span>: <span style="color:#a6e22e">requestURI</span>,
+	<span style="color:#a6e22e">Proto</span>:      <span style="color:#e6db74">&#34;HTTP/2.0&#34;</span>,
+	<span style="color:#a6e22e">ProtoMajor</span>: <span style="color:#ae81ff">2</span>,
+	<span style="color:#a6e22e">ProtoMinor</span>: <span style="color:#ae81ff">0</span>,
+	<span style="color:#a6e22e">TLS</span>:        <span style="color:#a6e22e">tlsState</span>,
+	<span style="color:#a6e22e">Host</span>:       <span style="color:#a6e22e">rp</span>.<span style="color:#a6e22e">authority</span>,
+	<span style="color:#a6e22e">Body</span>:       <span style="color:#a6e22e">body</span>,
+	<span style="color:#a6e22e">Trailer</span>:    <span style="color:#a6e22e">trailer</span>,
+}
+</code></pre></div><p>由于<code>:path</code>标头的值也不包含Host信息，所以HTTP2的server也无法通过<code>req.URL.String()</code>得到请求的完整URL。</p>
+<p>在这里我们反思一个问题。通过伪标头字段已经能够得到完整的URL，为什么仍然只读取<code>:path</code>和<code>:authority</code>中的一个来赋值<code>req.URL</code>呢？</p>
+<p>老许在这里猜测可能原因是希望开发者无需关心请求是HTTP1.1还是HTTP2，避免不必要的HTTP版本判断。</p>
+<p>关于获取请求完整URL的思考就到这里。最后，衷心希望本文能够对各位读者有一定的帮助。</p>
+<blockquote>
+<p><strong>注</strong>：</p>
+<ol>
+<li>写本文时， 笔者所用go版本为: go1.15.2</li>
+</ol>
+</blockquote>
+<p>参考：</p>
+<p><a href="https://tools.ietf.org/html/rfc7230">https://tools.ietf.org/html/rfc7230</a></p>
+<p><a href="https://tools.ietf.org/html/rfc7540">https://tools.ietf.org/html/rfc7540</a></p>
+<p>【关注公众号】</p>
+<p><img src="https://note.youdao.com/yws/api/personal/file/WEBa3ee67b2b867e98cb5c587f4adfa6801?method=download&amp;shareKey=0fbb95d0aec6170b854e7b890d50d559" alt=""></p>
+]]></content>
+        </item>
         
         <item>
             <title>白话Go内存模型&amp;Happen-Before</title>

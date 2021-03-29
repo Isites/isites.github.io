@@ -6,7 +6,24 @@
     <description>Recent content on Gopher指北</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 04 Mar 2021 18:53:38 +0800</lastBuildDate><atom:link href="https://isites.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Mon, 29 Mar 2021 19:36:38 +0800</lastBuildDate><atom:link href="https://isites.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>有趣！一行代码居然无法获取请求的完整URL</title>
+      <link>https://isites.github.io/timeline/get-full-url/</link>
+      <pubDate>Mon, 29 Mar 2021 19:36:38 +0800</pubDate>
+      
+      <guid>https://isites.github.io/timeline/get-full-url/</guid>
+      <description>缘起 做Web服务的时候，可能会有这样一个业务场景，获取一个HTTP请求的完整URL。很巧，老许就碰到了这样的业务场景。面对如此简单的需求，CV大法根本没有展示才能的机会。啪啪啪，获取请求的完整URL代码就出来了。
+当时离验证只差一步，老许信心满满，很快，打脸来得很快就像龙卷风。。。
+从图中可以知道，req.URL中的Scheme和Host均为空，所以r.URL.String()无法得到完整的请求连接。这个结果让老许一阵激动，万万没想到有一天我也有机会发现Go源码中可能遗漏的赋值。老许强行按耐住心中的激动，准备好好研究一番，万一成为了Go的Contributor呢^ω^。最后发现官方实现没有问题，因此就有了今天这篇文章。
+HTTP1.1中为什么无法获取完整的连接 HTTP1.1的Server读取请求并构建Request.URL对象的逻辑在request.go文件的readRequest方法中，下面老许对其源码做一个简单分析总结。
+ 读取请求的第一行，HTTP请求的第一行又称为请求行。  // First line: GET /index.html HTTP/1.0 var s string if s, err = tp.ReadLine(); err != nil { return nil, err } 将请求行的内容分别解析为req.Method、req.RequestURI和req.Proto。  var ok bool req.Method, req.RequestURI, req.Proto, ok = parseRequestLine(s) 将req.RequestURI解析为req.URL。  rawurl := req.RequestURI if req.URL, err = url.ParseRequestURI(rawurl); err != nil { return nil, err }  注：当请求方法是CONNECT时，上述流程略有变化
+ 通过上面的流程我们知道req.URL的数据来源为req.RequestURI，而req.RequestURI到底是什么让我们继续阅读后文。
+请求资源 根据rfc7230中的定义， 请求行分为请求方法、请求资源和HTTP版本，分别对应上述的req.Method、req.RequestURI和req.Proto（request-target在本文均被译作请求资源）。
+关于请求方法有哪些想必不用老许在这儿科普了吧。至于常用的HTTP版本无非就是HTTP1.1和HTTP2。 下面主要介绍请求资源的几种形式。
+origin-form 这种形式是请求资源中最常见的形式，其格式定义如下。</description>
+    </item>
+    
     <item>
       <title>白话Go内存模型&amp;Happen-Before</title>
       <link>https://isites.github.io/timeline/go-memory-model/</link>
