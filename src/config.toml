@@ -5,5 +5,5 @@ theme = "timeline"
 
 [params]
   defaultTheme = "light"
-  customJS  = ["js/bd-hm.js"]
+  customJS  = ["/js/bd-hm.js"]
 
