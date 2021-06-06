@@ -5,6 +5,12 @@ set -e
 
 printf "\033[0;32mDeploying updates to GitHub...\033[0m\n"
 
+# gen config.toml
+
+cp config.template config.toml
+# for mac
+sed -i "" 's,BASE_URL,https://isites.github.io/,g' config.toml
+
 # Build the project, and output to ../
 /opt/repos/GO_REPO/bin/hugo -t timeline -D # if using a theme, replace with `hugo -t <YOURTHEME>`
 

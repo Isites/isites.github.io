@@ -1,0 +1,9 @@
+baseURL = "BASE_URL"
+languageCode = "en-us"
+title = "Gopher指北"
+theme = "timeline"
+
+[params]
+  defaultTheme = "light"
+  customJS  = ["/js/bd-hm.js"]
+
