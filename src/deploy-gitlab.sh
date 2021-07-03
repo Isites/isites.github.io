@@ -32,5 +32,5 @@ fi
 git commit -m "$msg"
 
 # Push source and build repos.
-git push gitee-origin master
+git push gitlab-origin master
 
