@@ -9,7 +9,7 @@ printf "\033[0;32mDeploying updates to gitee...\033[0m\n"
 
 cp config.template config.toml
 # for mac
-sed -i "" 's,BASE_URL,https://isites.gitlab.io/,g' config.toml
+sed -i "" 's,BASE_URL,https://isites.gitlab.io/isites/,g' config.toml
 
 # Build the project, and output to ../
 /opt/repos/GO_REPO/bin/hugo -t timeline -D # if using a theme, replace with `hugo -t <YOURTHEME>`
