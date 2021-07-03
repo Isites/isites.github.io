@@ -2,17 +2,17 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>网络篇 on Gopher指北</title>
-    <link>https://gopher-north.gitee.io/tags/%E7%BD%91%E7%BB%9C%E7%AF%87/</link>
+    <link>https://isites.gitlab.io/gopher/tags/%E7%BD%91%E7%BB%9C%E7%AF%87/</link>
     <description>Recent content in 网络篇 on Gopher指北</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Mon, 29 Mar 2021 19:36:38 +0800</lastBuildDate><atom:link href="https://gopher-north.gitee.io/tags/%E7%BD%91%E7%BB%9C%E7%AF%87/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Mon, 29 Mar 2021 19:36:38 +0800</lastBuildDate><atom:link href="https://isites.gitlab.io/gopher/tags/%E7%BD%91%E7%BB%9C%E7%AF%87/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>有趣！一行代码居然无法获取请求的完整URL</title>
-      <link>https://gopher-north.gitee.io/timeline/get-full-url/</link>
+      <link>https://isites.gitlab.io/gopher/timeline/get-full-url/</link>
       <pubDate>Mon, 29 Mar 2021 19:36:38 +0800</pubDate>
       
-      <guid>https://gopher-north.gitee.io/timeline/get-full-url/</guid>
+      <guid>https://isites.gitlab.io/gopher/timeline/get-full-url/</guid>
       <description>缘起 做Web服务的时候，可能会有这样一个业务场景，获取一个HTTP请求的完整URL。很巧，老许就碰到了这样的业务场景。面对如此简单的需求，CV大法根本没有展示才能的机会。啪啪啪，获取请求的完整URL代码就出来了。
 当时离验证只差一步，老许信心满满，很快，打脸来得很快就像龙卷风。。。
 从图中可以知道，req.URL中的Scheme和Host均为空，所以r.URL.String()无法得到完整的请求连接。这个结果让老许一阵激动，万万没想到有一天我也有机会发现Go源码中可能遗漏的赋值。老许强行按耐住心中的激动，准备好好研究一番，万一成为了Go的Contributor呢^ω^。最后发现官方实现没有问题，因此就有了今天这篇文章。
@@ -26,10 +26,10 @@ origin-form 这种形式是请求资源中最常见的形式，其格式定义�
     
     <item>
       <title>Go中的SSRF攻防战</title>
-      <link>https://gopher-north.gitee.io/timeline/go-ssrf/</link>
+      <link>https://isites.gitlab.io/gopher/timeline/go-ssrf/</link>
       <pubDate>Tue, 19 Jan 2021 20:30:38 +0800</pubDate>
       
-      <guid>https://gopher-north.gitee.io/timeline/go-ssrf/</guid>
+      <guid>https://isites.gitlab.io/gopher/timeline/go-ssrf/</guid>
       <description>写在最前面 “年年岁岁花相似，岁岁年年人不同”，没有什么是永恒的，很多东西都将成为过去式。比如，我以前在文章中自称“笔者”，细细想来这个称呼还是有一定的距离感，经过一番深思熟虑后，我打算将文章中的自称改为“老许”。
 关于自称，老许就不扯太远了，下面还是回到本篇的主旨。
 什么是SSRF SSRF英文全拼为Server Side Request Forgery，翻译为服务端请求伪造。攻击者在未能取得服务器权限时，利用服务器漏洞以服务器的身份发送一条构造好的请求给服务器所在内网。关于内网资源的访问控制，想必大家心里都有数。
@@ -42,10 +42,10 @@ origin-form 这种形式是请求资源中最常见的形式，其格式定义�
     
     <item>
       <title>码了2000多行代码就是为了讲清楚TLS握手流程（续）</title>
-      <link>https://gopher-north.gitee.io/timeline/gotls1.2/</link>
+      <link>https://isites.gitlab.io/gopher/timeline/gotls1.2/</link>
       <pubDate>Sun, 13 Dec 2020 23:47:48 +0800</pubDate>
       
-      <guid>https://gopher-north.gitee.io/timeline/gotls1.2/</guid>
+      <guid>https://isites.gitlab.io/gopher/timeline/gotls1.2/</guid>
       <description>在“码了2000多行代码就是为了讲清楚TLS握手流程”这一篇文章的最后挖了一个坑，今天这篇文章就是为了填坑而来，因此本篇主要分析TLS1.2的握手流程。
 在写前一篇文章时，笔者的Demo只支持解析TLS1.3握手流程中发送的消息，写本篇时，笔者的Demo已经可以解析TLS1.x握手流程中的消息，有兴趣的读者请至文末获取Demo源码。
 结论先行 为保证各位读者对TLS1.2的握手流程有一个大概的框架，本篇依旧结论先行。
