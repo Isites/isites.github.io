@@ -1,4 +1,4 @@
-baseURL = "https://isites.gitlab.io/isites/"
+baseURL = "https://isites.gitlab.io/gopher/"
 languageCode = "en-us"
 title = "Gopher指北"
 theme = "timeline"
