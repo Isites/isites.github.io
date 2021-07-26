@@ -1,19 +1,19 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
     <channel>
         <title>Timelines on Gopher指北</title>
-        <link>https://isites.gitlab.io/gopher/timeline/</link>
+        <link>https://isites.github.io/timeline/</link>
         <description>Recent content in Timelines on Gopher指北</description>
         <generator>Hugo -- gohugo.io</generator>
         <language>en-us</language>
         <lastBuildDate>Mon, 26 Jul 2021 22:09:00 +0800</lastBuildDate>
-        <atom:link href="https://isites.gitlab.io/gopher/timeline/index.xml" rel="self" type="application/rss+xml" />
+        <atom:link href="https://isites.github.io/timeline/index.xml" rel="self" type="application/rss+xml" />
         
         <item>
             <title>讲的是切片，但好像又不只是切片？</title>
-            <link>https://isites.gitlab.io/gopher/timeline/slice/</link>
+            <link>https://isites.github.io/timeline/slice/</link>
             <pubDate>Mon, 26 Jul 2021 22:09:00 +0800</pubDate>
             
-            <guid>https://isites.gitlab.io/gopher/timeline/slice/</guid>
+            <guid>https://isites.github.io/timeline/slice/</guid>
             <description>我内心一直有一个欲望，想要高声呼喊“我胡汉三又回来了”，而现在就是合适的时机。
 正式开干之前有点手生，太久没有写技术类的文章，总有点怠惰，不得不说坚持确实是一件很难的事情。如果不是因为愧疚和写点东西能让自己稍微平静下来一些，我可能还将继续怠惰下去。
 另外还有一件很有意思的事情分享一下。前一篇在公众号上的文章仅思考就花了近一个月，写只花了一天，而技术文章我一般边思考边写平均耗时一周。结果是不会骗人的，前一篇文章阅读量首次突破一千，果然这届读者的思想深度至少也有一个月那么多，老许佩服佩服。
@@ -243,10 +243,10 @@ type mySlice struct { data uintptr len int cap int } s := mySlice{} fmt.Println(
         
         <item>
             <title>天涯未远，上海再见，百度再见</title>
-            <link>https://isites.gitlab.io/gopher/timeline/leave-sh/</link>
+            <link>https://isites.github.io/timeline/leave-sh/</link>
             <pubDate>Sun, 06 Jun 2021 10:59:48 +0800</pubDate>
             
-            <guid>https://isites.gitlab.io/gopher/timeline/leave-sh/</guid>
+            <guid>https://isites.github.io/timeline/leave-sh/</guid>
             <description>关于离开想说的都在标题里。
 离开的原因有很多，但是老许并不打算在这里详细阐述。说的越多都是在反复鞭尸自己的无能，老许对此次的离开总结为两个字——“败犬”（并无意冒犯他人，仅仅是对自己的总结。如果有兴趣交流的可以在公众号后台私我）。
 以下为老许近一个多月的反思，这份反思没有什么大道理，更没有什么必须记住的知识点，老许写下来只是希望和各位读者有一个平等交流的机会。
@@ -293,10 +293,10 @@ type mySlice struct { data uintptr len int cap int } s := mySlice{} fmt.Println(
         
         <item>
             <title>有趣！一行代码居然无法获取请求的完整URL</title>
-            <link>https://isites.gitlab.io/gopher/timeline/get-full-url/</link>
+            <link>https://isites.github.io/timeline/get-full-url/</link>
             <pubDate>Mon, 29 Mar 2021 19:36:38 +0800</pubDate>
             
-            <guid>https://isites.gitlab.io/gopher/timeline/get-full-url/</guid>
+            <guid>https://isites.github.io/timeline/get-full-url/</guid>
             <description>缘起 做Web服务的时候，可能会有这样一个业务场景，获取一个HTTP请求的完整URL。很巧，老许就碰到了这样的业务场景。面对如此简单的需求，CV大法根本没有展示才能的机会。啪啪啪，获取请求的完整URL代码就出来了。
 当时离验证只差一步，老许信心满满，很快，打脸来得很快就像龙卷风。。。
 从图中可以知道，req.URL中的Scheme和Host均为空，所以r.URL.String()无法得到完整的请求连接。这个结果让老许一阵激动，万万没想到有一天我也有机会发现Go源码中可能遗漏的赋值。老许强行按耐住心中的激动，准备好好研究一番，万一成为了Go的Contributor呢^ω^。最后发现官方实现没有问题，因此就有了今天这篇文章。
@@ -438,10 +438,10 @@ Host: www.example.org
         
         <item>
             <title>白话Go内存模型&amp;Happen-Before</title>
-            <link>https://isites.gitlab.io/gopher/timeline/go-memory-model/</link>
+            <link>https://isites.github.io/timeline/go-memory-model/</link>
             <pubDate>Thu, 04 Mar 2021 18:53:38 +0800</pubDate>
             
-            <guid>https://isites.gitlab.io/gopher/timeline/go-memory-model/</guid>
+            <guid>https://isites.github.io/timeline/go-memory-model/</guid>
             <description>Go内存模型明确指出，一个goroutine如何才能观察到其他goroutine对同一变量的写操作。
 当多个goroutine并发同时存取同一个数据时必须把并发的存取操作序列化。在Go中保证读写的序列化可以通过channel通信或者其他同步原语（例如sync包中的互斥锁、读写锁和sync/atomic中的原子操作）。
 Happens Before 在单goroutine中，读取和写入的行为一定是和程序指定的执行顺序表现一致。换言之，编译器和处理器在不改变语言规范所定义的行为前提下才可以对单个goroutine中的指令进行重排序。
@@ -610,10 +610,10 @@ happens-before的作用 多个goroutine访问共享变量时，它们必须建�
         
         <item>
             <title>1分钟内的Linux性能分析法</title>
-            <link>https://isites.gitlab.io/gopher/timeline/60-linux/</link>
+            <link>https://isites.github.io/timeline/60-linux/</link>
             <pubDate>Mon, 01 Feb 2021 20:30:38 +0800</pubDate>
             
-            <guid>https://isites.gitlab.io/gopher/timeline/60-linux/</guid>
+            <guid>https://isites.github.io/timeline/60-linux/</guid>
             <description>本着“拿来主义”的精神，吸收他人长处为己用。老许翻译一篇Linux性能分析相关的文章分享给各位读者，同时也加深自己的印象。
  你登录到具有性能问题的Linux服务器时，第一分钟要检查什么？
 在Netflix，我们拥有庞大的Linux EC2云实例，以及大量的性能分析工具来监视和调查它们的性能。这些工具包括Atlas和Vector。Atlas用于全云监控，Vector用于按需实例分析。这些工具能帮助我们解决大部分问题，但有时候我们仍需登录实例并运行一些标准的Linux性能工具。
@@ -857,10 +857,10 @@ KiB Swap:        <span style="color:#ae81ff">0</span> total,        <span style=
         
         <item>
             <title>Go中的SSRF攻防战</title>
-            <link>https://isites.gitlab.io/gopher/timeline/go-ssrf/</link>
+            <link>https://isites.github.io/timeline/go-ssrf/</link>
             <pubDate>Tue, 19 Jan 2021 20:30:38 +0800</pubDate>
             
-            <guid>https://isites.gitlab.io/gopher/timeline/go-ssrf/</guid>
+            <guid>https://isites.github.io/timeline/go-ssrf/</guid>
             <description>写在最前面 “年年岁岁花相似，岁岁年年人不同”，没有什么是永恒的，很多东西都将成为过去式。比如，我以前在文章中自称“笔者”，细细想来这个称呼还是有一定的距离感，经过一番深思熟虑后，我打算将文章中的自称改为“老许”。
 关于自称，老许就不扯太远了，下面还是回到本篇的主旨。
 什么是SSRF SSRF英文全拼为Server Side Request Forgery，翻译为服务端请求伪造。攻击者在未能取得服务器权限时，利用服务器漏洞以服务器的身份发送一条构造好的请求给服务器所在内网。关于内网资源的访问控制，想必大家心里都有数。
@@ -1151,10 +1151,10 @@ KiB Swap:        <span style="color:#ae81ff">0</span> total,        <span style=
         
         <item>
             <title>2020总结：稍微努力了一下，依旧是咸鱼一条</title>
-            <link>https://isites.gitlab.io/gopher/timeline/2020summary/</link>
+            <link>https://isites.github.io/timeline/2020summary/</link>
             <pubDate>Thu, 31 Dec 2020 00:12:48 +0800</pubDate>
             
-            <guid>https://isites.gitlab.io/gopher/timeline/2020summary/</guid>
+            <guid>https://isites.github.io/timeline/2020summary/</guid>
             <description>2020最深刻的印记是新冠疫情，于笔者最深刻的印记是在这一年下定决心做了一些新的尝试。既然有了新的尝试，笔者也就随大流来一发年终总结。
 关于“新世界杂货铺”这个名字 2020的年终总结，最想谈的就是新世界杂货铺这个名字。为什么想先谈名字呢？因为笔者最近正在思考要不要换个名字，毕竟这个名字和公众号的内容实在没什么直接联系。笔者一度怀疑就是因为这个名字才导致笔者的粉丝增长缓慢。
 先说一说为什么叫这个名字吧。专注于技术分享但是又不止于技术分享故谓之“杂货铺”，比如笔者曾经深夜偷偷发了一篇“7年，爷青结，感谢春物的陪伴！”这样的文章，以后只会更多！对笔者而言，做公众号是一次崭新的尝试所以最终才取名为“新世界杂货铺”。名字的由来差不多就是这样，至于明年要不要换个名字，笔者还在犹豫，姑且走一步看一步吧。
@@ -1219,10 +1219,10 @@ Flag2：持续学习输出，粉丝也能持续增长就更好了。
         
         <item>
             <title>码了2000多行代码就是为了讲清楚TLS握手流程（续）</title>
-            <link>https://isites.gitlab.io/gopher/timeline/gotls1.2/</link>
+            <link>https://isites.github.io/timeline/gotls1.2/</link>
             <pubDate>Sun, 13 Dec 2020 23:47:48 +0800</pubDate>
             
-            <guid>https://isites.gitlab.io/gopher/timeline/gotls1.2/</guid>
+            <guid>https://isites.github.io/timeline/gotls1.2/</guid>
             <description>在“码了2000多行代码就是为了讲清楚TLS握手流程”这一篇文章的最后挖了一个坑，今天这篇文章就是为了填坑而来，因此本篇主要分析TLS1.2的握手流程。
 在写前一篇文章时，笔者的Demo只支持解析TLS1.3握手流程中发送的消息，写本篇时，笔者的Demo已经可以解析TLS1.x握手流程中的消息，有兴趣的读者请至文末获取Demo源码。
 结论先行 为保证各位读者对TLS1.2的握手流程有一个大概的框架，本篇依旧结论先行。
@@ -1416,10 +1416,10 @@ IV通常是随机或者伪随机的。它和数据加密的密钥一起使用可
         
         <item>
             <title>区分Protobuf 3中缺失值和默认值</title>
-            <link>https://isites.gitlab.io/gopher/timeline/gopb3/</link>
+            <link>https://isites.github.io/timeline/gopb3/</link>
             <pubDate>Tue, 01 Dec 2020 12:20:38 +0800</pubDate>
             
-            <guid>https://isites.gitlab.io/gopher/timeline/gopb3/</guid>
+            <guid>https://isites.github.io/timeline/gopb3/</guid>
             <description>这两天翻了翻以前的项目，发现不同项目中关于Protobuf 3缺失值和默认值的区分居然有好几种实现。今天笔者冷饭新炒，结合项目中的实现以及切身经验共总结出如下六种方案。
 增加标识字段 众所周知，在Go中数字类型的默认值为0（这里仅以数字类型举例），这在某些场景下往往会引起一定的歧义。
  以is_show字段为例，如果没有该字段表示不更新DB中的数据，如果有该字段且值为0则表示更新DB中的数据为不可见，如果有该字段且值为1则表示更新DB中的数据为可见。
@@ -1569,10 +1569,10 @@ json: cannot unmarshal object into Go struct field Status.st.Show of type oneof.
         
         <item>
             <title>为什么go中的receiver name不推荐使用this或者self</title>
-            <link>https://isites.gitlab.io/gopher/timeline/go-reciver/</link>
+            <link>https://isites.github.io/timeline/go-reciver/</link>
             <pubDate>Sat, 29 Aug 2020 12:20:38 +0800</pubDate>
             
-            <guid>https://isites.gitlab.io/gopher/timeline/go-reciver/</guid>
+            <guid>https://isites.github.io/timeline/go-reciver/</guid>
             <description>前言 在日常的开发中我们除了定义函数以外， 我们还会定义一些方法。这本来没有什么， 但是一些从PHP或者其他面向对象语言转GO的同学往往会把receiver name命名为this, self, me等。
 笔者在实际项目开发中也遇到类似的同学， 屡次提醒却没有效果，于是决心写下这篇文章以便好好说服这些同学。
 CR标准做法 首先我们来看一下GO推荐的标准命名Receiver Names，以下内容摘抄自https://github.com/golang/go/wiki/CodeReviewComments#receiver-names：
@@ -1691,10 +1691,10 @@ In Go, the receiver of a method is just another parameter and therefore, should 
         
         <item>
             <title>深入剖析go中字符串的编码问题——特殊字符的string怎么转byte？</title>
-            <link>https://isites.gitlab.io/gopher/timeline/go-string-encode/</link>
+            <link>https://isites.github.io/timeline/go-string-encode/</link>
             <pubDate>Mon, 24 Aug 2020 23:47:48 +0800</pubDate>
             
-            <guid>https://isites.gitlab.io/gopher/timeline/go-string-encode/</guid>
+            <guid>https://isites.github.io/timeline/go-string-encode/</guid>
             <description>前言 前段时间发表了Go中的HTTP请求之——HTTP1.1请求流程分析，所以这两天本来打算研究HTTP2.0的请求源码，结果发现太复杂就跑去逛知乎了，然后就发现了一个非常有意思的提问“golang 特殊字符的string怎么转成[]byte?”。为了转换一下心情， 便有了此篇文章。
 问题 原问题我就不码字了，直接上图： 看到问题，我的第一反应是ASCII码值范围应该是0~127呀，怎么会超过127呢？直到实际运行的时候才发现上图的特殊字符是‘’（如果无法展示，记住该特殊字符的unicode是\u0081），并不是英文中的句号。
 unicode和utf-8的恩怨纠葛 百度百科已经把unicode和utf-8介绍的很详细了，所以这里就不做过多的阐述，仅摘抄部分和本文相关的定义：
