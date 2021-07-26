@@ -5,8 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="ie=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <meta name="author" content="">
-<meta name="description" content="[TOC]
-我内心一直有一个欲望，想要高声呼喊“我胡汉三又回来了”，而现在就是合适的时机。
+<meta name="description" content="我内心一直有一个欲望，想要高声呼喊“我胡汉三又回来了”，而现在就是合适的时机。
 正式开干之前有点手生，太久没有写技术类的文章，总有点怠惰，不得不说坚持确实是一件很难的事情。如果不是因为愧疚和写点东西能让自己稍微平静下来一些，我可能还将继续怠惰下去。
 另外还有一件很有意思的事情分享一下。前一篇在公众号上的文章仅思考就花了近一个月，写只花了一天，而技术文章我一般边思考边写平均耗时一周。结果是不会骗人的，前一篇文章阅读量首次突破一千，果然这届读者的思想深度至少也有一个月那么多，老许佩服佩服。
 切片底层结构 切片和结构体的互转 其他不扯多了，我们还是回归本篇主题。 在正式了解切片底层结构之前， 我们先看几行代码。
@@ -14,7 +13,7 @@ type mySlice struct { data uintptr len int cap int } s := mySlice{} fmt.Println(
 <meta name="keywords" content=", Go" />
 <meta name="robots" content="noodp" />
 <meta name="theme-color" content="" />
-<link rel="canonical" href="https://gopher-north.gitee.io/timeline/slice/" />
+<link rel="canonical" href="https://isites.gitlab.io/gopher/timeline/slice/" />
 
 
     <title>
@@ -31,7 +30,7 @@ type mySlice struct { data uintptr len int cap int } s := mySlice{} fmt.Println(
 
 
 
-<link rel="stylesheet" href="/main.805b1025016494ee5fd67b55b8ecd5e2b7c4a9f0bdda42e300c62b85ddfef68f.css">
+<link rel="stylesheet" href="/gopher/main.805b1025016494ee5fd67b55b8ecd5e2b7c4a9f0bdda42e300c62b85ddfef68f.css">
 
 
   
@@ -48,15 +47,14 @@ type mySlice struct { data uintptr len int cap int } s := mySlice{} fmt.Println(
 
 
 <meta itemprop="name" content="讲的是切片，但好像又不只是切片？">
-<meta itemprop="description" content="[TOC]
-我内心一直有一个欲望，想要高声呼喊“我胡汉三又回来了”，而现在就是合适的时机。
+<meta itemprop="description" content="我内心一直有一个欲望，想要高声呼喊“我胡汉三又回来了”，而现在就是合适的时机。
 正式开干之前有点手生，太久没有写技术类的文章，总有点怠惰，不得不说坚持确实是一件很难的事情。如果不是因为愧疚和写点东西能让自己稍微平静下来一些，我可能还将继续怠惰下去。
 另外还有一件很有意思的事情分享一下。前一篇在公众号上的文章仅思考就花了近一个月，写只花了一天，而技术文章我一般边思考边写平均耗时一周。结果是不会骗人的，前一篇文章阅读量首次突破一千，果然这届读者的思想深度至少也有一个月那么多，老许佩服佩服。
 切片底层结构 切片和结构体的互转 其他不扯多了，我们还是回归本篇主题。 在正式了解切片底层结构之前， 我们先看几行代码。
 type mySlice struct { data uintptr len int cap int } s := mySlice{} fmt.Println(fmt.Sprintf(&#34;%&#43;v&#34;, s)) // {data:0 len:0 cap:0} s1 := make([]int, 10) s1[2] = 2 fmt.Println(fmt.Sprintf(&#34;%&#43;v, len(%d), cap(%d)&#34;, s1, len(s1), cap(s1))) // [0 0 2 0 0 0 0 0 0 0], len(10), cap(10) s = *(*mySlice)(unsafe.Pointer(&amp;s1)) fmt.Println(fmt.Sprintf(&#34;%&#43;v&#34;, s)) // {data:824634515456 len:10 cap:10} fmt.Printf(&#34;%p, %v\n&#34;, s1, unsafe.Pointer(s.data)) // 0xc0000c2000, 0xc0000c2000  在上述代码中，通过获取切片的地址，并将其转为*mySlice, 成功获得了切片的长度和容量。以及一个类似于指针一样的东西。而这个指针就是指向存储真实数据的数组，下面我们来进行验证。">
 <meta itemprop="datePublished" content="2021-07-26T22:09:00+08:00" />
 <meta itemprop="dateModified" content="2021-07-26T22:09:00+08:00" />
-<meta itemprop="wordCount" content="571">
+<meta itemprop="wordCount" content="570">
 
 
 
@@ -64,8 +62,7 @@ type mySlice struct { data uintptr len int cap int } s := mySlice{} fmt.Println(
 
 <meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="讲的是切片，但好像又不只是切片？"/>
-<meta name="twitter:description" content="[TOC]
-我内心一直有一个欲望，想要高声呼喊“我胡汉三又回来了”，而现在就是合适的时机。
+<meta name="twitter:description" content="我内心一直有一个欲望，想要高声呼喊“我胡汉三又回来了”，而现在就是合适的时机。
 正式开干之前有点手生，太久没有写技术类的文章，总有点怠惰，不得不说坚持确实是一件很难的事情。如果不是因为愧疚和写点东西能让自己稍微平静下来一些，我可能还将继续怠惰下去。
 另外还有一件很有意思的事情分享一下。前一篇在公众号上的文章仅思考就花了近一个月，写只花了一天，而技术文章我一般边思考边写平均耗时一周。结果是不会骗人的，前一篇文章阅读量首次突破一千，果然这届读者的思想深度至少也有一个月那么多，老许佩服佩服。
 切片底层结构 切片和结构体的互转 其他不扯多了，我们还是回归本篇主题。 在正式了解切片底层结构之前， 我们先看几行代码。
@@ -92,7 +89,7 @@ type mySlice struct { data uintptr len int cap int } s := mySlice{} fmt.Println(
         <div class="container">
             <header class="header">
     <span class="header__inner">
-        <a href="https://gopher-north.gitee.io/" style="text-decoration: none;">
+        <a href="https://isites.gitlab.io/gopher/" style="text-decoration: none;">
     <div class="logo">
         
             <span class="logo__mark">Gopher指北</span>
@@ -138,7 +135,7 @@ type mySlice struct { data uintptr len int cap int } s := mySlice{} fmt.Println(
 
     <article>
       <h1 class="post-title">
-        <a href="https://gopher-north.gitee.io/timeline/slice/">讲的是切片，但好像又不只是切片？</a>
+        <a href="https://isites.gitlab.io/gopher/timeline/slice/">讲的是切片，但好像又不只是切片？</a>
       </h1>
         <hr />
         <aside id="toc">
@@ -165,8 +162,7 @@ type mySlice struct { data uintptr len int cap int } s := mySlice{} fmt.Println(
       
 
       <div class="post-content">
-        <p>[TOC]</p>
-<p>我内心一直有一个欲望，想要高声呼喊“我胡汉三又回来了”，而现在就是合适的时机。</p>
+        <p>我内心一直有一个欲望，想要高声呼喊“我胡汉三又回来了”，而现在就是合适的时机。</p>
 <p>正式开干之前有点手生，太久没有写技术类的文章，总有点怠惰，不得不说坚持确实是一件很难的事情。如果不是因为愧疚和写点东西能让自己稍微平静下来一些，我可能还将继续怠惰下去。</p>
 <p>另外还有一件很有意思的事情分享一下。前一篇在公众号上的文章仅思考就花了近一个月，写只花了一天，而技术文章我一般边思考边写平均耗时一周。结果是不会骗人的，前一篇文章阅读量首次突破一千，果然这届读者的思想深度至少也有一个月那么多，老许佩服佩服。</p>
 <p><img src="https://note.youdao.com/yws/api/personal/file/WEBb829169226c8236ca3fd6bb1d31a4827?method=download&amp;shareKey=4371d20b80ab922011b921e562525227" alt=""></p>
@@ -396,7 +392,7 @@ type mySlice struct { data uintptr len int cap int } s := mySlice{} fmt.Println(
           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-tag meta-icon">
             <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path>
             <line x1="7" y1="7" x2="7" y2="7"></line>
-          </svg><span class="tag"><a href="https://gopher-north.gitee.io/tags/go/">Go</a></span>
+          </svg><span class="tag"><a href="https://isites.gitlab.io/gopher/tags/go/">Go</a></span>
         </p>
 
       <p>
@@ -407,7 +403,7 @@ type mySlice struct { data uintptr len int cap int } s := mySlice{} fmt.Println(
           <line x1="16" y1="17" x2="8" y2="17"></line>
           <polyline points="10 9 9 9 8 9"></polyline>
         </svg>
-        571 Words
+        570 Words
       </p>
 
       <p>
@@ -434,7 +430,7 @@ type mySlice struct { data uintptr len int cap int } s := mySlice{} fmt.Println(
 
           
             <span class="button next">
-              <a href="https://gopher-north.gitee.io/timeline/leave-sh/">
+              <a href="https://isites.gitlab.io/gopher/timeline/leave-sh/">
                 <span class="button__text">天涯未远，上海再见，百度再见</span>
                 <span class="button__icon">→</span>
               </a>
@@ -523,7 +519,7 @@ type mySlice struct { data uintptr len int cap int } s := mySlice{} fmt.Println(
 
 
 
-<script type="text/javascript" src="/bundle.min.dc716e9092c9820b77f96da294d0120aeeb189b5bcea9752309ebea27fd53bbe6b13cffb2aca8ecf32525647ceb7001f76091de4199ac5a3caa432c070247f5b.js" integrity="sha512-3HFukJLJggt3&#43;W2ilNASCu6xibW86pdSMJ6&#43;on/VO75rE8/7KsqOzzJSVkfOtwAfdgkd5BmaxaPKpDLAcCR/Ww=="></script>
+<script type="text/javascript" src="/gopher/bundle.min.dc716e9092c9820b77f96da294d0120aeeb189b5bcea9752309ebea27fd53bbe6b13cffb2aca8ecf32525647ceb7001f76091de4199ac5a3caa432c070247f5b.js" integrity="sha512-3HFukJLJggt3&#43;W2ilNASCu6xibW86pdSMJ6&#43;on/VO75rE8/7KsqOzzJSVkfOtwAfdgkd5BmaxaPKpDLAcCR/Ww=="></script>
 
 
     
