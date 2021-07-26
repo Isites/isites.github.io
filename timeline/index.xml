@@ -1,19 +1,254 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
     <channel>
         <title>Timelines on Gopher指北</title>
-        <link>https://isites.github.io/timeline/</link>
+        <link>https://isites.gitlab.io/gopher/timeline/</link>
         <description>Recent content in Timelines on Gopher指北</description>
         <generator>Hugo -- gohugo.io</generator>
         <language>en-us</language>
-        <lastBuildDate>Sun, 06 Jun 2021 10:59:48 +0800</lastBuildDate>
-        <atom:link href="https://isites.github.io/timeline/index.xml" rel="self" type="application/rss+xml" />
+        <lastBuildDate>Mon, 26 Jul 2021 22:09:00 +0800</lastBuildDate>
+        <atom:link href="https://isites.gitlab.io/gopher/timeline/index.xml" rel="self" type="application/rss+xml" />
+        
+        <item>
+            <title>讲的是切片，但好像又不只是切片？</title>
+            <link>https://isites.gitlab.io/gopher/timeline/slice/</link>
+            <pubDate>Mon, 26 Jul 2021 22:09:00 +0800</pubDate>
+            
+            <guid>https://isites.gitlab.io/gopher/timeline/slice/</guid>
+            <description>[TOC]
+我内心一直有一个欲望，想要高声呼喊“我胡汉三又回来了”，而现在就是合适的时机。
+正式开干之前有点手生，太久没有写技术类的文章，总有点怠惰，不得不说坚持确实是一件很难的事情。如果不是因为愧疚和写点东西能让自己稍微平静下来一些，我可能还将继续怠惰下去。
+另外还有一件很有意思的事情分享一下。前一篇在公众号上的文章仅思考就花了近一个月，写只花了一天，而技术文章我一般边思考边写平均耗时一周。结果是不会骗人的，前一篇文章阅读量首次突破一千，果然这届读者的思想深度至少也有一个月那么多，老许佩服佩服。
+切片底层结构 切片和结构体的互转 其他不扯多了，我们还是回归本篇主题。 在正式了解切片底层结构之前， 我们先看几行代码。
+type mySlice struct { data uintptr len int cap int } s := mySlice{} fmt.Println(fmt.Sprintf(&amp;#34;%+v&amp;#34;, s)) // {data:0 len:0 cap:0} s1 := make([]int, 10) s1[2] = 2 fmt.Println(fmt.Sprintf(&amp;#34;%+v, len(%d), cap(%d)&amp;#34;, s1, len(s1), cap(s1))) // [0 0 2 0 0 0 0 0 0 0], len(10), cap(10) s = *(*mySlice)(unsafe.Pointer(&amp;amp;s1)) fmt.Println(fmt.Sprintf(&amp;#34;%+v&amp;#34;, s)) // {data:824634515456 len:10 cap:10} fmt.Printf(&amp;#34;%p, %v\n&amp;#34;, s1, unsafe.Pointer(s.data)) // 0xc0000c2000, 0xc0000c2000  在上述代码中，通过获取切片的地址，并将其转为*mySlice, 成功获得了切片的长度和容量。以及一个类似于指针一样的东西。而这个指针就是指向存储真实数据的数组，下面我们来进行验证。</description>
+            <content type="html"><![CDATA[<p>[TOC]</p>
+<p>我内心一直有一个欲望，想要高声呼喊“我胡汉三又回来了”，而现在就是合适的时机。</p>
+<p>正式开干之前有点手生，太久没有写技术类的文章，总有点怠惰，不得不说坚持确实是一件很难的事情。如果不是因为愧疚和写点东西能让自己稍微平静下来一些，我可能还将继续怠惰下去。</p>
+<p>另外还有一件很有意思的事情分享一下。前一篇在公众号上的文章仅思考就花了近一个月，写只花了一天，而技术文章我一般边思考边写平均耗时一周。结果是不会骗人的，前一篇文章阅读量首次突破一千，果然这届读者的思想深度至少也有一个月那么多，老许佩服佩服。</p>
+<p><img src="https://note.youdao.com/yws/api/personal/file/WEBb829169226c8236ca3fd6bb1d31a4827?method=download&amp;shareKey=4371d20b80ab922011b921e562525227" alt=""></p>
+<h1 id="切片底层结构">切片底层结构</h1>
+<h2 id="切片和结构体的互转">切片和结构体的互转</h2>
+<p>其他不扯多了，我们还是回归本篇主题。 在正式了解切片底层结构之前， 我们先看几行代码。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">mySlice</span> <span style="color:#66d9ef">struct</span> {
+	<span style="color:#a6e22e">data</span> <span style="color:#66d9ef">uintptr</span>
+	<span style="color:#a6e22e">len</span>  <span style="color:#66d9ef">int</span>
+	<span style="color:#a6e22e">cap</span>  <span style="color:#66d9ef">int</span>
+}
+
+<span style="color:#a6e22e">s</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">mySlice</span>{}
+<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Sprintf</span>(<span style="color:#e6db74">&#34;%+v&#34;</span>, <span style="color:#a6e22e">s</span>))
+<span style="color:#75715e">// {data:0 len:0 cap:0}
+</span><span style="color:#75715e"></span><span style="color:#a6e22e">s1</span> <span style="color:#f92672">:=</span> make([]<span style="color:#66d9ef">int</span>, <span style="color:#ae81ff">10</span>)
+<span style="color:#a6e22e">s1</span>[<span style="color:#ae81ff">2</span>] = <span style="color:#ae81ff">2</span>
+<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Sprintf</span>(<span style="color:#e6db74">&#34;%+v, len(%d), cap(%d)&#34;</span>, <span style="color:#a6e22e">s1</span>, len(<span style="color:#a6e22e">s1</span>), cap(<span style="color:#a6e22e">s1</span>))) <span style="color:#75715e">// [0 0 2 0 0 0 0 0 0 0], len(10), cap(10)
+</span><span style="color:#75715e"></span><span style="color:#a6e22e">s</span> = <span style="color:#f92672">*</span>(<span style="color:#f92672">*</span><span style="color:#a6e22e">mySlice</span>)(<span style="color:#a6e22e">unsafe</span>.<span style="color:#a6e22e">Pointer</span>(<span style="color:#f92672">&amp;</span><span style="color:#a6e22e">s1</span>))
+<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Sprintf</span>(<span style="color:#e6db74">&#34;%+v&#34;</span>, <span style="color:#a6e22e">s</span>)) <span style="color:#75715e">// {data:824634515456 len:10 cap:10}
+</span><span style="color:#75715e"></span><span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Printf</span>(<span style="color:#e6db74">&#34;%p, %v\n&#34;</span>, <span style="color:#a6e22e">s1</span>, <span style="color:#a6e22e">unsafe</span>.<span style="color:#a6e22e">Pointer</span>(<span style="color:#a6e22e">s</span>.<span style="color:#a6e22e">data</span>)) <span style="color:#75715e">// 0xc0000c2000, 0xc0000c2000
+</span><span style="color:#75715e"></span>
+</code></pre></div><p>在上述代码中，通过获取切片的地址，并将其转为<code>*mySlice</code>, 成功获得了切片的长度和容量。以及一个类似于指针一样的东西。而这个指针就是指向存储真实数据的数组，下面我们来进行验证。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#75715e">//Data强转为一个数组
+</span><span style="color:#75715e"></span><span style="color:#a6e22e">s2</span> <span style="color:#f92672">:=</span> (<span style="color:#f92672">*</span>[<span style="color:#ae81ff">5</span>]<span style="color:#66d9ef">int</span>)(<span style="color:#a6e22e">unsafe</span>.<span style="color:#a6e22e">Pointer</span>(<span style="color:#a6e22e">s</span>.<span style="color:#a6e22e">data</span>))
+<span style="color:#a6e22e">s3</span> <span style="color:#f92672">:=</span> (<span style="color:#f92672">*</span>[<span style="color:#ae81ff">10</span>]<span style="color:#66d9ef">int</span>)(<span style="color:#a6e22e">unsafe</span>.<span style="color:#a6e22e">Pointer</span>(<span style="color:#a6e22e">s</span>.<span style="color:#a6e22e">data</span>))
+<span style="color:#75715e">// 修改数组中的数据后切片中对应位置的值也发生了变化
+</span><span style="color:#75715e"></span><span style="color:#a6e22e">s2</span>[<span style="color:#ae81ff">4</span>] = <span style="color:#ae81ff">4</span>
+<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">s1</span>)  <span style="color:#75715e">// [0 0 2 0 4 0 0 0 0 0]
+</span><span style="color:#75715e"></span><span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#f92672">*</span><span style="color:#a6e22e">s2</span>) <span style="color:#75715e">// [0 0 2 0 4]
+</span><span style="color:#75715e"></span><span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#f92672">*</span><span style="color:#a6e22e">s3</span>) <span style="color:#75715e">// [0 0 2 0 4 0 0 0 0 0]
+</span></code></pre></div><p>到这里，切片的底层结构已经呼之欲出了，不过为了做更进一步的验证，我们继续测试结构体转为切片的过程。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">var</span> (
+	<span style="color:#75715e">// 一个长度为5的数组
+</span><span style="color:#75715e"></span>	<span style="color:#a6e22e">dt</span> [<span style="color:#ae81ff">5</span>]<span style="color:#66d9ef">int</span>
+	<span style="color:#a6e22e">s4</span> []<span style="color:#66d9ef">int</span>
+)
+<span style="color:#a6e22e">s5</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">mySlice</span>{
+	<span style="color:#75715e">// 将数组地址赋值给data
+</span><span style="color:#75715e"></span>	<span style="color:#a6e22e">data</span>: uintptr(<span style="color:#a6e22e">unsafe</span>.<span style="color:#a6e22e">Pointer</span>(<span style="color:#f92672">&amp;</span><span style="color:#a6e22e">dt</span>)),
+	<span style="color:#a6e22e">len</span>:  <span style="color:#ae81ff">2</span>,
+	<span style="color:#a6e22e">cap</span>:  <span style="color:#ae81ff">5</span>,
+}
+<span style="color:#75715e">// 结构体强转为切片
+</span><span style="color:#75715e"></span><span style="color:#a6e22e">s4</span> = <span style="color:#f92672">*</span>((<span style="color:#f92672">*</span>[]<span style="color:#66d9ef">int</span>)(<span style="color:#a6e22e">unsafe</span>.<span style="color:#a6e22e">Pointer</span>(<span style="color:#f92672">&amp;</span><span style="color:#a6e22e">s5</span>)))
+<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">s4</span>, len(<span style="color:#a6e22e">s4</span>), cap(<span style="color:#a6e22e">s4</span>)) <span style="color:#75715e">// [0 0] 2 5
+</span><span style="color:#75715e">// 修改数组中的值， 切片内容也会发生变化
+</span><span style="color:#75715e"></span><span style="color:#a6e22e">dt</span>[<span style="color:#ae81ff">1</span>] = <span style="color:#ae81ff">3</span>
+<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">dt</span>, <span style="color:#a6e22e">s4</span>) <span style="color:#75715e">// [0 3 0 0 0] [0 3]
+</span></code></pre></div><p>通过上述三段代码，我们将切片的底层结构以结构体的形式更加清晰的表达出来。如下图所示，其中第一部分（Data）为指向数组的地址，第二部分（Len）为切片的长度即数组已使用的长度， 第三部分（Cap）为数组的长度。</p>
+<p><img src="https://note.youdao.com/yws/api/personal/file/WEB70ff878bc93b11ab7d9d75748459095c?method=download&amp;shareKey=6dee0526707b15611b604dc99fbd8b72" alt=""></p>
+<p><strong>小结</strong>：切片是对数组的包装，底层仍使用数组存储数据。</p>
+<blockquote>
+<p>额外再多说一嘴：</p>
+<p>reflect包要操作切片时通过<code>reflect.SliceHeader</code>结构体，详见https://github.com/golang/go/blob/master/src/reflect/value.go#L2329</p>
+<p>runtime对切片进行扩容时使用<code>slice</code>结构体, 详见https://github.com/golang/go/blob/master/src/runtime/slice.go#L12</p>
+</blockquote>
+<h2 id="unsafe题外话">unsafe题外话</h2>
+<p>在前一部分的Demo中几乎离不开<code>unsafe</code>包的使用。当然本篇并不是介绍此包的用法，只是作为一个题外话简单看一下它为什么不安全。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">otherOP</span>(<span style="color:#a6e22e">a</span>, <span style="color:#a6e22e">b</span> <span style="color:#f92672">*</span><span style="color:#66d9ef">int</span>) {
+	<span style="color:#a6e22e">reflect</span>.<span style="color:#a6e22e">ValueOf</span>(<span style="color:#a6e22e">a</span>)
+	<span style="color:#a6e22e">reflect</span>.<span style="color:#a6e22e">ValueOf</span>(<span style="color:#a6e22e">b</span>)
+}
+
+<span style="color:#66d9ef">var</span> (
+	<span style="color:#a6e22e">a</span> = new(<span style="color:#66d9ef">int</span>)
+	<span style="color:#a6e22e">b</span> = new(<span style="color:#66d9ef">int</span>)
+)
+<span style="color:#a6e22e">otherOP</span>(<span style="color:#a6e22e">a</span>, <span style="color:#a6e22e">b</span>) <span style="color:#75715e">// 如果注释此函数调用，最终输出结果会发生变化
+</span><span style="color:#75715e"></span><span style="color:#f92672">*</span>(<span style="color:#f92672">*</span><span style="color:#66d9ef">int</span>)(<span style="color:#a6e22e">unsafe</span>.<span style="color:#a6e22e">Pointer</span>(uintptr(<span style="color:#a6e22e">unsafe</span>.<span style="color:#a6e22e">Pointer</span>(<span style="color:#a6e22e">a</span>)) <span style="color:#f92672">+</span> <span style="color:#a6e22e">unsafe</span>.<span style="color:#a6e22e">Sizeof</span>(int(<span style="color:#f92672">*</span><span style="color:#a6e22e">a</span>)))) = <span style="color:#ae81ff">1</span>
+<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#f92672">*</span><span style="color:#a6e22e">a</span>, <span style="color:#f92672">*</span><span style="color:#a6e22e">b</span>)
+</code></pre></div><p>上述代在是否注释<code>otherOP</code>时，其输出结果是不一致的。</p>
+<p><img src="https://note.youdao.com/yws/api/personal/file/WEBfddf1fcfc2050d9232fd69336a2f5a75?method=download&amp;shareKey=a0f94f779e70eca0d74cc95c2276aa34" alt=""></p>
+<p>当变量逃逸至堆上时变量<code>a</code>和变量<code>b</code>内存地址相邻，故能够通过<code>a</code>变量地址去设置<code>b</code>变量的值。当未逃逸到堆上时，设置变量<code>b</code>的值并未生效，如此我们根本无法得知修改了哪一块儿内存的值，这种不确定性在老许看来即是我们需要慎重使用此包的原因。</p>
+<blockquote>
+<p>关于上述demo的补充解释：</p>
+<ol>
+<li>reflect.ValueOf会调用底层的escapes方法以保证对象逃逸到堆中</li>
+<li>Go中采用按大小分割的空闲链表内存分配器以及多级缓存，故a，b变量在大小一致且本demo变量较少的的情况下很有可能被分配到连续的内存空间中</li>
+</ol>
+</blockquote>
+<h1 id="创建切片">创建切片</h1>
+<p>创建切片方式有四种。第一种直接通过<code>var</code>进行变量声明，第二种通过类型推导，第三种通过<code>make</code>方式去创建，第四种通过切片表达式创建。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#75715e">// 通过变量声明的方式创建
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">var</span> <span style="color:#a6e22e">a</span> []<span style="color:#66d9ef">int</span>
+<span style="color:#75715e">// 类型推导
+</span><span style="color:#75715e"></span><span style="color:#a6e22e">b</span> <span style="color:#f92672">:=</span> []<span style="color:#66d9ef">int</span>{<span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">2</span>, <span style="color:#ae81ff">3</span>}
+<span style="color:#75715e">// make创建
+</span><span style="color:#75715e"></span><span style="color:#a6e22e">c</span> <span style="color:#f92672">:=</span> make([]<span style="color:#66d9ef">int</span>, <span style="color:#ae81ff">2</span>) <span style="color:#75715e">// c := make([]int, 0, 5)
+</span><span style="color:#75715e">// 切片表达式
+</span><span style="color:#75715e"></span><span style="color:#a6e22e">d</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">c</span>[:<span style="color:#ae81ff">3</span>]
+</code></pre></div><p>上述例子中，前三种没什么特别好说的，老许主要介绍一下第四种,以及它的相关限制和注意事项。</p>
+<h2 id="简单的切片表达式">简单的切片表达式</h2>
+<p>对于字符串、数组、数组指针和切片（切片指针不能使用下面的表达式）均可使用下面的表达式：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#a6e22e">s</span>[<span style="color:#a6e22e">low</span>:<span style="color:#a6e22e">high</span>] <span style="color:#75715e">// 生成的切片长度为high-low
+</span></code></pre></div><p>通过上述表达式可创建新的子串或者切片。特别注意的是，对字符串使用此表达式时既不是生成字符串切片也不是生成字节切片而是生成<code>子字符串</code>。另外，老许在<a href="https://mp.weixin.qq.com/s/MHMg0oxZrUfhuuCZlod5cA">go中字符串的编码问题</a>中提到Go中的字符串存储的就是utf8字节切片，所以我们在使用此方法获取包含中文等特殊字符时有可能会出现意想不到的结果。正确得到子串的方式应该是先转为rune切片再截取。</p>
+<p>上述表达式已经可以十分方便地创建新的切片，然而更加方便地是<code>low</code>和<code>high</code>还可以省略。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#a6e22e">s</span>[<span style="color:#ae81ff">2</span>:]  <span style="color:#75715e">// same as s[2 : len(a)]
+</span><span style="color:#75715e"></span><span style="color:#a6e22e">s</span>[:<span style="color:#ae81ff">3</span>]  <span style="color:#75715e">// same as s[0 : 3]
+</span><span style="color:#75715e"></span><span style="color:#a6e22e">s</span>[:]   <span style="color:#75715e">// same as s[0 : len(a)]
+</span></code></pre></div><p><strong>下标限制</strong></p>
+<p>对不同的类型使用切片表达式，<code>low</code>和<code>high</code>的取值范围不同。对于字符串和数组/数组指针而言，<code>low</code>和<code>high</code>的取值范围为<code>0 &lt;= low &lt;= len(s)</code>。对于切片而言，<code>low</code>和<code>high</code>的取值范围为<code>0 &lt;= low &lt;= cap(s)</code>。在<a href="https://mp.weixin.qq.com/s/G8MrTgwH88ABB-OOYreXIA">切片面试题系列一</a>中正是对此知识点的考察。</p>
+<p><strong>切片容量</strong></p>
+<p>通过切片表达式生成的切片，其底层数组共享，因此切片的容量为底层数组的长度减去<code>low</code>。由此可以推断下述代码输出结果为<code>3 8</code>和<code>3 13</code>。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">var</span> (
+	<span style="color:#a6e22e">s1</span> [<span style="color:#ae81ff">10</span>]<span style="color:#66d9ef">int</span>
+	<span style="color:#a6e22e">s2</span> []<span style="color:#66d9ef">int</span> = make([]<span style="color:#66d9ef">int</span>, <span style="color:#ae81ff">10</span>, <span style="color:#ae81ff">15</span>)
+)
+<span style="color:#a6e22e">s</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">s1</span>[<span style="color:#ae81ff">2</span>:<span style="color:#ae81ff">5</span>]
+<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(len(<span style="color:#a6e22e">s</span>), cap(<span style="color:#a6e22e">s</span>))
+<span style="color:#a6e22e">s</span> = <span style="color:#a6e22e">s2</span>[<span style="color:#ae81ff">2</span>:<span style="color:#ae81ff">5</span>]
+<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(len(<span style="color:#a6e22e">s</span>), cap(<span style="color:#a6e22e">s</span>))
+<span style="color:#66d9ef">return</span>
+</code></pre></div><h2 id="完整的切片表达式">完整的切片表达式</h2>
+<p>说实话这种方式真的不常用，虽然它可以控制切片的容量，但老许在实际开发中并未使用过。其完整表达式如下：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#a6e22e">s</span>[<span style="color:#a6e22e">low</span> : <span style="color:#a6e22e">high</span> : <span style="color:#a6e22e">max</span>]
+</code></pre></div><p>这种表达式有几个需要注意的点分别是：</p>
+<ul>
+<li>只适用于数组、数组指针和切片不适用于字符串。</li>
+<li>和简单切片表达式不同的是，它只能忽略<code>low</code>这个下标且忽略后该下标默认值为0。</li>
+<li>和简单切片表达式一样，通过完整切片表达式生成的切片底层数组共享</li>
+</ul>
+<p><strong>下标限制</strong></p>
+<p>对数组/数组指针而言，下标取值范围为<code>0 &lt;= low &lt;= high &lt;= max &lt;= len(s)</code>。对切片而言，下标取值范围为<code>0 &lt;= low &lt;= high &lt;= cap(s)</code>。在<a href="https://mp.weixin.qq.com/s/O5533KWvDkyrsiCpBRP9EA">切片面试题系列二</a>中正是对此知识点的考察。</p>
+<p><strong>切片容量</strong></p>
+<p>前面提到此切片表达式可以控制切片的容量。在<code>low</code>一定的情况下，通过改变<code>max</code>在允许范围内的值即可改变切片的容量，其容量计算方式为<code>max - low</code>。</p>
+<h1 id="切片扩容">切片扩容</h1>
+<p><code>runtime/slice.go</code>文件的<code>growslice</code>函数实现了切片的扩容逻辑,在正式分析内部逻辑之前我们先看看<code>growslice</code>的函数签名：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">slice</span> <span style="color:#66d9ef">struct</span> {
+	<span style="color:#a6e22e">array</span> <span style="color:#a6e22e">unsafe</span>.<span style="color:#a6e22e">Pointer</span>
+	<span style="color:#a6e22e">len</span>   <span style="color:#66d9ef">int</span>
+	<span style="color:#a6e22e">cap</span>   <span style="color:#66d9ef">int</span>
+}
+
+<span style="color:#66d9ef">func</span> <span style="color:#a6e22e">growslice</span>(<span style="color:#a6e22e">et</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">_type</span>, <span style="color:#a6e22e">old</span> <span style="color:#a6e22e">slice</span>, <span style="color:#a6e22e">cap</span> <span style="color:#66d9ef">int</span>) <span style="color:#a6e22e">slice</span>
+</code></pre></div><p>第一个参数<code>_type</code>是Go语言类型的运行时表示，其中包含了很多元信息，例如：类型大小、对齐以及种类等。</p>
+<p>第二个参数为待扩容切片的信息。</p>
+<p>第三个参数为真实需要的容量，即原容量和新增元素数量之和，老许对其简称为所需容量。为了更加容易理解所需容量的含义，我们先看一段代码：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#a6e22e">s</span> <span style="color:#f92672">:=</span> []<span style="color:#66d9ef">int</span>{<span style="color:#ae81ff">1</span>,<span style="color:#ae81ff">2</span>,<span style="color:#ae81ff">3</span>} <span style="color:#75715e">// 此时切片长度和容量均为3
+</span><span style="color:#75715e"></span><span style="color:#a6e22e">s</span> = append(<span style="color:#a6e22e">s</span>, <span style="color:#ae81ff">4</span>) <span style="color:#75715e">// 此时所需容量为3 + 1
+</span><span style="color:#75715e"></span><span style="color:#a6e22e">s1</span> <span style="color:#f92672">:=</span> []<span style="color:#66d9ef">int</span>{<span style="color:#ae81ff">1</span>,<span style="color:#ae81ff">2</span>,<span style="color:#ae81ff">3</span>} <span style="color:#75715e">// 此时切片长度和容量均为3
+</span><span style="color:#75715e"></span><span style="color:#a6e22e">s1</span> = append(<span style="color:#a6e22e">s1</span>, <span style="color:#ae81ff">4</span>, <span style="color:#ae81ff">5</span>, <span style="color:#ae81ff">6</span>) <span style="color:#75715e">// 此时所需容量为3 + 3
+</span></code></pre></div><h2 id="扩容逻辑">扩容逻辑</h2>
+<p>有了上面的概念之后，下面我们看看切片扩容算法：</p>
+<p><img src="https://note.youdao.com/yws/api/personal/file/WEB1327300fe17b24f8445d1060e1c7ce3d?method=download&amp;shareKey=427d873743a6bc9219f1259075c3af99" alt=""></p>
+<p>上图逻辑总结如下：</p>
+<p>首先，如果所需容量大于2倍当前容量则新容量为所需容量。</p>
+<p>其次，判断当前容量是否大于1024。如果当前容量小于1024则新容量等于2倍当前容量。如果当前容量大于等于1024则新容量循环增加1/4倍新容量直到新容量大于等于所需容量。</p>
+<p>老许在这里特别提示，和<code>0</code>的比较是有用的。初始时，老许也觉得这逻辑十分多余，后来有一天突然顿悟，这实际上是对整形溢出的判断。因为平时开发中很少会考虑这个问题，一时间惊为天人。也许我们和大神之间的代码差距仅仅是少了对溢出的判断。</p>
+<p>另外一个有意思的事情是，切片的逻辑最开始也不是这样的。这逻辑并不复杂，即使是刚入门的人写起来也毫无压力。然而即便是这样简单的逻辑，也是经过多个版本的迭代才有了如今的模样。</p>
+<p><img src="https://note.youdao.com/yws/api/personal/file/WEBc4310c28ed5948d6d5ee3ee1d4fbc1a3?method=download&amp;shareKey=f4fb2bbd7bfbbacb661a069b0eaca404" alt=""></p>
+<p>有一说一，在老许看来1.6中的扩容逻辑并不算优雅。想到这儿，一种“我赢了”的感觉油然而生，程序猿的快乐就是如此简单。</p>
+<h2 id="计算内存容量">计算内存容量</h2>
+<p>前文中的扩容逻辑是理想的内存分配容量，而真实的内存分配十分复杂。在Go1.6中切片扩容分配内存时分为四种情况，分别是类型大小为1字节、类型大小为指针大小、类型大小为2的n次幂和其他。而切片扩容分配内存时在不同的Go版本中又略有不同，这里只介绍1.16中类型大小为2的n次幂时内存分配。</p>
+<p>下面直接上代码：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">var</span> <span style="color:#a6e22e">shift</span> <span style="color:#66d9ef">uintptr</span>
+<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">sys</span>.<span style="color:#a6e22e">PtrSize</span> <span style="color:#f92672">==</span> <span style="color:#ae81ff">8</span> {
+	<span style="color:#75715e">// Mask shift for better code generation.
+</span><span style="color:#75715e"></span>	<span style="color:#75715e">// et.size = 1 &lt;&lt; n
+</span><span style="color:#75715e"></span>	<span style="color:#75715e">// shift = n
+</span><span style="color:#75715e"></span>	<span style="color:#75715e">// &amp;63是因为uint64中1最大左移63，再大就溢出了
+</span><span style="color:#75715e"></span>	<span style="color:#a6e22e">shift</span> = uintptr(<span style="color:#a6e22e">sys</span>.<span style="color:#a6e22e">Ctz64</span>(uint64(<span style="color:#a6e22e">et</span>.<span style="color:#a6e22e">size</span>))) <span style="color:#f92672">&amp;</span> <span style="color:#ae81ff">63</span>
+} <span style="color:#66d9ef">else</span> {
+	<span style="color:#a6e22e">shift</span> = uintptr(<span style="color:#a6e22e">sys</span>.<span style="color:#a6e22e">Ctz32</span>(uint32(<span style="color:#a6e22e">et</span>.<span style="color:#a6e22e">size</span>))) <span style="color:#f92672">&amp;</span> <span style="color:#ae81ff">31</span>
+}
+</code></pre></div><p>上述代码中，通过对指针大小判断以区分当前运行的是32位还是64位平台。<code>Ctz64</code>和<code>Ctz32</code>函数是针对不同类型计算最低位<code>0</code>的个数。又因为类型大小是2的n次幂，则0的个数即为n。</p>
+<blockquote>
+<p>类型大小为2的n次幂，则类型大小一定为 1 &laquo; n，因此计算最低位0的个数即可得到左移的位数。</p>
+<p>源码中通过<code>x&amp;(x-1) == 0</code>表达式判断一个无符号整数是否为2的n次幂。我们平时开发中如果有类似的逻辑，请参考切片扩容源码开始装逼之旅。</p>
+</blockquote>
+<p>接下来是计算内存容量的逻辑：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#a6e22e">capmem</span> = <span style="color:#a6e22e">roundupsize</span>(uintptr(<span style="color:#a6e22e">newcap</span>) <span style="color:#f92672">&lt;&lt;</span> <span style="color:#a6e22e">shift</span>)
+<span style="color:#a6e22e">newcap</span> = int(<span style="color:#a6e22e">capmem</span> <span style="color:#f92672">&gt;&gt;</span> <span style="color:#a6e22e">shift</span>)
+</code></pre></div><p>结合前文易知，<code>uintptr(newcap) &lt;&lt; shift</code>实际上可以理解为<code>uintptr(newcap) * et.size</code>，<code>capmem &gt;&gt; shift</code>可理解为<code>capmem / et.size</code>。<code>uintptr(newcap) &lt;&lt; shift</code>是最理想的所需内存大小，而实际分配内存时因为内存对齐等问题无法达到理想状况，所以通过<code>roundupsize</code>计算出实际需要的内存大小,最后再计算出真实容量。有了这个理解之后我们接下来着重分析<code>roundupsize</code>函数。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">roundupsize</span>(<span style="color:#a6e22e">size</span> <span style="color:#66d9ef">uintptr</span>) <span style="color:#66d9ef">uintptr</span> {
+	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">size</span> &lt; <span style="color:#a6e22e">_MaxSmallSize</span> {
+		<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">size</span> <span style="color:#f92672">&lt;=</span> <span style="color:#a6e22e">smallSizeMax</span><span style="color:#f92672">-</span><span style="color:#ae81ff">8</span> {
+			<span style="color:#66d9ef">return</span> uintptr(<span style="color:#a6e22e">class_to_size</span>[<span style="color:#a6e22e">size_to_class8</span>[<span style="color:#a6e22e">divRoundUp</span>(<span style="color:#a6e22e">size</span>, <span style="color:#a6e22e">smallSizeDiv</span>)]])
+		} <span style="color:#66d9ef">else</span> {
+			<span style="color:#66d9ef">return</span> uintptr(<span style="color:#a6e22e">class_to_size</span>[<span style="color:#a6e22e">size_to_class128</span>[<span style="color:#a6e22e">divRoundUp</span>(<span style="color:#a6e22e">size</span><span style="color:#f92672">-</span><span style="color:#a6e22e">smallSizeMax</span>, <span style="color:#a6e22e">largeSizeDiv</span>)]])
+		}
+	}
+	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">size</span><span style="color:#f92672">+</span><span style="color:#a6e22e">_PageSize</span> &lt; <span style="color:#a6e22e">size</span> {
+		<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">size</span>
+	}
+	<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">alignUp</span>(<span style="color:#a6e22e">size</span>, <span style="color:#a6e22e">_PageSize</span>)
+}
+</code></pre></div><p>上面函数有很多含义不清楚的变量，老许接下来会对其一一解释。</p>
+<p><code>_MaxSmallSize</code>: 其值为<code>32768</code>，即32kb大小。在Go中，当对象大小超过32kb时，内存分配策略和小于等于32kB时是有区别的。</p>
+<p><code>smallSizeMax</code>: 其值为1024字节。</p>
+<p><code>smallSizeDiv</code>: 其值为8字节。</p>
+<p><code>largeSizeDiv</code>: 其值为128字节。</p>
+<p><code>_PageSize</code>: 8192字节，即8kb大小。Go按页来管理内存，而每一页的大小就为8kb。</p>
+<p><code>class_to_size</code>: Go中的内存分配会按照不同跨度（也可理解为内存大小）将内存分割成不同内存块链表。当需要分配内存时，按照对象大小去匹配最合适的跨度找到空闲的内存块儿。Go中总共分为67个跨度，<code>class_to_size</code>是一个长度为68的数组，分别记录<code>0</code>和这67个跨度的值。源码详见<code>sruntime/izeclasses.go</code>。</p>
+<p><code>size_to_class8</code>: 这是一个长度为129的数组，代表的内存大小区间为<code>0~1024</code>字节。以索引<code>i</code>为例，此位置的对象大小<code>m</code>为<code>i * smallSizeDiv</code>，<code>size_to_class8[i]</code>的值为<code>class_to_size</code>数组中跨度最接近<code>m</code>的下标。</p>
+<p><code>size_to_class128</code>：这是一个长度为249的数组，代表的内存大小区间为<code>1024~32768</code>字节。以索引<code>i</code>为例，此位置的对象大小<code>m</code>为<code>smallSizeMax + i*largeSizeDiv</code>, <code>size_to_class128[i]</code>的值为<code>class_to_size</code>数组中跨度最接近<code>m</code>的下标。</p>
+<p><code>divRoundUp</code>: 此函数返回<code>a/b</code>向上舍入最接近的整数。</p>
+<p><code>alignUp</code>: <code>alignUp(size, _PageSize) = _PageSize * divRoundUp(size, _PageSize)</code>。</p>
+<p>最终将计算实际需要内存大小的逻辑表示如下：</p>
+<p><img src="https://note.youdao.com/yws/api/personal/file/WEB24cf5d5ab57e3dc5f6ae8b7bee3291b3?method=download&amp;shareKey=cc439fd08c9f8f324f655c514e00f45f" alt=""></p>
+<p>到这里，切片扩容的核心逻辑就已经分析完毕。本篇不对类型大小为1字节、类型大小为指针大小以及其他大小进行扩容逻辑分析的原因是整体逻辑差别不大。在老许看来源码中对类型大小区分的主要目的是为了尽可能减少除法和乘法运算。每每阅读这些优秀的源码都令老许直呼细节怪物。</p>
+<p>为了加深印象我们以<a href="https://mp.weixin.qq.com/s/qdABTKsNjeG7KpKFRaKMww">切片面试题系列三</a>中的一个例子进行一次演算。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#a6e22e">s3</span> <span style="color:#f92672">:=</span> []<span style="color:#66d9ef">int</span>{<span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">2</span>}
+<span style="color:#a6e22e">s3</span> = append(<span style="color:#a6e22e">s3</span>, <span style="color:#ae81ff">3</span>, <span style="color:#ae81ff">4</span>, <span style="color:#ae81ff">5</span>)
+<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(cap(<span style="color:#a6e22e">s3</span>))
+</code></pre></div><p>根据前文知，所需容量为5，又因所需容量大于2倍当前容量，故新容量也为5。</p>
+<p>又因为int类型大小为8（等于64位平台上的指针大小），所以实际需要的内存大小为<code>5 * 8 = 40</code>字节。而67个跨度中最接近40字节的跨度为48字节，所以实际分配的内存容量为48字节。</p>
+<p>最终计算真实的容量为<code>48 / 8 = 6</code>，和老许实际运行输出一致。</p>
+<p>最后，衷心希望本文能够对各位读者有一定的帮助。</p>
+<blockquote>
+<p><strong>注</strong>：</p>
+<ol>
+<li>写本文时， 笔者所用go版本为: go1.16.6</li>
+<li>文章中所用完整例子：https://github.com/Isites/go-coder/blob/master/slice/main.go</li>
+</ol>
+</blockquote>
+<p>【关注公众号】</p>
+<p><img src="https://note.youdao.com/yws/api/personal/file/WEBa3ee67b2b867e98cb5c587f4adfa6801?method=download&amp;shareKey=0fbb95d0aec6170b854e7b890d50d559" alt=""></p>
+]]></content>
+        </item>
         
         <item>
             <title>天涯未远，上海再见，百度再见</title>
-            <link>https://isites.github.io/timeline/leave-sh/</link>
+            <link>https://isites.gitlab.io/gopher/timeline/leave-sh/</link>
             <pubDate>Sun, 06 Jun 2021 10:59:48 +0800</pubDate>
             
-            <guid>https://isites.github.io/timeline/leave-sh/</guid>
+            <guid>https://isites.gitlab.io/gopher/timeline/leave-sh/</guid>
             <description>关于离开想说的都在标题里。
 离开的原因有很多，但是老许并不打算在这里详细阐述。说的越多都是在反复鞭尸自己的无能，老许对此次的离开总结为两个字——“败犬”（并无意冒犯他人，仅仅是对自己的总结。如果有兴趣交流的可以在公众号后台私我）。
 以下为老许近一个多月的反思，这份反思没有什么大道理，更没有什么必须记住的知识点，老许写下来只是希望和各位读者有一个平等交流的机会。
@@ -60,10 +295,10 @@
         
         <item>
             <title>有趣！一行代码居然无法获取请求的完整URL</title>
-            <link>https://isites.github.io/timeline/get-full-url/</link>
+            <link>https://isites.gitlab.io/gopher/timeline/get-full-url/</link>
             <pubDate>Mon, 29 Mar 2021 19:36:38 +0800</pubDate>
             
-            <guid>https://isites.github.io/timeline/get-full-url/</guid>
+            <guid>https://isites.gitlab.io/gopher/timeline/get-full-url/</guid>
             <description>缘起 做Web服务的时候，可能会有这样一个业务场景，获取一个HTTP请求的完整URL。很巧，老许就碰到了这样的业务场景。面对如此简单的需求，CV大法根本没有展示才能的机会。啪啪啪，获取请求的完整URL代码就出来了。
 当时离验证只差一步，老许信心满满，很快，打脸来得很快就像龙卷风。。。
 从图中可以知道，req.URL中的Scheme和Host均为空，所以r.URL.String()无法得到完整的请求连接。这个结果让老许一阵激动，万万没想到有一天我也有机会发现Go源码中可能遗漏的赋值。老许强行按耐住心中的激动，准备好好研究一番，万一成为了Go的Contributor呢^ω^。最后发现官方实现没有问题，因此就有了今天这篇文章。
@@ -205,10 +440,10 @@ Host: www.example.org
         
         <item>
             <title>白话Go内存模型&amp;Happen-Before</title>
-            <link>https://isites.github.io/timeline/go-memory-model/</link>
+            <link>https://isites.gitlab.io/gopher/timeline/go-memory-model/</link>
             <pubDate>Thu, 04 Mar 2021 18:53:38 +0800</pubDate>
             
-            <guid>https://isites.github.io/timeline/go-memory-model/</guid>
+            <guid>https://isites.gitlab.io/gopher/timeline/go-memory-model/</guid>
             <description>Go内存模型明确指出，一个goroutine如何才能观察到其他goroutine对同一变量的写操作。
 当多个goroutine并发同时存取同一个数据时必须把并发的存取操作序列化。在Go中保证读写的序列化可以通过channel通信或者其他同步原语（例如sync包中的互斥锁、读写锁和sync/atomic中的原子操作）。
 Happens Before 在单goroutine中，读取和写入的行为一定是和程序指定的执行顺序表现一致。换言之，编译器和处理器在不改变语言规范所定义的行为前提下才可以对单个goroutine中的指令进行重排序。
@@ -377,10 +612,10 @@ happens-before的作用 多个goroutine访问共享变量时，它们必须建�
         
         <item>
             <title>1分钟内的Linux性能分析法</title>
-            <link>https://isites.github.io/timeline/60-linux/</link>
+            <link>https://isites.gitlab.io/gopher/timeline/60-linux/</link>
             <pubDate>Mon, 01 Feb 2021 20:30:38 +0800</pubDate>
             
-            <guid>https://isites.github.io/timeline/60-linux/</guid>
+            <guid>https://isites.gitlab.io/gopher/timeline/60-linux/</guid>
             <description>本着“拿来主义”的精神，吸收他人长处为己用。老许翻译一篇Linux性能分析相关的文章分享给各位读者，同时也加深自己的印象。
  你登录到具有性能问题的Linux服务器时，第一分钟要检查什么？
 在Netflix，我们拥有庞大的Linux EC2云实例，以及大量的性能分析工具来监视和调查它们的性能。这些工具包括Atlas和Vector。Atlas用于全云监控，Vector用于按需实例分析。这些工具能帮助我们解决大部分问题，但有时候我们仍需登录实例并运行一些标准的Linux性能工具。
@@ -624,10 +859,10 @@ KiB Swap:        <span style="color:#ae81ff">0</span> total,        <span style=
         
         <item>
             <title>Go中的SSRF攻防战</title>
-            <link>https://isites.github.io/timeline/go-ssrf/</link>
+            <link>https://isites.gitlab.io/gopher/timeline/go-ssrf/</link>
             <pubDate>Tue, 19 Jan 2021 20:30:38 +0800</pubDate>
             
-            <guid>https://isites.github.io/timeline/go-ssrf/</guid>
+            <guid>https://isites.gitlab.io/gopher/timeline/go-ssrf/</guid>
             <description>写在最前面 “年年岁岁花相似，岁岁年年人不同”，没有什么是永恒的，很多东西都将成为过去式。比如，我以前在文章中自称“笔者”，细细想来这个称呼还是有一定的距离感，经过一番深思熟虑后，我打算将文章中的自称改为“老许”。
 关于自称，老许就不扯太远了，下面还是回到本篇的主旨。
 什么是SSRF SSRF英文全拼为Server Side Request Forgery，翻译为服务端请求伪造。攻击者在未能取得服务器权限时，利用服务器漏洞以服务器的身份发送一条构造好的请求给服务器所在内网。关于内网资源的访问控制，想必大家心里都有数。
@@ -918,10 +1153,10 @@ KiB Swap:        <span style="color:#ae81ff">0</span> total,        <span style=
         
         <item>
             <title>2020总结：稍微努力了一下，依旧是咸鱼一条</title>
-            <link>https://isites.github.io/timeline/2020summary/</link>
+            <link>https://isites.gitlab.io/gopher/timeline/2020summary/</link>
             <pubDate>Thu, 31 Dec 2020 00:12:48 +0800</pubDate>
             
-            <guid>https://isites.github.io/timeline/2020summary/</guid>
+            <guid>https://isites.gitlab.io/gopher/timeline/2020summary/</guid>
             <description>2020最深刻的印记是新冠疫情，于笔者最深刻的印记是在这一年下定决心做了一些新的尝试。既然有了新的尝试，笔者也就随大流来一发年终总结。
 关于“新世界杂货铺”这个名字 2020的年终总结，最想谈的就是新世界杂货铺这个名字。为什么想先谈名字呢？因为笔者最近正在思考要不要换个名字，毕竟这个名字和公众号的内容实在没什么直接联系。笔者一度怀疑就是因为这个名字才导致笔者的粉丝增长缓慢。
 先说一说为什么叫这个名字吧。专注于技术分享但是又不止于技术分享故谓之“杂货铺”，比如笔者曾经深夜偷偷发了一篇“7年，爷青结，感谢春物的陪伴！”这样的文章，以后只会更多！对笔者而言，做公众号是一次崭新的尝试所以最终才取名为“新世界杂货铺”。名字的由来差不多就是这样，至于明年要不要换个名字，笔者还在犹豫，姑且走一步看一步吧。
@@ -986,10 +1221,10 @@ Flag2：持续学习输出，粉丝也能持续增长就更好了。
         
         <item>
             <title>码了2000多行代码就是为了讲清楚TLS握手流程（续）</title>
-            <link>https://isites.github.io/timeline/gotls1.2/</link>
+            <link>https://isites.gitlab.io/gopher/timeline/gotls1.2/</link>
             <pubDate>Sun, 13 Dec 2020 23:47:48 +0800</pubDate>
             
-            <guid>https://isites.github.io/timeline/gotls1.2/</guid>
+            <guid>https://isites.gitlab.io/gopher/timeline/gotls1.2/</guid>
             <description>在“码了2000多行代码就是为了讲清楚TLS握手流程”这一篇文章的最后挖了一个坑，今天这篇文章就是为了填坑而来，因此本篇主要分析TLS1.2的握手流程。
 在写前一篇文章时，笔者的Demo只支持解析TLS1.3握手流程中发送的消息，写本篇时，笔者的Demo已经可以解析TLS1.x握手流程中的消息，有兴趣的读者请至文末获取Demo源码。
 结论先行 为保证各位读者对TLS1.2的握手流程有一个大概的框架，本篇依旧结论先行。
@@ -1183,10 +1418,10 @@ IV通常是随机或者伪随机的。它和数据加密的密钥一起使用可
         
         <item>
             <title>区分Protobuf 3中缺失值和默认值</title>
-            <link>https://isites.github.io/timeline/gopb3/</link>
+            <link>https://isites.gitlab.io/gopher/timeline/gopb3/</link>
             <pubDate>Tue, 01 Dec 2020 12:20:38 +0800</pubDate>
             
-            <guid>https://isites.github.io/timeline/gopb3/</guid>
+            <guid>https://isites.gitlab.io/gopher/timeline/gopb3/</guid>
             <description>这两天翻了翻以前的项目，发现不同项目中关于Protobuf 3缺失值和默认值的区分居然有好几种实现。今天笔者冷饭新炒，结合项目中的实现以及切身经验共总结出如下六种方案。
 增加标识字段 众所周知，在Go中数字类型的默认值为0（这里仅以数字类型举例），这在某些场景下往往会引起一定的歧义。
  以is_show字段为例，如果没有该字段表示不更新DB中的数据，如果有该字段且值为0则表示更新DB中的数据为不可见，如果有该字段且值为1则表示更新DB中的数据为可见。
@@ -1336,10 +1571,10 @@ json: cannot unmarshal object into Go struct field Status.st.Show of type oneof.
         
         <item>
             <title>为什么go中的receiver name不推荐使用this或者self</title>
-            <link>https://isites.github.io/timeline/go-reciver/</link>
+            <link>https://isites.gitlab.io/gopher/timeline/go-reciver/</link>
             <pubDate>Sat, 29 Aug 2020 12:20:38 +0800</pubDate>
             
-            <guid>https://isites.github.io/timeline/go-reciver/</guid>
+            <guid>https://isites.gitlab.io/gopher/timeline/go-reciver/</guid>
             <description>前言 在日常的开发中我们除了定义函数以外， 我们还会定义一些方法。这本来没有什么， 但是一些从PHP或者其他面向对象语言转GO的同学往往会把receiver name命名为this, self, me等。
 笔者在实际项目开发中也遇到类似的同学， 屡次提醒却没有效果，于是决心写下这篇文章以便好好说服这些同学。
 CR标准做法 首先我们来看一下GO推荐的标准命名Receiver Names，以下内容摘抄自https://github.com/golang/go/wiki/CodeReviewComments#receiver-names：
@@ -1458,10 +1693,10 @@ In Go, the receiver of a method is just another parameter and therefore, should 
         
         <item>
             <title>深入剖析go中字符串的编码问题——特殊字符的string怎么转byte？</title>
-            <link>https://isites.github.io/timeline/go-string-encode/</link>
+            <link>https://isites.gitlab.io/gopher/timeline/go-string-encode/</link>
             <pubDate>Mon, 24 Aug 2020 23:47:48 +0800</pubDate>
             
-            <guid>https://isites.github.io/timeline/go-string-encode/</guid>
+            <guid>https://isites.gitlab.io/gopher/timeline/go-string-encode/</guid>
             <description>前言 前段时间发表了Go中的HTTP请求之——HTTP1.1请求流程分析，所以这两天本来打算研究HTTP2.0的请求源码，结果发现太复杂就跑去逛知乎了，然后就发现了一个非常有意思的提问“golang 特殊字符的string怎么转成[]byte?”。为了转换一下心情， 便有了此篇文章。
 问题 原问题我就不码字了，直接上图： 看到问题，我的第一反应是ASCII码值范围应该是0~127呀，怎么会超过127呢？直到实际运行的时候才发现上图的特殊字符是‘’（如果无法展示，记住该特殊字符的unicode是\u0081），并不是英文中的句号。
 unicode和utf-8的恩怨纠葛 百度百科已经把unicode和utf-8介绍的很详细了，所以这里就不做过多的阐述，仅摘抄部分和本文相关的定义：
