@@ -2,17 +2,17 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>linux on Gopher指北</title>
-    <link>https://gopher-north.gitee.io/tags/linux/</link>
+    <link>https://isites.github.io/tags/linux/</link>
     <description>Recent content in linux on Gopher指北</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Mon, 01 Feb 2021 20:30:38 +0800</lastBuildDate><atom:link href="https://gopher-north.gitee.io/tags/linux/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Mon, 01 Feb 2021 20:30:38 +0800</lastBuildDate><atom:link href="https://isites.github.io/tags/linux/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>1分钟内的Linux性能分析法</title>
-      <link>https://gopher-north.gitee.io/timeline/60-linux/</link>
+      <link>https://isites.github.io/timeline/60-linux/</link>
       <pubDate>Mon, 01 Feb 2021 20:30:38 +0800</pubDate>
       
-      <guid>https://gopher-north.gitee.io/timeline/60-linux/</guid>
+      <guid>https://isites.github.io/timeline/60-linux/</guid>
       <description>本着“拿来主义”的精神，吸收他人长处为己用。老许翻译一篇Linux性能分析相关的文章分享给各位读者，同时也加深自己的印象。
  你登录到具有性能问题的Linux服务器时，第一分钟要检查什么？
 在Netflix，我们拥有庞大的Linux EC2云实例，以及大量的性能分析工具来监视和调查它们的性能。这些工具包括Atlas和Vector。Atlas用于全云监控，Vector用于按需实例分析。这些工具能帮助我们解决大部分问题，但有时候我们仍需登录实例并运行一些标准的Linux性能工具。
