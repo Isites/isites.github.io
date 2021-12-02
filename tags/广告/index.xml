@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>广告 on Gopher指北</title>
+    <link>https://isites.gitlab.io/gopher/tags/%E5%B9%BF%E5%91%8A/</link>
+    <description>Recent content in 广告 on Gopher指北</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sat, 30 Oct 2021 12:20:38 +0800</lastBuildDate><atom:link href="https://isites.gitlab.io/gopher/tags/%E5%B9%BF%E5%91%8A/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>浅谈在线广告分配策略</title>
+      <link>https://isites.gitlab.io/gopher/timeline/ad-msvv/</link>
+      <pubDate>Sat, 30 Oct 2021 12:20:38 +0800</pubDate>
+      
+      <guid>https://isites.gitlab.io/gopher/timeline/ad-msvv/</guid>
+      <description>在线广告，也称网络广告、互联网广告，顾名思义，指的是在线媒体上投放的广告。平时我们在刷信息流、短视频、新闻和微博均可以看见它的影子。对于比较大的广告平台，用户定向后依旧会有大量的广告可以下发，而从大量的广告中选择合适的广告展现给用户就是本篇要讨论的主题——在线广告分配策略。
+名词描述 为了更好的理解本文，先提前做一些名词描述。
+eCPM(Effective Cost Per Mille): 指的是每一千次展示可以获得的广告收入。此指标反映盈利能力，不代表实际收入。不同的广告主会选择CPC、CPM等不同出价方式，因此广告分配时无法以纯粹的出价进行比较，所以才有了ecpm这一指标用于评估不同出价方式的广告可以给广告平台带来的收益。
+定向广告：所谓&amp;quot;定向&amp;quot;实际上是对受众的筛选，即广告的显示是根据访问者来决定的，先进的广告管理系统 能够提供多种多样的定向方式。
+最好的一定合适嘛 对于广告平台而言收益最大化是优先事项。为了保证收益最大化，对于每一次广告请求我们都选择ecpm最高的广告下发。这个逻辑从理论上来看是正确的，但在实际中就不一定了，那么它到底会有什么问题呢？
+ ⼴告消耗超预算限额。 广告预算消耗不尽。 空结果问题。 部分广告消耗过快影响广告主投放体验和用户产品体验。  问题分析 问题1
+对问题1进行分析时，我们需要先有这样一个共识，广告的点击、曝光等数据上报有一定的延时。
+由于广告分配策略未考虑预算消耗信息，当消耗接近预算限额时未能及时减缓曝光速度，导致本应分配给其他广告主的流量依旧分配给了预算受限的广告主，这是对广告平台流量的浪费（流量越大的平台浪费会愈加严重）。
+问题2
+部分中小广告主竞争力弱(出价低)，很难获取足够的曝光量，这种情形当广告充裕时尤为明显。
+问题3
+一方面可能是因为广告资源不足，另外一方面也有可能是定向广告消耗过快(详见下面的例子)。
+问题4
+广告按照ecpm排序，会导致广告消耗速度差异较大直接影响广告主的投放体验，甚至于用户反复看到重复的广告直接影响用户产品体验，再反过来影响到广告的CVR。
+为了进一步说明纯按价高者得这一算法的不足之处，请看下面的特殊例子。
+   广告 出价($) 预算($) 定向     A 0.5 100 男,游戏   B 1 100 男,游戏,运动    以上述广告为例，现有男,游戏和男,运动请求各100。理想最大收益为150$，但是按照上述策略分配广告时，会出现男,游戏这100请求先到达时优先消耗B广告，男,运动这100请求达到时无广告可消耗。按照ecpm排序的算法又称为Greedy算法，该算法会让高价值广告快速消耗。
+合适的才是最好的 Balance算法 与Greedy算法不同的是，Kalyanasundaram和Pruhs提出的Balance算法忽略单个bidder的出价，尽可能平衡所有bidder的预算消耗，使得其在线时间尽可能⻓，即尽量使得所有⼴告都保持匀速投放。其算法描述如下：
+当一个满足一些定向广告的请求到达时： if 广告预算消耗完 { continue } else { 选择一个（消耗/预算）值最小的一个广告 } 相比贪心算法，Balance算法平衡所有广告的消耗速度，能够有效解决贪心算法广告快速消耗的问题，但在广告消耗不尽的问题上依旧不是最佳解决方案。我们看下面特殊例子：
+   广告 出价($) 预算($) 定向     A 1 100 男,游戏   B 0.</description>
+    </item>
+    
+  </channel>
+</rss>

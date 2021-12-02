@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="author" content="">
+<meta name="description" content="不知道其他人是不是这样，反正老许最怕听到的词就是“偶现”，至于原因我不多说，懂的都懂。
+下面直接看panic信息。
+runtime error: invalid memory address or nil pointer dereference panic(0xbd1c80, 0x1271710) /root/.go/src/runtime/panic.go:969 &#43;0x175 github.com/json-iterator/go.(*Stream).WriteStringWithHTMLEscaped(0xc00b0c6000, 0x0, 0x24) /go/pkg/mod/github.com/json-iterator/go@v1.1.11/stream_str.go:227 &#43;0x7b github.com/json-iterator/go.(*htmlEscapedStringEncoder).Encode(0x12b9250, 0xc0096c4c00, 0xc00b0c6000) /go/pkg/mod/github.com/json-iterator/go@v1.1.11/config.go:263 &#43;0x45 github.com/json-iterator/go.(*structFieldEncoder).Encode(0xc002e9c8d0, 0xc0096c4c00, 0xc00b0c6000) /go/pkg/mod/github.com/json-iterator/go@v1.1.11/reflect_struct_encoder.go:110 &#43;0x78 github.com/json-iterator/go.(*structEncoder).Encode(0xc002e9c9c0, 0xc0096c4c00, 0xc00b0c6000) /go/pkg/mod/github.com/json-iterator/go@v1.1.11/reflect_struct_encoder.go:158 &#43;0x3f4 github.com/json-iterator/go.(*structFieldEncoder).Encode(0xc002eac990, 0xc0096c4c00, 0xc00b0c6000) /go/pkg/mod/github.com/json-iterator/go@v1.1.11/reflect_struct_encoder.go:110 &#43;0x78 github.com/json-iterator/go.(*structEncoder).Encode(0xc002eacba0, 0xc0096c4c00, 0xc00b0c6000) /go/pkg/mod/github.com/json-iterator/go@v1.1.11/reflect_struct_encoder.go:158 &#43;0x3f4 github.com/json-iterator/go.(*OptionalEncoder).Encode(0xc002e9f570, 0xc006b18b38, 0xc00b0c6000) /go/pkg/mod/github.com/json-iterator/go@v1.1.11/reflect_optional.go:70 &#43;0xf4 github.com/json-iterator/go.(*onePtrEncoder).Encode(0xc002e9f580, 0xc0096c4c00, 0xc00b0c6000) /go/pkg/mod/github.com/json-iterator/go@v1.1.11/reflect.go:219 &#43;0x68 github.com/json-iterator/go.(*Stream).WriteVal(0xc00b0c6000, 0xb78d60, 0xc0096c4c00) /go/pkg/mod/github.com/json-iterator/go@v1.1.11/reflect.go:98 &#43;0x150 github.com/json-iterator/go.(*frozenConfig).Marshal(0xc00012c640, 0xb78d60, 0xc0096c4c00, 0x0, 0x0, 0x0, 0x0, 0x0) 首先我坚信一条，开源的力量值得信赖。因此老许第一波操作就是，分析业务代码是否有逻辑漏洞。很明显，同事也是值得信赖的，因此果断猜测是某些未曾设想到的数据触发了边界条件。接下来就是保存现场的常规操作。
+如标题所说，这是偶现的panic问题，因此按照上面的分类采用符合当前技术栈的方法保存现场即可。接下来就是坐等收获的季节，而这一等就是好多天。中间数次收到告警，却没有符合预期的现场。" />
+<meta name="keywords" content=", Go" />
+<meta name="robots" content="noodp" />
+<meta name="theme-color" content="" />
+<link rel="canonical" href="https://isites.gitlab.io/gopher/timeline/defer-sync-pool/" />
+
+
+    <title>
+        
+            终于解决了这个线上偶现的panic问题 :: Gopher指北 
+        
+    </title>
+
+
+
+<link href="https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/3.2.1/css/flag-icon.min.css" rel="stylesheet"
+    type="text/css"> 
+
+
+
+
+<link rel="stylesheet" href="/gopher/main.805b1025016494ee5fd67b55b8ecd5e2b7c4a9f0bdda42e300c62b85ddfef68f.css">
+
+
+  
+
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest">
+    <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#252627">
+    <link rel="shortcut icon" href="/favicon.ico">
+    <meta name="msapplication-TileColor" content="#252627">
+    <meta name="theme-color" content="#252627">
+
+
+
+<meta itemprop="name" content="终于解决了这个线上偶现的panic问题">
+<meta itemprop="description" content="不知道其他人是不是这样，反正老许最怕听到的词就是“偶现”，至于原因我不多说，懂的都懂。
+下面直接看panic信息。
+runtime error: invalid memory address or nil pointer dereference panic(0xbd1c80, 0x1271710) /root/.go/src/runtime/panic.go:969 &#43;0x175 github.com/json-iterator/go.(*Stream).WriteStringWithHTMLEscaped(0xc00b0c6000, 0x0, 0x24) /go/pkg/mod/github.com/json-iterator/go@v1.1.11/stream_str.go:227 &#43;0x7b github.com/json-iterator/go.(*htmlEscapedStringEncoder).Encode(0x12b9250, 0xc0096c4c00, 0xc00b0c6000) /go/pkg/mod/github.com/json-iterator/go@v1.1.11/config.go:263 &#43;0x45 github.com/json-iterator/go.(*structFieldEncoder).Encode(0xc002e9c8d0, 0xc0096c4c00, 0xc00b0c6000) /go/pkg/mod/github.com/json-iterator/go@v1.1.11/reflect_struct_encoder.go:110 &#43;0x78 github.com/json-iterator/go.(*structEncoder).Encode(0xc002e9c9c0, 0xc0096c4c00, 0xc00b0c6000) /go/pkg/mod/github.com/json-iterator/go@v1.1.11/reflect_struct_encoder.go:158 &#43;0x3f4 github.com/json-iterator/go.(*structFieldEncoder).Encode(0xc002eac990, 0xc0096c4c00, 0xc00b0c6000) /go/pkg/mod/github.com/json-iterator/go@v1.1.11/reflect_struct_encoder.go:110 &#43;0x78 github.com/json-iterator/go.(*structEncoder).Encode(0xc002eacba0, 0xc0096c4c00, 0xc00b0c6000) /go/pkg/mod/github.com/json-iterator/go@v1.1.11/reflect_struct_encoder.go:158 &#43;0x3f4 github.com/json-iterator/go.(*OptionalEncoder).Encode(0xc002e9f570, 0xc006b18b38, 0xc00b0c6000) /go/pkg/mod/github.com/json-iterator/go@v1.1.11/reflect_optional.go:70 &#43;0xf4 github.com/json-iterator/go.(*onePtrEncoder).Encode(0xc002e9f580, 0xc0096c4c00, 0xc00b0c6000) /go/pkg/mod/github.com/json-iterator/go@v1.1.11/reflect.go:219 &#43;0x68 github.com/json-iterator/go.(*Stream).WriteVal(0xc00b0c6000, 0xb78d60, 0xc0096c4c00) /go/pkg/mod/github.com/json-iterator/go@v1.1.11/reflect.go:98 &#43;0x150 github.com/json-iterator/go.(*frozenConfig).Marshal(0xc00012c640, 0xb78d60, 0xc0096c4c00, 0x0, 0x0, 0x0, 0x0, 0x0) 首先我坚信一条，开源的力量值得信赖。因此老许第一波操作就是，分析业务代码是否有逻辑漏洞。很明显，同事也是值得信赖的，因此果断猜测是某些未曾设想到的数据触发了边界条件。接下来就是保存现场的常规操作。
+如标题所说，这是偶现的panic问题，因此按照上面的分类采用符合当前技术栈的方法保存现场即可。接下来就是坐等收获的季节，而这一等就是好多天。中间数次收到告警，却没有符合预期的现场。">
+<meta itemprop="datePublished" content="2021-11-23T12:20:38+08:00" />
+<meta itemprop="dateModified" content="2021-11-23T12:20:38+08:00" />
+<meta itemprop="wordCount" content="223">
+
+
+
+<meta itemprop="keywords" content="Go," />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="终于解决了这个线上偶现的panic问题"/>
+<meta name="twitter:description" content="不知道其他人是不是这样，反正老许最怕听到的词就是“偶现”，至于原因我不多说，懂的都懂。
+下面直接看panic信息。
+runtime error: invalid memory address or nil pointer dereference panic(0xbd1c80, 0x1271710) /root/.go/src/runtime/panic.go:969 &#43;0x175 github.com/json-iterator/go.(*Stream).WriteStringWithHTMLEscaped(0xc00b0c6000, 0x0, 0x24) /go/pkg/mod/github.com/json-iterator/go@v1.1.11/stream_str.go:227 &#43;0x7b github.com/json-iterator/go.(*htmlEscapedStringEncoder).Encode(0x12b9250, 0xc0096c4c00, 0xc00b0c6000) /go/pkg/mod/github.com/json-iterator/go@v1.1.11/config.go:263 &#43;0x45 github.com/json-iterator/go.(*structFieldEncoder).Encode(0xc002e9c8d0, 0xc0096c4c00, 0xc00b0c6000) /go/pkg/mod/github.com/json-iterator/go@v1.1.11/reflect_struct_encoder.go:110 &#43;0x78 github.com/json-iterator/go.(*structEncoder).Encode(0xc002e9c9c0, 0xc0096c4c00, 0xc00b0c6000) /go/pkg/mod/github.com/json-iterator/go@v1.1.11/reflect_struct_encoder.go:158 &#43;0x3f4 github.com/json-iterator/go.(*structFieldEncoder).Encode(0xc002eac990, 0xc0096c4c00, 0xc00b0c6000) /go/pkg/mod/github.com/json-iterator/go@v1.1.11/reflect_struct_encoder.go:110 &#43;0x78 github.com/json-iterator/go.(*structEncoder).Encode(0xc002eacba0, 0xc0096c4c00, 0xc00b0c6000) /go/pkg/mod/github.com/json-iterator/go@v1.1.11/reflect_struct_encoder.go:158 &#43;0x3f4 github.com/json-iterator/go.(*OptionalEncoder).Encode(0xc002e9f570, 0xc006b18b38, 0xc00b0c6000) /go/pkg/mod/github.com/json-iterator/go@v1.1.11/reflect_optional.go:70 &#43;0xf4 github.com/json-iterator/go.(*onePtrEncoder).Encode(0xc002e9f580, 0xc0096c4c00, 0xc00b0c6000) /go/pkg/mod/github.com/json-iterator/go@v1.1.11/reflect.go:219 &#43;0x68 github.com/json-iterator/go.(*Stream).WriteVal(0xc00b0c6000, 0xb78d60, 0xc0096c4c00) /go/pkg/mod/github.com/json-iterator/go@v1.1.11/reflect.go:98 &#43;0x150 github.com/json-iterator/go.(*frozenConfig).Marshal(0xc00012c640, 0xb78d60, 0xc0096c4c00, 0x0, 0x0, 0x0, 0x0, 0x0) 首先我坚信一条，开源的力量值得信赖。因此老许第一波操作就是，分析业务代码是否有逻辑漏洞。很明显，同事也是值得信赖的，因此果断猜测是某些未曾设想到的数据触发了边界条件。接下来就是保存现场的常规操作。
+如标题所说，这是偶现的panic问题，因此按照上面的分类采用符合当前技术栈的方法保存现场即可。接下来就是坐等收获的季节，而这一等就是好多天。中间数次收到告警，却没有符合预期的现场。"/>
+
+
+
+
+
+
+
+    <meta property="article:published_time" content="2021-11-23 12:20:38 &#43;0800 CST" />
+
+
+
+
+
+
+
+
+    </head>
+
+    <body class="">
+        <div class="container">
+            <header class="header">
+    <span class="header__inner">
+        <a href="https://isites.gitlab.io/gopher/" style="text-decoration: none;">
+    <div class="logo">
+        
+            <span class="logo__mark">Gopher指北</span>
+            <span class="logo__text"></span>
+            <span class="logo__cursor" style=
+                  "
+                   
+                   ">
+            </span>
+        
+    </div>
+</a>
+
+
+        <span class="header__right">
+             
+            <span class="theme-toggle unselectable"><svg class="theme-toggler" width="24" height="24" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <path d="M22 41C32.4934 41 41 32.4934 41 22C41 11.5066 32.4934 3 22
+  3C11.5066 3 3 11.5066 3 22C3 32.4934 11.5066 41 22 41ZM7 22C7
+  13.7157 13.7157 7 22 7V37C13.7157 37 7 30.2843 7 22Z"/>
+</svg>
+</span>
+        </span>
+    </span>
+</header>
+
+
+            <div class="content">
+                
+  <main class="post">
+
+    <div class="post-info">
+      <p>
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-clock">
+          <circle cx="12" cy="12" r="10"></circle>
+          <polyline points="12 6 12 12 16 14"></polyline>
+        </svg>
+        2 minutes
+
+        
+      </p>
+    </div>
+
+    <article>
+      <h1 class="post-title">
+        <a href="https://isites.gitlab.io/gopher/timeline/defer-sync-pool/">终于解决了这个线上偶现的panic问题</a>
+      </h1>
+        <hr />
+        <aside id="toc">
+          <div class="toc-title">Table of Contents</div>
+          <nav id="TableOfContents"></nav>
+        </aside>
+        <hr />
+
+      
+
+      <div class="post-content">
+        <p>不知道其他人是不是这样，反正老许最怕听到的词就是“偶现”，至于原因我不多说，懂的都懂。</p>
+<p>下面直接看<code>panic</code>信息。</p>
+<pre><code>runtime error: invalid memory address or nil pointer dereference
+
+panic(0xbd1c80, 0x1271710)
+        /root/.go/src/runtime/panic.go:969 +0x175
+github.com/json-iterator/go.(*Stream).WriteStringWithHTMLEscaped(0xc00b0c6000, 0x0, 0x24)
+        /go/pkg/mod/github.com/json-iterator/go@v1.1.11/stream_str.go:227 +0x7b
+github.com/json-iterator/go.(*htmlEscapedStringEncoder).Encode(0x12b9250, 0xc0096c4c00, 0xc00b0c6000)
+        /go/pkg/mod/github.com/json-iterator/go@v1.1.11/config.go:263 +0x45
+github.com/json-iterator/go.(*structFieldEncoder).Encode(0xc002e9c8d0, 0xc0096c4c00, 0xc00b0c6000)
+        /go/pkg/mod/github.com/json-iterator/go@v1.1.11/reflect_struct_encoder.go:110 +0x78
+github.com/json-iterator/go.(*structEncoder).Encode(0xc002e9c9c0, 0xc0096c4c00, 0xc00b0c6000)
+        /go/pkg/mod/github.com/json-iterator/go@v1.1.11/reflect_struct_encoder.go:158 +0x3f4
+github.com/json-iterator/go.(*structFieldEncoder).Encode(0xc002eac990, 0xc0096c4c00, 0xc00b0c6000)
+        /go/pkg/mod/github.com/json-iterator/go@v1.1.11/reflect_struct_encoder.go:110 +0x78
+github.com/json-iterator/go.(*structEncoder).Encode(0xc002eacba0, 0xc0096c4c00, 0xc00b0c6000)
+        /go/pkg/mod/github.com/json-iterator/go@v1.1.11/reflect_struct_encoder.go:158 +0x3f4
+github.com/json-iterator/go.(*OptionalEncoder).Encode(0xc002e9f570, 0xc006b18b38, 0xc00b0c6000)
+        /go/pkg/mod/github.com/json-iterator/go@v1.1.11/reflect_optional.go:70 +0xf4
+github.com/json-iterator/go.(*onePtrEncoder).Encode(0xc002e9f580, 0xc0096c4c00, 0xc00b0c6000)
+        /go/pkg/mod/github.com/json-iterator/go@v1.1.11/reflect.go:219 +0x68
+github.com/json-iterator/go.(*Stream).WriteVal(0xc00b0c6000, 0xb78d60, 0xc0096c4c00)
+        /go/pkg/mod/github.com/json-iterator/go@v1.1.11/reflect.go:98 +0x150
+github.com/json-iterator/go.(*frozenConfig).Marshal(0xc00012c640, 0xb78d60, 0xc0096c4c00, 0x0, 0x0, 0x0, 0x0, 0x0)
+</code></pre><p>首先我坚信一条，开源的力量值得信赖。因此老许第一波操作就是，分析业务代码是否有逻辑漏洞。很明显，同事也是值得信赖的，因此果断猜测是某些未曾设想到的数据触发了边界条件。接下来就是保存现场的常规操作。</p>
+<p><img src="https://note.youdao.com/yws/api/personal/file/WEB55378a70dcf723b1617068ca71946b42?method=download&amp;shareKey=8271f11fe3137da9849495f3fe9f899e" alt=""></p>
+<p>如标题所说，这是偶现的panic问题，因此按照上面的分类采用符合当前技术栈的方法保存现场即可。接下来就是坐等收获的季节，而这一等就是好多天。中间数次收到告警，却没有符合预期的现场。</p>
+<p>这个时候我不仅不慌，甚至还有点小激动。某某曾曰：“要敢于质疑，敢于挑战权威”，一念至此便一发不可收拾，我老许又要为开源事业做出贡献了嘛！说干就敢干，怀着小心思开始阅读<code>json-iterator</code>的源码。</p>
+<p>刚开始研读我便明白了一个道理， “当上帝关了这扇门，一定会为你打开另一扇门”这句话是骗人的。老许只觉得上帝不仅关上了所有的门甚至还关上了所有的窗。下面我们看看他到底是怎么关门的。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">cfg</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">frozenConfig</span>) <span style="color:#a6e22e">Marshal</span>(<span style="color:#a6e22e">v</span> <span style="color:#66d9ef">interface</span>{}) ([]<span style="color:#66d9ef">byte</span>, <span style="color:#66d9ef">error</span>) {
+	<span style="color:#a6e22e">stream</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">cfg</span>.<span style="color:#a6e22e">BorrowStream</span>(<span style="color:#66d9ef">nil</span>)
+	<span style="color:#66d9ef">defer</span> <span style="color:#a6e22e">cfg</span>.<span style="color:#a6e22e">ReturnStream</span>(<span style="color:#a6e22e">stream</span>)
+	<span style="color:#a6e22e">stream</span>.<span style="color:#a6e22e">WriteVal</span>(<span style="color:#a6e22e">v</span>)
+	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">stream</span>.<span style="color:#a6e22e">Error</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+		<span style="color:#66d9ef">return</span> <span style="color:#66d9ef">nil</span>, <span style="color:#a6e22e">stream</span>.<span style="color:#a6e22e">Error</span>
+	}
+	<span style="color:#a6e22e">result</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">stream</span>.<span style="color:#a6e22e">Buffer</span>()
+	<span style="color:#a6e22e">copied</span> <span style="color:#f92672">:=</span> make([]<span style="color:#66d9ef">byte</span>, len(<span style="color:#a6e22e">result</span>))
+	copy(<span style="color:#a6e22e">copied</span>, <span style="color:#a6e22e">result</span>)
+	<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">copied</span>, <span style="color:#66d9ef">nil</span>
+}
+
+
+<span style="color:#75715e">// WriteVal copy the go interface into underlying JSON, same as json.Marshal
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">stream</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">Stream</span>) <span style="color:#a6e22e">WriteVal</span>(<span style="color:#a6e22e">val</span> <span style="color:#66d9ef">interface</span>{}) {
+	<span style="color:#66d9ef">if</span> <span style="color:#66d9ef">nil</span> <span style="color:#f92672">==</span> <span style="color:#a6e22e">val</span> {
+		<span style="color:#a6e22e">stream</span>.<span style="color:#a6e22e">WriteNil</span>()
+		<span style="color:#66d9ef">return</span>
+	}
+	<span style="color:#75715e">// 省略其他代码
+</span><span style="color:#75715e"></span>}
+
+</code></pre></div><p>根据panic栈知道是因为空指针造成了panic，而<code>(*frozenConfig).Marshal</code>函数内部已经做了非空判断。到此，老许真的已经别无他法只得战略性放弃解决此次panic。毕竟，这个影响也没那么大，而且程序员哪有修的完的bug呢。经过这样一番安慰，心里确实容易接受多了。</p>
+<p>事实上，在较长一段时间内我都有意识地忽略这个问题，毕竟没有找到问题的根因。这个问题在线上一直持续到一个说不上来什么日子的日子，总而言之就是兴致来了，我再次看了两眼，而这两眼很关键！</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">doReq</span>() {
+    <span style="color:#a6e22e">req</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">paramsPool</span>.<span style="color:#a6e22e">Get</span>().(<span style="color:#f92672">*</span><span style="color:#a6e22e">model</span>.<span style="color:#a6e22e">Params</span>)
+    <span style="color:#75715e">// defer 1
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">defer</span> <span style="color:#66d9ef">func</span>() {
+    	<span style="color:#a6e22e">reqBytes</span>, <span style="color:#a6e22e">_</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">json</span>.<span style="color:#a6e22e">Marshal</span>(<span style="color:#a6e22e">req</span>)
+    	<span style="color:#75715e">// 省略其他打印日志的代码
+</span><span style="color:#75715e"></span>    }()
+    <span style="color:#75715e">// defer 2
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">defer</span> <span style="color:#a6e22e">paramsPool</span>.<span style="color:#a6e22e">Put</span>(<span style="color:#a6e22e">req</span>)
+    <span style="color:#75715e">// req初始化以及发起请求和其他操作
+</span><span style="color:#75715e"></span>}
+</code></pre></div><blockquote>
+<p><strong>注：</strong></p>
+<ol>
+<li>上述代码变量命名已经被老许通用化处理。</li>
+<li>项目中实际代码远比上述复杂，但上述代码依旧是造成本次问题的最小原型。</li>
+</ol>
+</blockquote>
+<p>上面代码中<code>paramsPool</code>是<code>sync.Pool</code>类型的变量，而<code>sync.Pool</code>想必大家都很熟悉。<code>sync.Pool</code>是为了复用已经使用过的对象(协程安全)，减少内存分配和降低GC压力。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">test</span> <span style="color:#66d9ef">struct</span> {
+	<span style="color:#a6e22e">a</span> <span style="color:#66d9ef">string</span>
+}
+
+<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">sp</span> = <span style="color:#a6e22e">sync</span>.<span style="color:#a6e22e">Pool</span>{
+	<span style="color:#a6e22e">New</span>: <span style="color:#66d9ef">func</span>() <span style="color:#66d9ef">interface</span>{} {
+		<span style="color:#66d9ef">return</span> new(<span style="color:#a6e22e">test</span>)
+	},
+}
+
+<span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
+	<span style="color:#a6e22e">t</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">sp</span>.<span style="color:#a6e22e">Get</span>().(<span style="color:#f92672">*</span><span style="color:#a6e22e">test</span>)
+	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">unsafe</span>.<span style="color:#a6e22e">Pointer</span>(<span style="color:#a6e22e">t</span>))
+	<span style="color:#a6e22e">sp</span>.<span style="color:#a6e22e">Put</span>(<span style="color:#a6e22e">t</span>)
+	<span style="color:#a6e22e">t1</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">sp</span>.<span style="color:#a6e22e">Get</span>().(<span style="color:#f92672">*</span><span style="color:#a6e22e">test</span>)
+	<span style="color:#a6e22e">t2</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">sp</span>.<span style="color:#a6e22e">Get</span>().(<span style="color:#f92672">*</span><span style="color:#a6e22e">test</span>)
+	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">unsafe</span>.<span style="color:#a6e22e">Pointer</span>(<span style="color:#a6e22e">t1</span>), <span style="color:#a6e22e">unsafe</span>.<span style="color:#a6e22e">Pointer</span>(<span style="color:#a6e22e">t2</span>))
+}
+</code></pre></div><p><img src="https://note.youdao.com/yws/api/personal/file/WEB30a2f5c4b11b2974a9dacfaa7afc06a8?method=download&amp;shareKey=c81b700ce8b721b4d27062c5f07ef4e3" alt=""></p>
+<p>根据上述代码和输出结果知，<code>t1</code>变量和<code>t</code>变量地址一致，因此他们是复用对象。此时再回顾上面的<code>doReq</code>函数就很容易发现问题的根因。</p>
+<p><code>defer 2</code>和<code>defer 1</code>顺序反了！！！</p>
+<p><code>defer 2</code>和<code>defer 1</code>顺序反了！！！</p>
+<p><code>defer 2</code>和<code>defer 1</code>顺序反了！！！</p>
+<p><code>sync.Pool</code>提供的<code>Get</code>和<code>Put</code>方法是协程安全的，但是高并发调用<code>doReq</code>函数时<code>json.Marshal(req)</code>和请求初始化会存在并发问题，极有可能引起panic的并发调用时间线如下图所示。</p>
+<p><img src="https://note.youdao.com/yws/api/personal/file/WEBab9220ec9c5c75ac59489fd69039e269?method=download&amp;shareKey=e962344375d221450b80e4b1d6306aec" alt=""></p>
+<p>既然已经找到原因，解决起来就容易多了，只需调整<code>defer 2</code>和<code>defer 1</code>的调用顺序即可。老许将修改后的代码发布到线上后也确实再没有出现panic。造成这次事故的根本原因是一个微乎其微的细节，所以我们平时在开发中还是要谨慎加谨慎，避免因为这种小白错误造成不可挽回的损失。另外一个经验之谈就是，开发和查问题时尽量不要钻牛角尖，适当的停顿可能会有意想不到的奇效。</p>
+<p>最后，衷心希望本文能够对各位读者有一定的帮助。</p>
+<p>【关注公众号】</p>
+<p><img src="https://note.youdao.com/yws/api/personal/file/WEBa3ee67b2b867e98cb5c587f4adfa6801?method=download&amp;shareKey=0fbb95d0aec6170b854e7b890d50d559" alt=""></p>
+
+      </div>
+    </article>
+
+    <hr />
+
+    <div class="post-info">
+        <p>
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-tag meta-icon">
+            <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path>
+            <line x1="7" y1="7" x2="7" y2="7"></line>
+          </svg><span class="tag"><a href="https://isites.gitlab.io/gopher/tags/go/">Go</a></span>
+        </p>
+
+      <p>
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file-text">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+          <polyline points="14 2 14 8 20 8"></polyline>
+          <line x1="16" y1="13" x2="8" y2="13"></line>
+          <line x1="16" y1="17" x2="8" y2="17"></line>
+          <polyline points="10 9 9 9 8 9"></polyline>
+        </svg>
+        223 Words
+      </p>
+
+      <p>
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-calendar">
+          <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+          <line x1="16" y1="2" x2="16" y2="6"></line>
+          <line x1="8" y1="2" x2="8" y2="6"></line>
+          <line x1="3" y1="10" x2="21" y2="10"></line>
+        </svg>
+        2021-11-23 12:20 &#43;0800
+      </p>
+ 
+    </div>
+
+    
+      <div class="pagination">
+        <div class="pagination__title">
+          <span class="pagination__title-h"></span>
+          <hr />
+        </div>
+
+        <div class="pagination__buttons">
+          
+
+          
+            <span class="button next">
+              <a href="https://isites.gitlab.io/gopher/timeline/ad-msvv/">
+                <span class="button__text">浅谈在线广告分配策略</span>
+                <span class="button__icon">→</span>
+              </a>
+            </span>
+          
+        </div>
+      </div>
+    
+
+
+    
+
+  </main>
+
+            </div>
+
+            
+                <footer class="footer">
+    <div class="footer__inner">
+        <div class="footer__content">
+            <span>&copy; 2021</span>
+            
+             
+        </div>
+    </div> 
+</footer>
+<script type="text/javascript">
+    $(function(){
+
+  window.sr = ScrollReveal();
+
+  if ($(window).width() < 768) {
+
+    if ($('.timeline-content').hasClass('js--fadeInLeft')) {
+        $('.timeline-content').removeClass('js--fadeInLeft').addClass('js--fadeInRight');
+    }
+
+    sr.reveal('.js--fadeInRight', {
+        origin: 'right',
+        distance: '300px',
+        easing: 'ease-in-out',
+        duration: 800,
+      });
+
+  } else {
+    
+    sr.reveal('.js--fadeInLeft', {
+        origin: 'left',
+        distance: '300px',
+          easing: 'ease-in-out',
+        duration: 800,
+      });
+
+      sr.reveal('.js--fadeInRight', {
+        origin: 'right',
+        distance: '300px',
+        easing: 'ease-in-out',
+        duration: 800,
+      });
+
+  }
+  
+  sr.reveal('.js--fadeInLeft', {
+        origin: 'left',
+        distance: '300px',
+          easing: 'ease-in-out',
+        duration: 800,
+      });
+
+      sr.reveal('.js--fadeInRight', {
+        origin: 'right',
+        distance: '300px',
+        easing: 'ease-in-out',
+        duration: 800,
+      });
+
+
+});
+
+</script>
+            
+        </div>
+
+        
+
+
+
+
+<script type="text/javascript" src="/gopher/bundle.min.dc716e9092c9820b77f96da294d0120aeeb189b5bcea9752309ebea27fd53bbe6b13cffb2aca8ecf32525647ceb7001f76091de4199ac5a3caa432c070247f5b.js" integrity="sha512-3HFukJLJggt3&#43;W2ilNASCu6xibW86pdSMJ6&#43;on/VO75rE8/7KsqOzzJSVkfOtwAfdgkd5BmaxaPKpDLAcCR/Ww=="></script>
+
+
+    
+        <script src="/js/bd-hm.js"></script>
+    
+
+
+    </body>
+</html>
