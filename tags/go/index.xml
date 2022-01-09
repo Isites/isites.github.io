@@ -6,7 +6,33 @@
     <description>Recent content in Go on Gopher指北</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Tue, 23 Nov 2021 12:20:38 +0800</lastBuildDate><atom:link href="https://isites.gitlab.io/gopher/tags/go/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Mon, 20 Dec 2021 12:20:38 +0800</lastBuildDate><atom:link href="https://isites.gitlab.io/gopher/tags/go/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>探讨系统中💰钱的精度问题</title>
+      <link>https://isites.gitlab.io/gopher/timeline/money/</link>
+      <pubDate>Mon, 20 Dec 2021 12:20:38 +0800</pubDate>
+      
+      <guid>https://isites.gitlab.io/gopher/timeline/money/</guid>
+      <description>钱,乃亘古之玄物,有则气粗神壮,缺则心卑力浅
+ 在一个系统中，特别是一个和钱相关的系统，钱乃重中之重，计算时的精度将是本篇讨论的主题。
+精度为何如此重要 “积羽沉舟”用在此处最为合适。假如某电商平台每年订单成交数量为10亿，每笔订单少结算1分钱，则累计损失1000万！有一说一，这损失的钱就是王某人的十分之一个小目标。如果因为精度问题在给客户结算时，少算会损失客户，多算会损失钱。由此可见，精确的计算钱十分重要！
+为什么会有精度的问题 经典案例，我们来看一下0.1 + 0.2在计算机中是否等于0.3。
+上述case学过计算机的应该都知道，计算机是二进制的，用二进制表示浮点数时(IEEE754标准)，只有少量的数可以用这种方法精确的表示出来。下面以0.3为例看一下十进制转二进制小数的过程。
+计算机的位数有限制，因此计算机用浮点数计算时肯定无法得到精确的结果。这种硬限制无法突破，所以需要引入精度以保证对钱的计算在允许的误差范围内尽可能准确。
+ 关于浮点数在计算机中的实际表示本文不做进一步讨论，可以参考下述连接学习：
+单精度浮点数表示：
+https://en.wikipedia.org/wiki/Single-precision_floating-point_format
+双精度浮点数表示：
+https://en.wikipedia.org/wiki/Double-precision_floating-point_format
+浮点数转换器：
+https://www.h-schmidt.net/FloatConverter/IEEE754.html
+ 用浮点数计算 还是以上述0.1 + 0.2为例，0.00000000000000004的误差完全可以忽略，我们尝试小数部分保留5位精度，看下面结果。
+此时的结果符合预期。这也是为什么很多时候判断两个浮点数是否相等往往采用a - b &amp;lt;= 0.00001的形式，说白了这就是小数部分保留5位精度的另一种表现形式。
+用整型计算 前面提到只有少量的浮点数可以用IEEE754标准表示，而整型可精确表示所有有效范围内的数。因此很容易想到，使用整型表示浮点数。
+例如，事先定好小数保留8位精度，则0.1和0.2分别表示成整数为10000000和20000000, 浮点数的运算也就转换为整型的运算。还是以0.1 + 0.2为例。
+// 表示小数位保留8位精度 const prec = 100000000 func float2Int(f float64) int64 { return int64(f * prec) } func int2float(i int64) float64 { return float64(i) / prec } func main() { var a, b float64 = 0.</description>
+    </item>
+    
     <item>
       <title>终于解决了这个线上偶现的panic问题</title>
       <link>https://isites.gitlab.io/gopher/timeline/defer-sync-pool/</link>
