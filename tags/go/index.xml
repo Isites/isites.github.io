@@ -2,17 +2,17 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Go on Gopher指北</title>
-    <link>https://isites.gitlab.io/gopher/tags/go/</link>
+    <link>https://isites.github.io/tags/go/</link>
     <description>Recent content in Go on Gopher指北</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Mon, 20 Dec 2021 12:20:38 +0800</lastBuildDate><atom:link href="https://isites.gitlab.io/gopher/tags/go/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Mon, 20 Dec 2021 12:20:38 +0800</lastBuildDate><atom:link href="https://isites.github.io/tags/go/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>探讨系统中💰钱的精度问题</title>
-      <link>https://isites.gitlab.io/gopher/timeline/money/</link>
+      <link>https://isites.github.io/timeline/money/</link>
       <pubDate>Mon, 20 Dec 2021 12:20:38 +0800</pubDate>
       
-      <guid>https://isites.gitlab.io/gopher/timeline/money/</guid>
+      <guid>https://isites.github.io/timeline/money/</guid>
       <description>钱,乃亘古之玄物,有则气粗神壮,缺则心卑力浅
  在一个系统中，特别是一个和钱相关的系统，钱乃重中之重，计算时的精度将是本篇讨论的主题。
 精度为何如此重要 “积羽沉舟”用在此处最为合适。假如某电商平台每年订单成交数量为10亿，每笔订单少结算1分钱，则累计损失1000万！有一说一，这损失的钱就是王某人的十分之一个小目标。如果因为精度问题在给客户结算时，少算会损失客户，多算会损失钱。由此可见，精确的计算钱十分重要！
@@ -35,10 +35,10 @@ https://www.h-schmidt.net/FloatConverter/IEEE754.html
     
     <item>
       <title>终于解决了这个线上偶现的panic问题</title>
-      <link>https://isites.gitlab.io/gopher/timeline/defer-sync-pool/</link>
+      <link>https://isites.github.io/timeline/defer-sync-pool/</link>
       <pubDate>Tue, 23 Nov 2021 12:20:38 +0800</pubDate>
       
-      <guid>https://isites.gitlab.io/gopher/timeline/defer-sync-pool/</guid>
+      <guid>https://isites.github.io/timeline/defer-sync-pool/</guid>
       <description>不知道其他人是不是这样，反正老许最怕听到的词就是“偶现”，至于原因我不多说，懂的都懂。
 下面直接看panic信息。
 runtime error: invalid memory address or nil pointer dereference panic(0xbd1c80, 0x1271710) /root/.go/src/runtime/panic.go:969 +0x175 github.com/json-iterator/go.(*Stream).WriteStringWithHTMLEscaped(0xc00b0c6000, 0x0, 0x24) /go/pkg/mod/github.com/json-iterator/go@v1.1.11/stream_str.go:227 +0x7b github.com/json-iterator/go.(*htmlEscapedStringEncoder).Encode(0x12b9250, 0xc0096c4c00, 0xc00b0c6000) /go/pkg/mod/github.com/json-iterator/go@v1.1.11/config.go:263 +0x45 github.com/json-iterator/go.(*structFieldEncoder).Encode(0xc002e9c8d0, 0xc0096c4c00, 0xc00b0c6000) /go/pkg/mod/github.com/json-iterator/go@v1.1.11/reflect_struct_encoder.go:110 +0x78 github.com/json-iterator/go.(*structEncoder).Encode(0xc002e9c9c0, 0xc0096c4c00, 0xc00b0c6000) /go/pkg/mod/github.com/json-iterator/go@v1.1.11/reflect_struct_encoder.go:158 +0x3f4 github.com/json-iterator/go.(*structFieldEncoder).Encode(0xc002eac990, 0xc0096c4c00, 0xc00b0c6000) /go/pkg/mod/github.com/json-iterator/go@v1.1.11/reflect_struct_encoder.go:110 +0x78 github.com/json-iterator/go.(*structEncoder).Encode(0xc002eacba0, 0xc0096c4c00, 0xc00b0c6000) /go/pkg/mod/github.com/json-iterator/go@v1.1.11/reflect_struct_encoder.go:158 +0x3f4 github.com/json-iterator/go.(*OptionalEncoder).Encode(0xc002e9f570, 0xc006b18b38, 0xc00b0c6000) /go/pkg/mod/github.com/json-iterator/go@v1.1.11/reflect_optional.go:70 +0xf4 github.com/json-iterator/go.(*onePtrEncoder).Encode(0xc002e9f580, 0xc0096c4c00, 0xc00b0c6000) /go/pkg/mod/github.com/json-iterator/go@v1.1.11/reflect.go:219 +0x68 github.com/json-iterator/go.(*Stream).WriteVal(0xc00b0c6000, 0xb78d60, 0xc0096c4c00) /go/pkg/mod/github.com/json-iterator/go@v1.1.11/reflect.go:98 +0x150 github.com/json-iterator/go.(*frozenConfig).Marshal(0xc00012c640, 0xb78d60, 0xc0096c4c00, 0x0, 0x0, 0x0, 0x0, 0x0) 首先我坚信一条，开源的力量值得信赖。因此老许第一波操作就是，分析业务代码是否有逻辑漏洞。很明显，同事也是值得信赖的，因此果断猜测是某些未曾设想到的数据触发了边界条件。接下来就是保存现场的常规操作。
@@ -47,10 +47,10 @@ runtime error: invalid memory address or nil pointer dereference panic(0xbd1c80,
     
     <item>
       <title>sync.Once化作一道光让我顿悟</title>
-      <link>https://isites.gitlab.io/gopher/timeline/sync-once/</link>
+      <link>https://isites.github.io/timeline/sync-once/</link>
       <pubDate>Mon, 20 Sep 2021 12:20:38 +0800</pubDate>
       
-      <guid>https://isites.gitlab.io/gopher/timeline/sync-once/</guid>
+      <guid>https://isites.github.io/timeline/sync-once/</guid>
       <description>前几天和公司同事吃饭直接社死，同事直言我写的文章很骚。
 他们怎么知道我在写公众号！
 我tm没在公众号里写什么奇奇怪怪的东西吧！
@@ -64,10 +64,10 @@ var ( resource *test loadOnce sync.</description>
     
     <item>
       <title>一次带宽拉满引发的百分百超时血案！</title>
-      <link>https://isites.gitlab.io/gopher/timeline/net-bandwidth/</link>
+      <link>https://isites.github.io/timeline/net-bandwidth/</link>
       <pubDate>Sun, 05 Sep 2021 12:20:38 +0800</pubDate>
       
-      <guid>https://isites.gitlab.io/gopher/timeline/net-bandwidth/</guid>
+      <guid>https://isites.github.io/timeline/net-bandwidth/</guid>
       <description>偈语: 未经他人苦,莫劝他人善
 鏖战两周有余，为了排查线上某接口百分百超时的原因，如今总算有些成果。虽然仍有疑虑但是碍于时间不允许和个人能力问题先做如下总结以备来日再战。
 出口带宽拉满 能够发现这个问题实属侥幸。依稀记得这是一个风雨交加的夜晚，这风、这雨注定了今夜的不平凡。果然线上百分百超时的根因被发现了！
@@ -88,10 +88,10 @@ func (s *TarsProtocol) InvokeTimeout(pkg []byte) []byte { rspPackage := requestf
     
     <item>
       <title>公司内一次分享-Go并发编程</title>
-      <link>https://isites.gitlab.io/gopher/timeline/go-share/</link>
+      <link>https://isites.github.io/timeline/go-share/</link>
       <pubDate>Tue, 17 Aug 2021 21:00:00 +0800</pubDate>
       
-      <guid>https://isites.gitlab.io/gopher/timeline/go-share/</guid>
+      <guid>https://isites.github.io/timeline/go-share/</guid>
       <description>提到并发编程，不得不想到Go并发编程中的一句经典名言
 Do not communicate by sharing memory; instead, share memory by communicating. 本次分享目标  避免Go并发编程一些常见的坑 理解为什么Go原生网络编程模型为什么这么爽  并发编程踩坑目录 优雅的代码不好定义，每位开发也有自己的风格，但是坑总是相似的。
 channel误用 Case-1
@@ -100,10 +100,10 @@ func main() { wg := sync.WaitGroup{} ch := make(chan int, 10) for i := 0; i &amp
     
     <item>
       <title>惊！Go里面居然有这样精妙的小函数！</title>
-      <link>https://isites.gitlab.io/gopher/timeline/fns/</link>
+      <link>https://isites.github.io/timeline/fns/</link>
       <pubDate>Tue, 03 Aug 2021 21:00:00 +0800</pubDate>
       
-      <guid>https://isites.gitlab.io/gopher/timeline/fns/</guid>
+      <guid>https://isites.github.io/timeline/fns/</guid>
       <description>各位哥麻烦腾个道，前面是大型装逼现场。
 首先老许要感谢他人的认同，这是我乐此不彼的动力，同时我也需要反思。这位小姐姐还是比较委婉， 但用我们四川话来说，前一篇文章的标题是真的cuo。
 老许反复思考后决定哗众取宠一波，感叹号双连取名曰“惊！Go里面居然有这样精妙的小函数！”。下面就让我们来看看和标题没那么符合的一些小函数。
@@ -117,10 +117,10 @@ func isPowerOfTwo(x uintptr) bool { return x&amp;amp;(x-1) == 0 } 这个也挺�
     
     <item>
       <title>讲的是切片，但好像又不只是切片？</title>
-      <link>https://isites.gitlab.io/gopher/timeline/slice/</link>
+      <link>https://isites.github.io/timeline/slice/</link>
       <pubDate>Mon, 26 Jul 2021 22:09:00 +0800</pubDate>
       
-      <guid>https://isites.gitlab.io/gopher/timeline/slice/</guid>
+      <guid>https://isites.github.io/timeline/slice/</guid>
       <description>我内心一直有一个欲望，想要高声呼喊“我胡汉三又回来了”，而现在就是合适的时机。
 正式开干之前有点手生，太久没有写技术类的文章，总有点怠惰，不得不说坚持确实是一件很难的事情。如果不是因为愧疚和写点东西能让自己稍微平静下来一些，我可能还将继续怠惰下去。
 另外还有一件很有意思的事情分享一下。前一篇在公众号上的文章仅思考就花了近一个月，写只花了一天，而技术文章我一般边思考边写平均耗时一周。结果是不会骗人的，前一篇文章阅读量首次突破一千，果然这届读者的思想深度至少也有一个月那么多，老许佩服佩服。
@@ -130,10 +130,10 @@ type mySlice struct { data uintptr len int cap int } s := mySlice{} fmt.Println(
     
     <item>
       <title>有趣！一行代码居然无法获取请求的完整URL</title>
-      <link>https://isites.gitlab.io/gopher/timeline/get-full-url/</link>
+      <link>https://isites.github.io/timeline/get-full-url/</link>
       <pubDate>Mon, 29 Mar 2021 19:36:38 +0800</pubDate>
       
-      <guid>https://isites.gitlab.io/gopher/timeline/get-full-url/</guid>
+      <guid>https://isites.github.io/timeline/get-full-url/</guid>
       <description>缘起 做Web服务的时候，可能会有这样一个业务场景，获取一个HTTP请求的完整URL。很巧，老许就碰到了这样的业务场景。面对如此简单的需求，CV大法根本没有展示才能的机会。啪啪啪，获取请求的完整URL代码就出来了。
 当时离验证只差一步，老许信心满满，很快，打脸来得很快就像龙卷风。。。
 从图中可以知道，req.URL中的Scheme和Host均为空，所以r.URL.String()无法得到完整的请求连接。这个结果让老许一阵激动，万万没想到有一天我也有机会发现Go源码中可能遗漏的赋值。老许强行按耐住心中的激动，准备好好研究一番，万一成为了Go的Contributor呢^ω^。最后发现官方实现没有问题，因此就有了今天这篇文章。
@@ -147,10 +147,10 @@ origin-form 这种形式是请求资源中最常见的形式，其格式定义�
     
     <item>
       <title>白话Go内存模型&amp;Happen-Before</title>
-      <link>https://isites.gitlab.io/gopher/timeline/go-memory-model/</link>
+      <link>https://isites.github.io/timeline/go-memory-model/</link>
       <pubDate>Thu, 04 Mar 2021 18:53:38 +0800</pubDate>
       
-      <guid>https://isites.gitlab.io/gopher/timeline/go-memory-model/</guid>
+      <guid>https://isites.github.io/timeline/go-memory-model/</guid>
       <description>Go内存模型明确指出，一个goroutine如何才能观察到其他goroutine对同一变量的写操作。
 当多个goroutine并发同时存取同一个数据时必须把并发的存取操作序列化。在Go中保证读写的序列化可以通过channel通信或者其他同步原语（例如sync包中的互斥锁、读写锁和sync/atomic中的原子操作）。
 Happens Before 在单goroutine中，读取和写入的行为一定是和程序指定的执行顺序表现一致。换言之，编译器和处理器在不改变语言规范所定义的行为前提下才可以对单个goroutine中的指令进行重排序。
@@ -167,10 +167,10 @@ happens-before的作用 多个goroutine访问共享变量时，它们必须建�
     
     <item>
       <title>Go中的SSRF攻防战</title>
-      <link>https://isites.gitlab.io/gopher/timeline/go-ssrf/</link>
+      <link>https://isites.github.io/timeline/go-ssrf/</link>
       <pubDate>Tue, 19 Jan 2021 20:30:38 +0800</pubDate>
       
-      <guid>https://isites.gitlab.io/gopher/timeline/go-ssrf/</guid>
+      <guid>https://isites.github.io/timeline/go-ssrf/</guid>
       <description>写在最前面 “年年岁岁花相似，岁岁年年人不同”，没有什么是永恒的，很多东西都将成为过去式。比如，我以前在文章中自称“笔者”，细细想来这个称呼还是有一定的距离感，经过一番深思熟虑后，我打算将文章中的自称改为“老许”。
 关于自称，老许就不扯太远了，下面还是回到本篇的主旨。
 什么是SSRF SSRF英文全拼为Server Side Request Forgery，翻译为服务端请求伪造。攻击者在未能取得服务器权限时，利用服务器漏洞以服务器的身份发送一条构造好的请求给服务器所在内网。关于内网资源的访问控制，想必大家心里都有数。
@@ -183,10 +183,10 @@ happens-before的作用 多个goroutine访问共享变量时，它们必须建�
     
     <item>
       <title>码了2000多行代码就是为了讲清楚TLS握手流程（续）</title>
-      <link>https://isites.gitlab.io/gopher/timeline/gotls1.2/</link>
+      <link>https://isites.github.io/timeline/gotls1.2/</link>
       <pubDate>Sun, 13 Dec 2020 23:47:48 +0800</pubDate>
       
-      <guid>https://isites.gitlab.io/gopher/timeline/gotls1.2/</guid>
+      <guid>https://isites.github.io/timeline/gotls1.2/</guid>
       <description>在“码了2000多行代码就是为了讲清楚TLS握手流程”这一篇文章的最后挖了一个坑，今天这篇文章就是为了填坑而来，因此本篇主要分析TLS1.2的握手流程。
 在写前一篇文章时，笔者的Demo只支持解析TLS1.3握手流程中发送的消息，写本篇时，笔者的Demo已经可以解析TLS1.x握手流程中的消息，有兴趣的读者请至文末获取Demo源码。
 结论先行 为保证各位读者对TLS1.2的握手流程有一个大概的框架，本篇依旧结论先行。
@@ -210,10 +210,10 @@ happens-before的作用 多个goroutine访问共享变量时，它们必须建�
     
     <item>
       <title>区分Protobuf 3中缺失值和默认值</title>
-      <link>https://isites.gitlab.io/gopher/timeline/gopb3/</link>
+      <link>https://isites.github.io/timeline/gopb3/</link>
       <pubDate>Tue, 01 Dec 2020 12:20:38 +0800</pubDate>
       
-      <guid>https://isites.gitlab.io/gopher/timeline/gopb3/</guid>
+      <guid>https://isites.github.io/timeline/gopb3/</guid>
       <description>这两天翻了翻以前的项目，发现不同项目中关于Protobuf 3缺失值和默认值的区分居然有好几种实现。今天笔者冷饭新炒，结合项目中的实现以及切身经验共总结出如下六种方案。
 增加标识字段 众所周知，在Go中数字类型的默认值为0（这里仅以数字类型举例），这在某些场景下往往会引起一定的歧义。
  以is_show字段为例，如果没有该字段表示不更新DB中的数据，如果有该字段且值为0则表示更新DB中的数据为不可见，如果有该字段且值为1则表示更新DB中的数据为可见。
@@ -229,10 +229,10 @@ message Status { oneof show { int32 is_show = 1; } } message Test { int32 bar = 
     
     <item>
       <title>为什么go中的receiver name不推荐使用this或者self</title>
-      <link>https://isites.gitlab.io/gopher/timeline/go-reciver/</link>
+      <link>https://isites.github.io/timeline/go-reciver/</link>
       <pubDate>Sat, 29 Aug 2020 12:20:38 +0800</pubDate>
       
-      <guid>https://isites.gitlab.io/gopher/timeline/go-reciver/</guid>
+      <guid>https://isites.github.io/timeline/go-reciver/</guid>
       <description>前言 在日常的开发中我们除了定义函数以外， 我们还会定义一些方法。这本来没有什么， 但是一些从PHP或者其他面向对象语言转GO的同学往往会把receiver name命名为this, self, me等。
 笔者在实际项目开发中也遇到类似的同学， 屡次提醒却没有效果，于是决心写下这篇文章以便好好说服这些同学。
 CR标准做法 首先我们来看一下GO推荐的标准命名Receiver Names，以下内容摘抄自https://github.com/golang/go/wiki/CodeReviewComments#receiver-names：
@@ -241,10 +241,10 @@ The name of a method&#39;s receiver should be a reflection of its identity; ofte
     
     <item>
       <title>深入剖析go中字符串的编码问题——特殊字符的string怎么转byte？</title>
-      <link>https://isites.gitlab.io/gopher/timeline/go-string-encode/</link>
+      <link>https://isites.github.io/timeline/go-string-encode/</link>
       <pubDate>Mon, 24 Aug 2020 23:47:48 +0800</pubDate>
       
-      <guid>https://isites.gitlab.io/gopher/timeline/go-string-encode/</guid>
+      <guid>https://isites.github.io/timeline/go-string-encode/</guid>
       <description>前言 前段时间发表了Go中的HTTP请求之——HTTP1.1请求流程分析，所以这两天本来打算研究HTTP2.0的请求源码，结果发现太复杂就跑去逛知乎了，然后就发现了一个非常有意思的提问“golang 特殊字符的string怎么转成[]byte?”。为了转换一下心情， 便有了此篇文章。
 问题 原问题我就不码字了，直接上图： 看到问题，我的第一反应是ASCII码值范围应该是0~127呀，怎么会超过127呢？直到实际运行的时候才发现上图的特殊字符是‘’（如果无法展示，记住该特殊字符的unicode是\u0081），并不是英文中的句号。
 unicode和utf-8的恩怨纠葛 百度百科已经把unicode和utf-8介绍的很详细了，所以这里就不做过多的阐述，仅摘抄部分和本文相关的定义：
