@@ -21,13 +21,12 @@
 2、TLS1.2中除了finishedMsg其余消息均未加密。
 3、在TLS1.2中，ChangeCipherSpec消息之后的所有数据均会做加密处理，它的作用在TLS1.2中更像是一个开启加密的开关（TLS1.3中忽略此消息，并不做任何处理）。
 和TLS1.3的比较 消息格式的变化 对比本篇的时序图和前篇的时序图很容易发现部分消息格式发生了变化。下面是certificateMsg和certificateMsgTLS13的定义：
-// TLS1.2 type certificateMsg struct { raw []byte certificates [][]byte } // TLS1.3 type certificateMsgTLS13 struct { raw []byte certificate tls.Certificate ocspStapling bool scts bool } 其他消息的定义笔者就不一一列举了，这里仅列出格式发生变化的消息。
-   TLS1.2 TLS1.3     certificateRequestMsg certificateRequestMsgTLS13   certificateMsg certificateMsgTLS13    消息类型的变化 TLS1.2和TLS1.3有相同的消息类型也有各自独立的消息类型。下面是笔者例子中TLS1.2和TLS1.3各自独有的消息类型：
-   TLS1." />
+// TLS1.2 type certificateMsg struct { 	raw []byte 	certificates [][]byte } // TLS1.3 type certificateMsgTLS13 struct { 	raw []byte 	certificate tls.Certificate 	ocspStapling bool 	scts bool } 其他消息的定义笔者就不一一列举了，这里仅列出格式发生变化的消息。
+   TLS1.2 TLS1.3     certificateRequestMsg certificateRequestMsgTLS13   certificateMsg certificateMsgTLS13    消息类型的变化 TLS1." />
 <meta name="keywords" content=", Go, 网络篇" />
 <meta name="robots" content="noodp" />
 <meta name="theme-color" content="" />
-<link rel="canonical" href="https://isites.github.io/timeline/gotls1.2/" />
+<link rel="canonical" href="https://isites.gitlab.io/gopher/timeline/gotls1.2/" />
 
 
     <title>
@@ -44,7 +43,7 @@
 
 
 
-<link rel="stylesheet" href="/main.805b1025016494ee5fd67b55b8ecd5e2b7c4a9f0bdda42e300c62b85ddfef68f.css">
+<link rel="stylesheet" href="/gopher/main.805b1025016494ee5fd67b55b8ecd5e2b7c4a9f0bdda42e300c62b85ddfef68f.css">
 
 
   
@@ -77,17 +76,11 @@
 2、TLS1.2中除了finishedMsg其余消息均未加密。
 3、在TLS1.2中，ChangeCipherSpec消息之后的所有数据均会做加密处理，它的作用在TLS1.2中更像是一个开启加密的开关（TLS1.3中忽略此消息，并不做任何处理）。
 和TLS1.3的比较 消息格式的变化 对比本篇的时序图和前篇的时序图很容易发现部分消息格式发生了变化。下面是certificateMsg和certificateMsgTLS13的定义：
-// TLS1.2 type certificateMsg struct { raw []byte certificates [][]byte } // TLS1.3 type certificateMsgTLS13 struct { raw []byte certificate tls.Certificate ocspStapling bool scts bool } 其他消息的定义笔者就不一一列举了，这里仅列出格式发生变化的消息。
-   TLS1.2 TLS1.3     certificateRequestMsg certificateRequestMsgTLS13   certificateMsg certificateMsgTLS13    消息类型的变化 TLS1.2和TLS1.3有相同的消息类型也有各自独立的消息类型。下面是笔者例子中TLS1.2和TLS1.3各自独有的消息类型：
-   TLS1.">
-<meta itemprop="datePublished" content="2020-12-13T23:47:48+08:00" />
+// TLS1.2 type certificateMsg struct { 	raw []byte 	certificates [][]byte } // TLS1.3 type certificateMsgTLS13 struct { 	raw []byte 	certificate tls.Certificate 	ocspStapling bool 	scts bool } 其他消息的定义笔者就不一一列举了，这里仅列出格式发生变化的消息。
+   TLS1.2 TLS1.3     certificateRequestMsg certificateRequestMsgTLS13   certificateMsg certificateMsgTLS13    消息类型的变化 TLS1."><meta itemprop="datePublished" content="2020-12-13T23:47:48+08:00" />
 <meta itemprop="dateModified" content="2020-12-13T23:47:48+08:00" />
 <meta itemprop="wordCount" content="203">
-
-
-
 <meta itemprop="keywords" content="Go,网络篇," />
-
 <meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="码了2000多行代码就是为了讲清楚TLS握手流程（续）"/>
 <meta name="twitter:description" content="在“码了2000多行代码就是为了讲清楚TLS握手流程”这一篇文章的最后挖了一个坑，今天这篇文章就是为了填坑而来，因此本篇主要分析TLS1.2的握手流程。
@@ -106,9 +99,8 @@
 2、TLS1.2中除了finishedMsg其余消息均未加密。
 3、在TLS1.2中，ChangeCipherSpec消息之后的所有数据均会做加密处理，它的作用在TLS1.2中更像是一个开启加密的开关（TLS1.3中忽略此消息，并不做任何处理）。
 和TLS1.3的比较 消息格式的变化 对比本篇的时序图和前篇的时序图很容易发现部分消息格式发生了变化。下面是certificateMsg和certificateMsgTLS13的定义：
-// TLS1.2 type certificateMsg struct { raw []byte certificates [][]byte } // TLS1.3 type certificateMsgTLS13 struct { raw []byte certificate tls.Certificate ocspStapling bool scts bool } 其他消息的定义笔者就不一一列举了，这里仅列出格式发生变化的消息。
-   TLS1.2 TLS1.3     certificateRequestMsg certificateRequestMsgTLS13   certificateMsg certificateMsgTLS13    消息类型的变化 TLS1.2和TLS1.3有相同的消息类型也有各自独立的消息类型。下面是笔者例子中TLS1.2和TLS1.3各自独有的消息类型：
-   TLS1."/>
+// TLS1.2 type certificateMsg struct { 	raw []byte 	certificates [][]byte } // TLS1.3 type certificateMsgTLS13 struct { 	raw []byte 	certificate tls.Certificate 	ocspStapling bool 	scts bool } 其他消息的定义笔者就不一一列举了，这里仅列出格式发生变化的消息。
+   TLS1.2 TLS1.3     certificateRequestMsg certificateRequestMsgTLS13   certificateMsg certificateMsgTLS13    消息类型的变化 TLS1."/>
 
 
 
@@ -131,7 +123,7 @@
         <div class="container">
             <header class="header">
     <span class="header__inner">
-        <a href="https://isites.github.io/" style="text-decoration: none;">
+        <a href="https://isites.gitlab.io/gopher/" style="text-decoration: none;">
     <div class="logo">
         
             <span class="logo__mark">Gopher指北</span>
@@ -177,7 +169,7 @@
 
     <article>
       <h1 class="post-title">
-        <a href="https://isites.github.io/timeline/gotls1.2/">码了2000多行代码就是为了讲清楚TLS握手流程（续）</a>
+        <a href="https://isites.gitlab.io/gopher/timeline/gotls1.2/">码了2000多行代码就是为了讲清楚TLS握手流程（续）</a>
       </h1>
         <hr />
         <aside id="toc">
@@ -226,19 +218,19 @@
 <h3 id="和tls13的比较">和TLS1.3的比较</h3>
 <h4 id="消息格式的变化">消息格式的变化</h4>
 <p>对比本篇的时序图和前篇的时序图很容易发现部分消息格式发生了变化。下面是<code>certificateMsg</code>和<code>certificateMsgTLS13</code>的定义：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#75715e">// TLS1.2
-</span><span style="color:#75715e"></span><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">certificateMsg</span> <span style="color:#66d9ef">struct</span> {
-	<span style="color:#a6e22e">raw</span>          []<span style="color:#66d9ef">byte</span>
-	<span style="color:#a6e22e">certificates</span> [][]<span style="color:#66d9ef">byte</span>
-}
-<span style="color:#75715e">// TLS1.3
-</span><span style="color:#75715e"></span><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">certificateMsgTLS13</span> <span style="color:#66d9ef">struct</span> {
-	<span style="color:#a6e22e">raw</span>          []<span style="color:#66d9ef">byte</span>
-	<span style="color:#a6e22e">certificate</span>  <span style="color:#a6e22e">tls</span>.<span style="color:#a6e22e">Certificate</span>
-	<span style="color:#a6e22e">ocspStapling</span> <span style="color:#66d9ef">bool</span>
-	<span style="color:#a6e22e">scts</span>         <span style="color:#66d9ef">bool</span>
-}
-</code></pre></div><p>其他消息的定义笔者就不一一列举了，这里仅列出格式发生变化的消息。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#75715e">// TLS1.2
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">certificateMsg</span> <span style="color:#66d9ef">struct</span> {
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">raw</span>          []<span style="color:#66d9ef">byte</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">certificates</span> [][]<span style="color:#66d9ef">byte</span>
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// TLS1.3
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">certificateMsgTLS13</span> <span style="color:#66d9ef">struct</span> {
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">raw</span>          []<span style="color:#66d9ef">byte</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">certificate</span>  <span style="color:#a6e22e">tls</span>.<span style="color:#a6e22e">Certificate</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">ocspStapling</span> <span style="color:#66d9ef">bool</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">scts</span>         <span style="color:#66d9ef">bool</span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>其他消息的定义笔者就不一一列举了，这里仅列出格式发生变化的消息。</p>
 <table>
 <thead>
 <tr>
@@ -302,21 +294,21 @@
 <p><img src="https://note.youdao.com/yws/api/personal/file/WEB46c9f6e0eebb4d6e53f69bc2715959e1?method=download&amp;shareKey=83cb14cdf13ea7c2968b6f55260741af" alt=""></p>
 <p>图中<code>prefixNonceAEAD</code>即为TLS1.2中AEAD加密算法的一种实现。</p>
 <p>这里需要注意的是TLS1.3也会计算<code>masterSecret</code>。为了方便理解，我们先回顾一下TLS1.3中生成<code>masterSecret</code>的部分源码：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#75715e">// 基于共享密钥派生hs.handshakeSecret
-</span><span style="color:#75715e"></span><span style="color:#a6e22e">hs</span>.<span style="color:#a6e22e">handshakeSecret</span> = <span style="color:#a6e22e">hs</span>.<span style="color:#a6e22e">suite</span>.<span style="color:#a6e22e">extract</span>(<span style="color:#a6e22e">hs</span>.<span style="color:#a6e22e">sharedKey</span>,
-    <span style="color:#a6e22e">hs</span>.<span style="color:#a6e22e">suite</span>.<span style="color:#a6e22e">deriveSecret</span>(<span style="color:#a6e22e">earlySecret</span>, <span style="color:#e6db74">&#34;derived&#34;</span>, <span style="color:#66d9ef">nil</span>))
-<span style="color:#75715e">// 基于hs.handshakeSecret 派生hs.masterSecret
-</span><span style="color:#75715e"></span><span style="color:#a6e22e">hs</span>.<span style="color:#a6e22e">masterSecret</span> = <span style="color:#a6e22e">hs</span>.<span style="color:#a6e22e">suite</span>.<span style="color:#a6e22e">extract</span>(<span style="color:#66d9ef">nil</span>,
-	<span style="color:#a6e22e">hs</span>.<span style="color:#a6e22e">suite</span>.<span style="color:#a6e22e">deriveSecret</span>(<span style="color:#a6e22e">hs</span>.<span style="color:#a6e22e">handshakeSecret</span>, <span style="color:#e6db74">&#34;derived&#34;</span>, <span style="color:#66d9ef">nil</span>))
-</code></pre></div><p>由上易知，TLS1.3先通过共享密钥派生出<code>handshakeSecret</code>，最后通过<code>handshakeSecret</code>派生出<code>masterSecret</code>。与此相比，TLS1.2生成<code>masterSecret</code>仅需一步：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#a6e22e">hs</span>.<span style="color:#a6e22e">masterSecret</span> = <span style="color:#a6e22e">masterFromPreMasterSecret</span>(<span style="color:#a6e22e">c</span>.<span style="color:#a6e22e">vers</span>, <span style="color:#a6e22e">hs</span>.<span style="color:#a6e22e">suite</span>, <span style="color:#a6e22e">preMasterSecret</span>, <span style="color:#a6e22e">hs</span>.<span style="color:#a6e22e">hello</span>.<span style="color:#a6e22e">random</span>, <span style="color:#a6e22e">hs</span>.<span style="color:#a6e22e">serverHello</span>.<span style="color:#a6e22e">random</span>)
-</code></pre></div><p><code>masterFromPreMasterSecret</code>函数的作用是利用<code>HMAC</code>（HMAC在前篇中已经提到故本篇不再赘述）算法对Client和Server的随机数以及共享密钥进行摘要，从而计算得到<code>masterSecret</code>。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#75715e">// 基于共享密钥派生hs.handshakeSecret
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#a6e22e">hs</span>.<span style="color:#a6e22e">handshakeSecret</span> = <span style="color:#a6e22e">hs</span>.<span style="color:#a6e22e">suite</span>.<span style="color:#a6e22e">extract</span>(<span style="color:#a6e22e">hs</span>.<span style="color:#a6e22e">sharedKey</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">hs</span>.<span style="color:#a6e22e">suite</span>.<span style="color:#a6e22e">deriveSecret</span>(<span style="color:#a6e22e">earlySecret</span>, <span style="color:#e6db74">&#34;derived&#34;</span>, <span style="color:#66d9ef">nil</span>))
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// 基于hs.handshakeSecret 派生hs.masterSecret
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#a6e22e">hs</span>.<span style="color:#a6e22e">masterSecret</span> = <span style="color:#a6e22e">hs</span>.<span style="color:#a6e22e">suite</span>.<span style="color:#a6e22e">extract</span>(<span style="color:#66d9ef">nil</span>,
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">hs</span>.<span style="color:#a6e22e">suite</span>.<span style="color:#a6e22e">deriveSecret</span>(<span style="color:#a6e22e">hs</span>.<span style="color:#a6e22e">handshakeSecret</span>, <span style="color:#e6db74">&#34;derived&#34;</span>, <span style="color:#66d9ef">nil</span>))
+</span></span></code></pre></div><p>由上易知，TLS1.3先通过共享密钥派生出<code>handshakeSecret</code>，最后通过<code>handshakeSecret</code>派生出<code>masterSecret</code>。与此相比，TLS1.2生成<code>masterSecret</code>仅需一步：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#a6e22e">hs</span>.<span style="color:#a6e22e">masterSecret</span> = <span style="color:#a6e22e">masterFromPreMasterSecret</span>(<span style="color:#a6e22e">c</span>.<span style="color:#a6e22e">vers</span>, <span style="color:#a6e22e">hs</span>.<span style="color:#a6e22e">suite</span>, <span style="color:#a6e22e">preMasterSecret</span>, <span style="color:#a6e22e">hs</span>.<span style="color:#a6e22e">hello</span>.<span style="color:#a6e22e">random</span>, <span style="color:#a6e22e">hs</span>.<span style="color:#a6e22e">serverHello</span>.<span style="color:#a6e22e">random</span>)
+</span></span></code></pre></div><p><code>masterFromPreMasterSecret</code>函数的作用是利用<code>HMAC</code>（HMAC在前篇中已经提到故本篇不再赘述）算法对Client和Server的随机数以及共享密钥进行摘要，从而计算得到<code>masterSecret</code>。</p>
 <p><code>masterSecret</code>在后续的过程中并不会用于数据加密，下面笔者带各位读者分别看一下TLS1.3和TLS1.2生成数据加密密钥的过程。</p>
 <p>TLS1.3生成数据加密密钥（以Client计算serverSecret为例）：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#a6e22e">serverSecret</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">hs</span>.<span style="color:#a6e22e">suite</span>.<span style="color:#a6e22e">deriveSecret</span>(<span style="color:#a6e22e">hs</span>.<span style="color:#a6e22e">masterSecret</span>,
-	<span style="color:#a6e22e">serverApplicationTrafficLabel</span>, <span style="color:#a6e22e">hs</span>.<span style="color:#a6e22e">transcript</span>)
-<span style="color:#a6e22e">c</span>.<span style="color:#a6e22e">in</span>.<span style="color:#a6e22e">setTrafficSecret</span>(<span style="color:#a6e22e">hs</span>.<span style="color:#a6e22e">suite</span>, <span style="color:#a6e22e">serverSecret</span>)
-</code></pre></div><p>前篇中提到<code>hs.suite.deriveSecret</code>内部会通过<code>hs.transcript</code>计算出消息摘要从而重新得到一个<code>serverSecret</code>。<code>setTrafficSecret</code>方法内部会对<code>serverSecret</code>计算得到AEAD加密算法所需要的key和iv（初始向量：Initialization vector）。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#a6e22e">serverSecret</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">hs</span>.<span style="color:#a6e22e">suite</span>.<span style="color:#a6e22e">deriveSecret</span>(<span style="color:#a6e22e">hs</span>.<span style="color:#a6e22e">masterSecret</span>,
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">serverApplicationTrafficLabel</span>, <span style="color:#a6e22e">hs</span>.<span style="color:#a6e22e">transcript</span>)
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">c</span>.<span style="color:#a6e22e">in</span>.<span style="color:#a6e22e">setTrafficSecret</span>(<span style="color:#a6e22e">hs</span>.<span style="color:#a6e22e">suite</span>, <span style="color:#a6e22e">serverSecret</span>)
+</span></span></code></pre></div><p>前篇中提到<code>hs.suite.deriveSecret</code>内部会通过<code>hs.transcript</code>计算出消息摘要从而重新得到一个<code>serverSecret</code>。<code>setTrafficSecret</code>方法内部会对<code>serverSecret</code>计算得到AEAD加密算法所需要的key和iv（初始向量：Initialization vector）。</p>
 <p>因此可知TLS1.3计算密钥和Client/Server生成的随机数无直接关系，而与Client/Server当前收发的所有消息的摘要有关。</p>
 <blockquote>
 <p>补充：
@@ -326,11 +318,11 @@ IV通常是随机或者伪随机的。它和数据加密的密钥一起使用可
 <a href="https://en.wikipedia.org/wiki/Initialization_vector">https://en.wikipedia.org/wiki/Initialization_vector</a></p>
 </blockquote>
 <p>TLS1.2生成数据加密密钥：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#a6e22e">clientMAC</span>, <span style="color:#a6e22e">serverMAC</span>, <span style="color:#a6e22e">clientKey</span>, <span style="color:#a6e22e">serverKey</span>, <span style="color:#a6e22e">clientIV</span>, <span style="color:#a6e22e">serverIV</span> <span style="color:#f92672">:=</span>
-			<span style="color:#a6e22e">keysFromMasterSecret</span>(<span style="color:#a6e22e">tr</span>.<span style="color:#a6e22e">vers</span>, <span style="color:#a6e22e">suite</span>, <span style="color:#a6e22e">p</span>.<span style="color:#a6e22e">masterSecret</span>, <span style="color:#a6e22e">tr</span>.<span style="color:#a6e22e">clientHello</span>.<span style="color:#a6e22e">random</span>, <span style="color:#a6e22e">tr</span>.<span style="color:#a6e22e">serverHello</span>.<span style="color:#a6e22e">random</span>, <span style="color:#a6e22e">suite</span>.<span style="color:#a6e22e">macLen</span>, <span style="color:#a6e22e">suite</span>.<span style="color:#a6e22e">keyLen</span>, <span style="color:#a6e22e">suite</span>.<span style="color:#a6e22e">ivLen</span>)
-<span style="color:#a6e22e">serverCipher</span> = <span style="color:#a6e22e">hs</span>.<span style="color:#a6e22e">suite</span>.<span style="color:#a6e22e">aead</span>(<span style="color:#a6e22e">serverKey</span>, <span style="color:#a6e22e">serverIV</span>)
-<span style="color:#a6e22e">c</span>.<span style="color:#a6e22e">in</span>.<span style="color:#a6e22e">prepareCipherSpec</span>(<span style="color:#a6e22e">c</span>.<span style="color:#a6e22e">vers</span>, <span style="color:#a6e22e">serverCipher</span>, <span style="color:#a6e22e">serverHash</span>)
-</code></pre></div><p>前文中提到<code>masterSecret</code>的生成与Client和Server的随机数有关，而通过<code>keysFromMasterSecret</code>计算AEAD所需的key和iv依旧与随机数有关。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#a6e22e">clientMAC</span>, <span style="color:#a6e22e">serverMAC</span>, <span style="color:#a6e22e">clientKey</span>, <span style="color:#a6e22e">serverKey</span>, <span style="color:#a6e22e">clientIV</span>, <span style="color:#a6e22e">serverIV</span> <span style="color:#f92672">:=</span>
+</span></span><span style="display:flex;"><span>			<span style="color:#a6e22e">keysFromMasterSecret</span>(<span style="color:#a6e22e">tr</span>.<span style="color:#a6e22e">vers</span>, <span style="color:#a6e22e">suite</span>, <span style="color:#a6e22e">p</span>.<span style="color:#a6e22e">masterSecret</span>, <span style="color:#a6e22e">tr</span>.<span style="color:#a6e22e">clientHello</span>.<span style="color:#a6e22e">random</span>, <span style="color:#a6e22e">tr</span>.<span style="color:#a6e22e">serverHello</span>.<span style="color:#a6e22e">random</span>, <span style="color:#a6e22e">suite</span>.<span style="color:#a6e22e">macLen</span>, <span style="color:#a6e22e">suite</span>.<span style="color:#a6e22e">keyLen</span>, <span style="color:#a6e22e">suite</span>.<span style="color:#a6e22e">ivLen</span>)
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">serverCipher</span> = <span style="color:#a6e22e">hs</span>.<span style="color:#a6e22e">suite</span>.<span style="color:#a6e22e">aead</span>(<span style="color:#a6e22e">serverKey</span>, <span style="color:#a6e22e">serverIV</span>)
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">c</span>.<span style="color:#a6e22e">in</span>.<span style="color:#a6e22e">prepareCipherSpec</span>(<span style="color:#a6e22e">c</span>.<span style="color:#a6e22e">vers</span>, <span style="color:#a6e22e">serverCipher</span>, <span style="color:#a6e22e">serverHash</span>)
+</span></span></code></pre></div><p>前文中提到<code>masterSecret</code>的生成与Client和Server的随机数有关，而通过<code>keysFromMasterSecret</code>计算AEAD所需的key和iv依旧与随机数有关。</p>
 <p><strong>小结</strong>：</p>
 <p>1、本例中TLS1.2和TLS1.3均使用<code>X25519</code>算法计算共享密钥。</p>
 <p>2、本例中TLS1.2和TLS1.3均使用<code>AEAD</code>进行数据加解密。</p>
@@ -339,14 +331,14 @@ IV通常是随机或者伪随机的。它和数据加密的密钥一起使用可
 <h3 id="tls11和tls10不支持http2">TLS1.1和TLS1.0不支持HTTP2</h3>
 <p>在前面提到本文的例子已经支持解析TLS1.x的握手流程，这个时候笔者突然很好奇浏览器还支持那些版本的TLS协议。</p>
 <p>然后笔者在谷歌浏览器上首先测试了TLS1.1的服务，为了方便测试笔者改造了之前<a href="">服务器推送的案例</a>：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#a6e22e">server</span> <span style="color:#f92672">:=</span> <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">Server</span>{<span style="color:#a6e22e">Addr</span>: <span style="color:#e6db74">&#34;:8080&#34;</span>, <span style="color:#a6e22e">Handler</span>: <span style="color:#66d9ef">nil</span>}
-<span style="color:#a6e22e">server</span>.<span style="color:#a6e22e">TLSConfig</span> = new(<span style="color:#a6e22e">tls</span>.<span style="color:#a6e22e">Config</span>)
-<span style="color:#a6e22e">server</span>.<span style="color:#a6e22e">TLSConfig</span>.<span style="color:#a6e22e">PreferServerCipherSuites</span> = <span style="color:#66d9ef">true</span>
-<span style="color:#a6e22e">server</span>.<span style="color:#a6e22e">TLSConfig</span>.<span style="color:#a6e22e">NextProtos</span> = append(<span style="color:#a6e22e">server</span>.<span style="color:#a6e22e">TLSConfig</span>.<span style="color:#a6e22e">NextProtos</span>, <span style="color:#e6db74">&#34;h2&#34;</span>, <span style="color:#e6db74">&#34;http/1.1&#34;</span>)
-<span style="color:#75715e">// 服务端支持的最大tls版本调整为1.1
-</span><span style="color:#75715e"></span><span style="color:#a6e22e">server</span>.<span style="color:#a6e22e">TLSConfig</span>.<span style="color:#a6e22e">MaxVersion</span> = <span style="color:#a6e22e">tls</span>.<span style="color:#a6e22e">VersionTLS11</span>
-<span style="color:#a6e22e">server</span>.<span style="color:#a6e22e">ListenAndServeTLS</span>(<span style="color:#e6db74">&#34;ca.crt&#34;</span>, <span style="color:#e6db74">&#34;ca.key&#34;</span>)
-</code></pre></div><p>运行Demo后得到如下截图：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#a6e22e">server</span> <span style="color:#f92672">:=</span> <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">Server</span>{<span style="color:#a6e22e">Addr</span>: <span style="color:#e6db74">&#34;:8080&#34;</span>, <span style="color:#a6e22e">Handler</span>: <span style="color:#66d9ef">nil</span>}
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">server</span>.<span style="color:#a6e22e">TLSConfig</span> = new(<span style="color:#a6e22e">tls</span>.<span style="color:#a6e22e">Config</span>)
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">server</span>.<span style="color:#a6e22e">TLSConfig</span>.<span style="color:#a6e22e">PreferServerCipherSuites</span> = <span style="color:#66d9ef">true</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">server</span>.<span style="color:#a6e22e">TLSConfig</span>.<span style="color:#a6e22e">NextProtos</span> = append(<span style="color:#a6e22e">server</span>.<span style="color:#a6e22e">TLSConfig</span>.<span style="color:#a6e22e">NextProtos</span>, <span style="color:#e6db74">&#34;h2&#34;</span>, <span style="color:#e6db74">&#34;http/1.1&#34;</span>)
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// 服务端支持的最大tls版本调整为1.1
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#a6e22e">server</span>.<span style="color:#a6e22e">TLSConfig</span>.<span style="color:#a6e22e">MaxVersion</span> = <span style="color:#a6e22e">tls</span>.<span style="color:#a6e22e">VersionTLS11</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">server</span>.<span style="color:#a6e22e">ListenAndServeTLS</span>(<span style="color:#e6db74">&#34;ca.crt&#34;</span>, <span style="color:#e6db74">&#34;ca.key&#34;</span>)
+</span></span></code></pre></div><p>运行Demo后得到如下截图：</p>
 <p><img src="https://note.youdao.com/yws/api/personal/file/WEB2c8bf091ddf6f390b4a56357eb87fd2f?method=download&amp;shareKey=86fc79ae656452976818c5931a504bf8" alt=""></p>
 <p>图中红框部分<code>obsolete</code>的意思笔者也不知，正好学习一波（技术人的英语大概就是这样慢慢积累起来的吧）。</p>
 <p><img src="https://note.youdao.com/yws/api/personal/file/WEBab135aec59a8a4c6f59e89b5e1537686?method=download&amp;shareKey=fd9e75e79f9b3cccacfdc54e38e6193f" alt=""></p>
@@ -355,8 +347,8 @@ IV通常是随机或者伪随机的。它和数据加密的密钥一起使用可
 <p><img src="https://note.youdao.com/yws/api/personal/file/WEB5f9afe2142e28f4f2094daca63d5e17b?method=download&amp;shareKey=51250aff915a34a94c60da68ad7719cf" alt=""></p>
 <p>图中蓝框部分正是TLS1.1的握手流程，有兴趣的读者可以使用笔者的例子和<code>curl -v</code>命令进行双向验证。</p>
 <p>图中红框部分提示说“HTTP2的数据发送失败”，笔者才恍然大悟，将上述代码作如下微调后页面可正常访问。</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#a6e22e">server</span>.<span style="color:#a6e22e">TLSConfig</span>.<span style="color:#a6e22e">NextProtos</span> = append(<span style="color:#a6e22e">server</span>.<span style="color:#a6e22e">TLSConfig</span>.<span style="color:#a6e22e">NextProtos</span>, <span style="color:#e6db74">&#34;http/1.1&#34;</span>)
-</code></pre></div><p>经过笔者的测试，TLS1.0同TLS1.1一样均不支持HTTP2协议，当然这两个协议也不推荐继续使用。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#a6e22e">server</span>.<span style="color:#a6e22e">TLSConfig</span>.<span style="color:#a6e22e">NextProtos</span> = append(<span style="color:#a6e22e">server</span>.<span style="color:#a6e22e">TLSConfig</span>.<span style="color:#a6e22e">NextProtos</span>, <span style="color:#e6db74">&#34;http/1.1&#34;</span>)
+</span></span></code></pre></div><p>经过笔者的测试，TLS1.0同TLS1.1一样均不支持HTTP2协议，当然这两个协议也不推荐继续使用。</p>
 <h3 id="写在最后">写在最后</h3>
 <p>“纸上得来终觉浅，绝知此事需躬行”。笔者不敢保证把TLS握手流程的每个细节都讲的十分清楚，所以建议各位读者去github克隆代码，然后自己一步一步Debug必然能够加深印象并彻底理解。当然，顺便关注或者star一下这种随手为之的小事，笔者相信各位读者还是十分乐意的～</p>
 <p>最后，衷心希望本文能够对各位读者有一定的帮助。</p>
@@ -380,7 +372,7 @@ IV通常是随机或者伪随机的。它和数据加密的密钥一起使用可
           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-tag meta-icon">
             <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path>
             <line x1="7" y1="7" x2="7" y2="7"></line>
-          </svg><span class="tag"><a href="https://isites.github.io/tags/go/">Go</a></span><span class="tag"><a href="https://isites.github.io/tags/%E7%BD%91%E7%BB%9C%E7%AF%87/">网络篇</a></span>
+          </svg><span class="tag"><a href="https://isites.gitlab.io/gopher/tags/go/">Go</a></span><span class="tag"><a href="https://isites.gitlab.io/gopher/tags/%E7%BD%91%E7%BB%9C%E7%AF%87/">网络篇</a></span>
         </p>
 
       <p>
@@ -416,7 +408,7 @@ IV通常是随机或者伪随机的。它和数据加密的密钥一起使用可
         <div class="pagination__buttons">
           
             <span class="button previous">
-              <a href="https://isites.github.io/timeline/2020summary/">
+              <a href="https://isites.gitlab.io/gopher/timeline/2020summary/">
                 <span class="button__icon">←</span>
                 <span class="button__text">2020总结：稍微努力了一下，依旧是咸鱼一条</span>
               </a>
@@ -425,7 +417,7 @@ IV通常是随机或者伪随机的。它和数据加密的密钥一起使用可
 
           
             <span class="button next">
-              <a href="https://isites.github.io/timeline/gopb3/">
+              <a href="https://isites.gitlab.io/gopher/timeline/gopb3/">
                 <span class="button__text">区分Protobuf 3中缺失值和默认值</span>
                 <span class="button__icon">→</span>
               </a>
@@ -514,7 +506,7 @@ IV通常是随机或者伪随机的。它和数据加密的密钥一起使用可
 
 
 
-<script type="text/javascript" src="/bundle.min.dc716e9092c9820b77f96da294d0120aeeb189b5bcea9752309ebea27fd53bbe6b13cffb2aca8ecf32525647ceb7001f76091de4199ac5a3caa432c070247f5b.js" integrity="sha512-3HFukJLJggt3&#43;W2ilNASCu6xibW86pdSMJ6&#43;on/VO75rE8/7KsqOzzJSVkfOtwAfdgkd5BmaxaPKpDLAcCR/Ww=="></script>
+<script type="text/javascript" src="/gopher/bundle.min.e2a9675ced043d06ad6d3f13fafb0203d96c89eb2484878d5eb89d6da19559cbed55fb05ca9eae7be1e975cab83e3b2a1193afc357019620a509327c5a6a9c0f.js" integrity="sha512-4qlnXO0EPQatbT8T&#43;vsCA9lsieskhIeNXridbaGVWcvtVfsFyp6ue&#43;Hpdcq4PjsqEZOvw1cBliClCTJ8WmqcDw=="></script>
 
 
     

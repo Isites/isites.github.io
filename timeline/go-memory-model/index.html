@@ -9,18 +9,17 @@
 当多个goroutine并发同时存取同一个数据时必须把并发的存取操作序列化。在Go中保证读写的序列化可以通过channel通信或者其他同步原语（例如sync包中的互斥锁、读写锁和sync/atomic中的原子操作）。
 Happens Before 在单goroutine中，读取和写入的行为一定是和程序指定的执行顺序表现一致。换言之，编译器和处理器在不改变语言规范所定义的行为前提下才可以对单个goroutine中的指令进行重排序。
 a := 1 b := 2 由于指令重排序，b := 2可能先于a := 1执行。单goroutine中，该执行顺序的调整并不会影响最终结果。但多个goroutine场景下可能就会出现问题。
-var a, b int // goroutine A go func() { a := 5 b := 1 }() // goroutine B go func() { for b == 1 {} fmt.Println(a) }() 执行上述代码时，预期goroutine B能够正常输出5，但因为指令重排序，b := 1可能先于a := 5执行，最终goroutine B可能输出0。
+var a, b int // goroutine A go func() {  a := 5  b := 1 }() // goroutine B go func() {  for b == 1 {}  fmt.Println(a) }() 执行上述代码时，预期goroutine B能够正常输出5，但因为指令重排序，b := 1可能先于a := 5执行，最终goroutine B可能输出0。
  注：上述例子是个不正确的示例，仅作说明用。
  为了明确读写的操作的要求，Go中引入了happens before，它表示执行内存操作的一种偏序关系。
 happens-before的作用 多个goroutine访问共享变量时，它们必须建立同步事件来确保happens-before条件，以此确保读能够观察预期的写。
 什么是Happens Before 如果事件e1发生在事件e2之前，那么我们说e2发生在e1之后。 同样，如果e1不在e2之前发生也没有在e2之后发生，那么我们说e1和e2同时发生。
 在单个goroutine中，happens-before的顺序就是程序执行的顺序。那happens-before到底是什么顺序呢？我们看看下面的条件。
-如果对于一个变量v的读操作r和写操作w满足下述两个条件，r才允许观察到w：
- r没有发生在w之前。 没有其他写操作发生在w之后和r之前。  为了保证变量v的一个读操作r能够观察到一个特定的写操作w，需要确保w是唯一允许被r观察的写操作。那么，如果 r、w 都满足以下条件，r就能确保观察到w：" />
+如果对于一个变量v的读操作r和写操作w满足下述两个条件，r才允许观察到w：" />
 <meta name="keywords" content=", Go" />
 <meta name="robots" content="noodp" />
 <meta name="theme-color" content="" />
-<link rel="canonical" href="https://isites.github.io/timeline/go-memory-model/" />
+<link rel="canonical" href="https://isites.gitlab.io/gopher/timeline/go-memory-model/" />
 
 
     <title>
@@ -37,7 +36,7 @@ happens-before的作用 多个goroutine访问共享变量时，它们必须建�
 
 
 
-<link rel="stylesheet" href="/main.805b1025016494ee5fd67b55b8ecd5e2b7c4a9f0bdda42e300c62b85ddfef68f.css">
+<link rel="stylesheet" href="/gopher/main.805b1025016494ee5fd67b55b8ecd5e2b7c4a9f0bdda42e300c62b85ddfef68f.css">
 
 
   
@@ -58,36 +57,29 @@ happens-before的作用 多个goroutine访问共享变量时，它们必须建�
 当多个goroutine并发同时存取同一个数据时必须把并发的存取操作序列化。在Go中保证读写的序列化可以通过channel通信或者其他同步原语（例如sync包中的互斥锁、读写锁和sync/atomic中的原子操作）。
 Happens Before 在单goroutine中，读取和写入的行为一定是和程序指定的执行顺序表现一致。换言之，编译器和处理器在不改变语言规范所定义的行为前提下才可以对单个goroutine中的指令进行重排序。
 a := 1 b := 2 由于指令重排序，b := 2可能先于a := 1执行。单goroutine中，该执行顺序的调整并不会影响最终结果。但多个goroutine场景下可能就会出现问题。
-var a, b int // goroutine A go func() { a := 5 b := 1 }() // goroutine B go func() { for b == 1 {} fmt.Println(a) }() 执行上述代码时，预期goroutine B能够正常输出5，但因为指令重排序，b := 1可能先于a := 5执行，最终goroutine B可能输出0。
+var a, b int // goroutine A go func() {  a := 5  b := 1 }() // goroutine B go func() {  for b == 1 {}  fmt.Println(a) }() 执行上述代码时，预期goroutine B能够正常输出5，但因为指令重排序，b := 1可能先于a := 5执行，最终goroutine B可能输出0。
  注：上述例子是个不正确的示例，仅作说明用。
  为了明确读写的操作的要求，Go中引入了happens before，它表示执行内存操作的一种偏序关系。
 happens-before的作用 多个goroutine访问共享变量时，它们必须建立同步事件来确保happens-before条件，以此确保读能够观察预期的写。
 什么是Happens Before 如果事件e1发生在事件e2之前，那么我们说e2发生在e1之后。 同样，如果e1不在e2之前发生也没有在e2之后发生，那么我们说e1和e2同时发生。
 在单个goroutine中，happens-before的顺序就是程序执行的顺序。那happens-before到底是什么顺序呢？我们看看下面的条件。
-如果对于一个变量v的读操作r和写操作w满足下述两个条件，r才允许观察到w：
- r没有发生在w之前。 没有其他写操作发生在w之后和r之前。  为了保证变量v的一个读操作r能够观察到一个特定的写操作w，需要确保w是唯一允许被r观察的写操作。那么，如果 r、w 都满足以下条件，r就能确保观察到w：">
-<meta itemprop="datePublished" content="2021-03-04T18:53:38+08:00" />
+如果对于一个变量v的读操作r和写操作w满足下述两个条件，r才允许观察到w："><meta itemprop="datePublished" content="2021-03-04T18:53:38+08:00" />
 <meta itemprop="dateModified" content="2021-03-04T18:53:38+08:00" />
 <meta itemprop="wordCount" content="206">
-
-
-
 <meta itemprop="keywords" content="Go," />
-
 <meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="白话Go内存模型&amp;Happen-Before"/>
 <meta name="twitter:description" content="Go内存模型明确指出，一个goroutine如何才能观察到其他goroutine对同一变量的写操作。
 当多个goroutine并发同时存取同一个数据时必须把并发的存取操作序列化。在Go中保证读写的序列化可以通过channel通信或者其他同步原语（例如sync包中的互斥锁、读写锁和sync/atomic中的原子操作）。
 Happens Before 在单goroutine中，读取和写入的行为一定是和程序指定的执行顺序表现一致。换言之，编译器和处理器在不改变语言规范所定义的行为前提下才可以对单个goroutine中的指令进行重排序。
 a := 1 b := 2 由于指令重排序，b := 2可能先于a := 1执行。单goroutine中，该执行顺序的调整并不会影响最终结果。但多个goroutine场景下可能就会出现问题。
-var a, b int // goroutine A go func() { a := 5 b := 1 }() // goroutine B go func() { for b == 1 {} fmt.Println(a) }() 执行上述代码时，预期goroutine B能够正常输出5，但因为指令重排序，b := 1可能先于a := 5执行，最终goroutine B可能输出0。
+var a, b int // goroutine A go func() {  a := 5  b := 1 }() // goroutine B go func() {  for b == 1 {}  fmt.Println(a) }() 执行上述代码时，预期goroutine B能够正常输出5，但因为指令重排序，b := 1可能先于a := 5执行，最终goroutine B可能输出0。
  注：上述例子是个不正确的示例，仅作说明用。
  为了明确读写的操作的要求，Go中引入了happens before，它表示执行内存操作的一种偏序关系。
 happens-before的作用 多个goroutine访问共享变量时，它们必须建立同步事件来确保happens-before条件，以此确保读能够观察预期的写。
 什么是Happens Before 如果事件e1发生在事件e2之前，那么我们说e2发生在e1之后。 同样，如果e1不在e2之前发生也没有在e2之后发生，那么我们说e1和e2同时发生。
 在单个goroutine中，happens-before的顺序就是程序执行的顺序。那happens-before到底是什么顺序呢？我们看看下面的条件。
-如果对于一个变量v的读操作r和写操作w满足下述两个条件，r才允许观察到w：
- r没有发生在w之前。 没有其他写操作发生在w之后和r之前。  为了保证变量v的一个读操作r能够观察到一个特定的写操作w，需要确保w是唯一允许被r观察的写操作。那么，如果 r、w 都满足以下条件，r就能确保观察到w："/>
+如果对于一个变量v的读操作r和写操作w满足下述两个条件，r才允许观察到w："/>
 
 
 
@@ -110,7 +102,7 @@ happens-before的作用 多个goroutine访问共享变量时，它们必须建�
         <div class="container">
             <header class="header">
     <span class="header__inner">
-        <a href="https://isites.github.io/" style="text-decoration: none;">
+        <a href="https://isites.gitlab.io/gopher/" style="text-decoration: none;">
     <div class="logo">
         
             <span class="logo__mark">Gopher指北</span>
@@ -156,7 +148,7 @@ happens-before的作用 多个goroutine访问共享变量时，它们必须建�
 
     <article>
       <h1 class="post-title">
-        <a href="https://isites.github.io/timeline/go-memory-model/">白话Go内存模型&amp;Happen-Before</a>
+        <a href="https://isites.gitlab.io/gopher/timeline/go-memory-model/">白话Go内存模型&amp;Happen-Before</a>
       </h1>
         <hr />
         <aside id="toc">
@@ -185,21 +177,21 @@ happens-before的作用 多个goroutine访问共享变量时，它们必须建�
 <p>当多个goroutine并发同时存取同一个数据时必须把并发的存取操作序列化。在Go中保证读写的序列化可以通过channel通信或者其他同步原语（例如sync包中的互斥锁、读写锁和sync/atomic中的原子操作）。</p>
 <h1 id="happens-before">Happens Before</h1>
 <p>在单goroutine中，读取和写入的行为一定是和程序指定的执行顺序表现一致。换言之，编译器和处理器在不改变语言规范所定义的行为前提下才可以对单个goroutine中的指令进行重排序。</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#a6e22e">a</span> <span style="color:#f92672">:=</span> <span style="color:#ae81ff">1</span>
-<span style="color:#a6e22e">b</span> <span style="color:#f92672">:=</span> <span style="color:#ae81ff">2</span>
-</code></pre></div><p>由于指令重排序，<code>b := 2</code>可能先于<code>a := 1</code>执行。单goroutine中，该执行顺序的调整并不会影响最终结果。但多个goroutine场景下可能就会出现问题。</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">var</span> <span style="color:#a6e22e">a</span>, <span style="color:#a6e22e">b</span> <span style="color:#66d9ef">int</span>
-<span style="color:#75715e">// goroutine A
-</span><span style="color:#75715e"></span><span style="color:#66d9ef">go</span> <span style="color:#66d9ef">func</span>() {
-    <span style="color:#a6e22e">a</span> <span style="color:#f92672">:=</span> <span style="color:#ae81ff">5</span>
-    <span style="color:#a6e22e">b</span> <span style="color:#f92672">:=</span> <span style="color:#ae81ff">1</span>
-}()
-<span style="color:#75715e">// goroutine B
-</span><span style="color:#75715e"></span><span style="color:#66d9ef">go</span> <span style="color:#66d9ef">func</span>() {
-    <span style="color:#66d9ef">for</span> <span style="color:#a6e22e">b</span> <span style="color:#f92672">==</span> <span style="color:#ae81ff">1</span> {}
-    <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">a</span>)
-}()
-</code></pre></div><p>执行上述代码时，预期goroutine B能够正常输出5，但因为指令重排序，<code>b := 1</code>可能先于<code>a := 5</code>执行，最终goroutine B可能输出0。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#a6e22e">a</span> <span style="color:#f92672">:=</span> <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">b</span> <span style="color:#f92672">:=</span> <span style="color:#ae81ff">2</span>
+</span></span></code></pre></div><p>由于指令重排序，<code>b := 2</code>可能先于<code>a := 1</code>执行。单goroutine中，该执行顺序的调整并不会影响最终结果。但多个goroutine场景下可能就会出现问题。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">var</span> <span style="color:#a6e22e">a</span>, <span style="color:#a6e22e">b</span> <span style="color:#66d9ef">int</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// goroutine A
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">go</span> <span style="color:#66d9ef">func</span>() {
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">a</span> <span style="color:#f92672">:=</span> <span style="color:#ae81ff">5</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">b</span> <span style="color:#f92672">:=</span> <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>}()
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// goroutine B
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">go</span> <span style="color:#66d9ef">func</span>() {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> <span style="color:#a6e22e">b</span> <span style="color:#f92672">==</span> <span style="color:#ae81ff">1</span> {}
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">a</span>)
+</span></span><span style="display:flex;"><span>}()
+</span></span></code></pre></div><p>执行上述代码时，预期goroutine B能够正常输出5，但因为指令重排序，<code>b := 1</code>可能先于<code>a := 5</code>执行，最终goroutine B可能输出0。</p>
 <blockquote>
 <p><strong>注</strong>：上述例子是个不正确的示例，仅作说明用。</p>
 </blockquote>
@@ -239,13 +231,13 @@ happens-before的作用 多个goroutine访问共享变量时，它们必须建�
 <p>如果包p导入了包q，则q包init函数执行结束先于p包init函数的执行。main函数的执行发生在所有init函数执行完成之后。</p>
 <h2 id="goroutine的创建结束">goroutine的创建结束</h2>
 <p>goroutine的创建先于goroutine的执行。老许觉得这基本就是废话，但事情总是没有那么简单，其隐含之意大概是goroutine的创建是阻塞的。</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">sleep</span>() <span style="color:#66d9ef">bool</span> {
-   <span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">Sleep</span>(<span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">Second</span>)
-   <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">true</span>
-}
-
-<span style="color:#66d9ef">go</span> <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">sleep</span>())
-</code></pre></div><p>上述代码会阻塞主goroutine一秒，然后才创建子goroutine。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">sleep</span>() <span style="color:#66d9ef">bool</span> {
+</span></span><span style="display:flex;"><span>   <span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">Sleep</span>(<span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">Second</span>)
+</span></span><span style="display:flex;"><span>   <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">true</span>
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">go</span> <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">sleep</span>())
+</span></span></code></pre></div><p>上述代码会阻塞主goroutine一秒，然后才创建子goroutine。</p>
 <p>goroutine的退出是无法预测的。如果用一个goroutine观察另一个goroutine，请使用锁或者Channel来保证相对有序。</p>
 <h2 id="channel的发送和接收">Channel的发送和接收</h2>
 <p>Channel通信是goroutine之间同步的主要方式。</p>
@@ -258,9 +250,9 @@ happens-before的作用 多个goroutine访问共享变量时，它们必须建�
 </li>
 </ul>
 <p>这两点总结起来分别是<code>开始发送</code>、<code>开始接受</code>、<code>发送完成</code>和<code>接受完成</code>四个动作，其时序关系如下。</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">开始发送 &gt; 接受完成
-开始接受 &gt; 发送完成
-</code></pre></div><blockquote>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>开始发送 &gt; 接受完成
+</span></span><span style="display:flex;"><span>开始接受 &gt; 发送完成
+</span></span></code></pre></div><blockquote>
 <p>注意：开始发送和开始接受并无明确的先后关系</p>
 </blockquote>
 <ul>
@@ -286,47 +278,47 @@ happens-before的作用 多个goroutine访问共享变量时，它们必须建�
 <p>once.Do(f)中f的返回先于任意其他once.Do的返回。</p>
 <h1 id="不正确的同步">不正确的同步</h1>
 <p><strong>错误示范一</strong></p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">var</span> <span style="color:#a6e22e">a</span>, <span style="color:#a6e22e">b</span> <span style="color:#66d9ef">int</span>
-
-<span style="color:#66d9ef">func</span> <span style="color:#a6e22e">f</span>() {
-	<span style="color:#a6e22e">a</span> = <span style="color:#ae81ff">1</span>
-	<span style="color:#a6e22e">b</span> = <span style="color:#ae81ff">2</span>
-}
-
-<span style="color:#66d9ef">func</span> <span style="color:#a6e22e">g</span>() {
-	print(<span style="color:#a6e22e">b</span>)
-	print(<span style="color:#a6e22e">a</span>)
-}
-
-<span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
-	<span style="color:#66d9ef">go</span> <span style="color:#a6e22e">f</span>()
-	<span style="color:#a6e22e">g</span>()
-}
-</code></pre></div><p>这个例子看起来挺简单，但是老许相信大部分人应该会忽略指令重排序引起的异常输出。假如goroutine f指令重排序后，<code>b=2</code>先于<code>a=1</code>发生，此时主goroutine观察到b发生变化而未观察到a变化，因此有可能输出<code>20</code>。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">var</span> <span style="color:#a6e22e">a</span>, <span style="color:#a6e22e">b</span> <span style="color:#66d9ef">int</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">f</span>() {
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">a</span> = <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">b</span> = <span style="color:#ae81ff">2</span>
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">g</span>() {
+</span></span><span style="display:flex;"><span>	print(<span style="color:#a6e22e">b</span>)
+</span></span><span style="display:flex;"><span>	print(<span style="color:#a6e22e">a</span>)
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">go</span> <span style="color:#a6e22e">f</span>()
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">g</span>()
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>这个例子看起来挺简单，但是老许相信大部分人应该会忽略指令重排序引起的异常输出。假如goroutine f指令重排序后，<code>b=2</code>先于<code>a=1</code>发生，此时主goroutine观察到b发生变化而未观察到a变化，因此有可能输出<code>20</code>。</p>
 <blockquote>
 <p>老许在本地实验了多次结果都是输出<code>00</code>，<code>20</code>这个输出估计只活在理论之中了。</p>
 </blockquote>
 <p><strong>错误示范二</strong></p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">var</span> <span style="color:#a6e22e">a</span> <span style="color:#66d9ef">string</span>
-<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">done</span> <span style="color:#66d9ef">bool</span>
-
-<span style="color:#66d9ef">func</span> <span style="color:#a6e22e">setup</span>() {
-	<span style="color:#a6e22e">a</span> = <span style="color:#e6db74">&#34;hello, world&#34;</span>
-	<span style="color:#a6e22e">done</span> = <span style="color:#66d9ef">true</span>
-}
-
-<span style="color:#66d9ef">func</span> <span style="color:#a6e22e">doprint</span>() {
-	<span style="color:#66d9ef">if</span> !<span style="color:#a6e22e">done</span> {
-		<span style="color:#a6e22e">once</span>.<span style="color:#a6e22e">Do</span>(<span style="color:#a6e22e">setup</span>)
-	}
-	print(<span style="color:#a6e22e">a</span>)
-}
-
-<span style="color:#66d9ef">func</span> <span style="color:#a6e22e">twoprint</span>() {
-	<span style="color:#66d9ef">go</span> <span style="color:#a6e22e">doprint</span>()
-	<span style="color:#66d9ef">go</span> <span style="color:#a6e22e">doprint</span>()
-}
-</code></pre></div><p>这种双重检测本意是为了避免同步的开销，但是依旧有可能打印出空字符串而不是“hello, world”。说实话老许自己都不敢保证以前没有写过这样的代码。现在唯一能想到的场景就是其中一个goroutine doprint执行到<code>done = true</code>（指令重排序导致<code>done=true</code>先于<code>a=&quot;hello, world&quot;</code>执行）时，另一个goroutine doprint刚开始执行并观察到done的值为true从而打印空字符串。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">var</span> <span style="color:#a6e22e">a</span> <span style="color:#66d9ef">string</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">var</span> <span style="color:#a6e22e">done</span> <span style="color:#66d9ef">bool</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">setup</span>() {
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">a</span> = <span style="color:#e6db74">&#34;hello, world&#34;</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">done</span> = <span style="color:#66d9ef">true</span>
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">doprint</span>() {
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">if</span> !<span style="color:#a6e22e">done</span> {
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">once</span>.<span style="color:#a6e22e">Do</span>(<span style="color:#a6e22e">setup</span>)
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>	print(<span style="color:#a6e22e">a</span>)
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">twoprint</span>() {
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">go</span> <span style="color:#a6e22e">doprint</span>()
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">go</span> <span style="color:#a6e22e">doprint</span>()
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>这种双重检测本意是为了避免同步的开销，但是依旧有可能打印出空字符串而不是“hello, world”。说实话老许自己都不敢保证以前没有写过这样的代码。现在唯一能想到的场景就是其中一个goroutine doprint执行到<code>done = true</code>（指令重排序导致<code>done=true</code>先于<code>a=&quot;hello, world&quot;</code>执行）时，另一个goroutine doprint刚开始执行并观察到done的值为true从而打印空字符串。</p>
 <p>最后，衷心希望本文能够对各位读者有一定的帮助。当然，发现错误也还请及时联系老许改正。</p>
 <p><strong>参考</strong></p>
 <p><a href="https://golang.org/ref/mem">https://golang.org/ref/mem</a></p>
@@ -343,7 +335,7 @@ happens-before的作用 多个goroutine访问共享变量时，它们必须建�
           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-tag meta-icon">
             <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path>
             <line x1="7" y1="7" x2="7" y2="7"></line>
-          </svg><span class="tag"><a href="https://isites.github.io/tags/go/">Go</a></span>
+          </svg><span class="tag"><a href="https://isites.gitlab.io/gopher/tags/go/">Go</a></span>
         </p>
 
       <p>
@@ -379,7 +371,7 @@ happens-before的作用 多个goroutine访问共享变量时，它们必须建�
         <div class="pagination__buttons">
           
             <span class="button previous">
-              <a href="https://isites.github.io/timeline/get-full-url/">
+              <a href="https://isites.gitlab.io/gopher/timeline/get-full-url/">
                 <span class="button__icon">←</span>
                 <span class="button__text">有趣！一行代码居然无法获取请求的完整URL</span>
               </a>
@@ -388,7 +380,7 @@ happens-before的作用 多个goroutine访问共享变量时，它们必须建�
 
           
             <span class="button next">
-              <a href="https://isites.github.io/timeline/60-linux/">
+              <a href="https://isites.gitlab.io/gopher/timeline/60-linux/">
                 <span class="button__text">1分钟内的Linux性能分析法</span>
                 <span class="button__icon">→</span>
               </a>
@@ -477,7 +469,7 @@ happens-before的作用 多个goroutine访问共享变量时，它们必须建�
 
 
 
-<script type="text/javascript" src="/bundle.min.dc716e9092c9820b77f96da294d0120aeeb189b5bcea9752309ebea27fd53bbe6b13cffb2aca8ecf32525647ceb7001f76091de4199ac5a3caa432c070247f5b.js" integrity="sha512-3HFukJLJggt3&#43;W2ilNASCu6xibW86pdSMJ6&#43;on/VO75rE8/7KsqOzzJSVkfOtwAfdgkd5BmaxaPKpDLAcCR/Ww=="></script>
+<script type="text/javascript" src="/gopher/bundle.min.e2a9675ced043d06ad6d3f13fafb0203d96c89eb2484878d5eb89d6da19559cbed55fb05ca9eae7be1e975cab83e3b2a1193afc357019620a509327c5a6a9c0f.js" integrity="sha512-4qlnXO0EPQatbT8T&#43;vsCA9lsieskhIeNXridbaGVWcvtVfsFyp6ue&#43;Hpdcq4PjsqEZOvw1cBliClCTJ8WmqcDw=="></script>
 
 
     

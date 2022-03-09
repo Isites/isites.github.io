@@ -12,7 +12,7 @@ runtime error: invalid memory address or nil pointer dereference panic(0xbd1c80,
 <meta name="keywords" content=", Go" />
 <meta name="robots" content="noodp" />
 <meta name="theme-color" content="" />
-<link rel="canonical" href="https://isites.github.io/timeline/defer-sync-pool/" />
+<link rel="canonical" href="https://isites.gitlab.io/gopher/timeline/defer-sync-pool/" />
 
 
     <title>
@@ -29,7 +29,7 @@ runtime error: invalid memory address or nil pointer dereference panic(0xbd1c80,
 
 
 
-<link rel="stylesheet" href="/main.805b1025016494ee5fd67b55b8ecd5e2b7c4a9f0bdda42e300c62b85ddfef68f.css">
+<link rel="stylesheet" href="/gopher/main.805b1025016494ee5fd67b55b8ecd5e2b7c4a9f0bdda42e300c62b85ddfef68f.css">
 
 
   
@@ -49,15 +49,10 @@ runtime error: invalid memory address or nil pointer dereference panic(0xbd1c80,
 <meta itemprop="description" content="不知道其他人是不是这样，反正老许最怕听到的词就是“偶现”，至于原因我不多说，懂的都懂。
 下面直接看panic信息。
 runtime error: invalid memory address or nil pointer dereference panic(0xbd1c80, 0x1271710) /root/.go/src/runtime/panic.go:969 &#43;0x175 github.com/json-iterator/go.(*Stream).WriteStringWithHTMLEscaped(0xc00b0c6000, 0x0, 0x24) /go/pkg/mod/github.com/json-iterator/go@v1.1.11/stream_str.go:227 &#43;0x7b github.com/json-iterator/go.(*htmlEscapedStringEncoder).Encode(0x12b9250, 0xc0096c4c00, 0xc00b0c6000) /go/pkg/mod/github.com/json-iterator/go@v1.1.11/config.go:263 &#43;0x45 github.com/json-iterator/go.(*structFieldEncoder).Encode(0xc002e9c8d0, 0xc0096c4c00, 0xc00b0c6000) /go/pkg/mod/github.com/json-iterator/go@v1.1.11/reflect_struct_encoder.go:110 &#43;0x78 github.com/json-iterator/go.(*structEncoder).Encode(0xc002e9c9c0, 0xc0096c4c00, 0xc00b0c6000) /go/pkg/mod/github.com/json-iterator/go@v1.1.11/reflect_struct_encoder.go:158 &#43;0x3f4 github.com/json-iterator/go.(*structFieldEncoder).Encode(0xc002eac990, 0xc0096c4c00, 0xc00b0c6000) /go/pkg/mod/github.com/json-iterator/go@v1.1.11/reflect_struct_encoder.go:110 &#43;0x78 github.com/json-iterator/go.(*structEncoder).Encode(0xc002eacba0, 0xc0096c4c00, 0xc00b0c6000) /go/pkg/mod/github.com/json-iterator/go@v1.1.11/reflect_struct_encoder.go:158 &#43;0x3f4 github.com/json-iterator/go.(*OptionalEncoder).Encode(0xc002e9f570, 0xc006b18b38, 0xc00b0c6000) /go/pkg/mod/github.com/json-iterator/go@v1.1.11/reflect_optional.go:70 &#43;0xf4 github.com/json-iterator/go.(*onePtrEncoder).Encode(0xc002e9f580, 0xc0096c4c00, 0xc00b0c6000) /go/pkg/mod/github.com/json-iterator/go@v1.1.11/reflect.go:219 &#43;0x68 github.com/json-iterator/go.(*Stream).WriteVal(0xc00b0c6000, 0xb78d60, 0xc0096c4c00) /go/pkg/mod/github.com/json-iterator/go@v1.1.11/reflect.go:98 &#43;0x150 github.com/json-iterator/go.(*frozenConfig).Marshal(0xc00012c640, 0xb78d60, 0xc0096c4c00, 0x0, 0x0, 0x0, 0x0, 0x0) 首先我坚信一条，开源的力量值得信赖。因此老许第一波操作就是，分析业务代码是否有逻辑漏洞。很明显，同事也是值得信赖的，因此果断猜测是某些未曾设想到的数据触发了边界条件。接下来就是保存现场的常规操作。
-如标题所说，这是偶现的panic问题，因此按照上面的分类采用符合当前技术栈的方法保存现场即可。接下来就是坐等收获的季节，而这一等就是好多天。中间数次收到告警，却没有符合预期的现场。">
-<meta itemprop="datePublished" content="2021-11-23T12:20:38+08:00" />
+如标题所说，这是偶现的panic问题，因此按照上面的分类采用符合当前技术栈的方法保存现场即可。接下来就是坐等收获的季节，而这一等就是好多天。中间数次收到告警，却没有符合预期的现场。"><meta itemprop="datePublished" content="2021-11-23T12:20:38+08:00" />
 <meta itemprop="dateModified" content="2021-11-23T12:20:38+08:00" />
 <meta itemprop="wordCount" content="223">
-
-
-
 <meta itemprop="keywords" content="Go," />
-
 <meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="终于解决了这个线上偶现的panic问题"/>
 <meta name="twitter:description" content="不知道其他人是不是这样，反正老许最怕听到的词就是“偶现”，至于原因我不多说，懂的都懂。
@@ -86,7 +81,7 @@ runtime error: invalid memory address or nil pointer dereference panic(0xbd1c80,
         <div class="container">
             <header class="header">
     <span class="header__inner">
-        <a href="https://isites.github.io/" style="text-decoration: none;">
+        <a href="https://isites.gitlab.io/gopher/" style="text-decoration: none;">
     <div class="logo">
         
             <span class="logo__mark">Gopher指北</span>
@@ -132,7 +127,7 @@ runtime error: invalid memory address or nil pointer dereference panic(0xbd1c80,
 
     <article>
       <h1 class="post-title">
-        <a href="https://isites.github.io/timeline/defer-sync-pool/">终于解决了这个线上偶现的panic问题</a>
+        <a href="https://isites.gitlab.io/gopher/timeline/defer-sync-pool/">终于解决了这个线上偶现的panic问题</a>
       </h1>
         <hr />
         <aside id="toc">
@@ -146,7 +141,7 @@ runtime error: invalid memory address or nil pointer dereference panic(0xbd1c80,
       <div class="post-content">
         <p>不知道其他人是不是这样，反正老许最怕听到的词就是“偶现”，至于原因我不多说，懂的都懂。</p>
 <p>下面直接看<code>panic</code>信息。</p>
-<pre><code>runtime error: invalid memory address or nil pointer dereference
+<pre tabindex="0"><code>runtime error: invalid memory address or nil pointer dereference
 
 panic(0xbd1c80, 0x1271710)
         /root/.go/src/runtime/panic.go:969 +0x175
@@ -174,43 +169,42 @@ github.com/json-iterator/go.(*frozenConfig).Marshal(0xc00012c640, 0xb78d60, 0xc0
 <p>如标题所说，这是偶现的panic问题，因此按照上面的分类采用符合当前技术栈的方法保存现场即可。接下来就是坐等收获的季节，而这一等就是好多天。中间数次收到告警，却没有符合预期的现场。</p>
 <p>这个时候我不仅不慌，甚至还有点小激动。某某曾曰：“要敢于质疑，敢于挑战权威”，一念至此便一发不可收拾，我老许又要为开源事业做出贡献了嘛！说干就敢干，怀着小心思开始阅读<code>json-iterator</code>的源码。</p>
 <p>刚开始研读我便明白了一个道理， “当上帝关了这扇门，一定会为你打开另一扇门”这句话是骗人的。老许只觉得上帝不仅关上了所有的门甚至还关上了所有的窗。下面我们看看他到底是怎么关门的。</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">cfg</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">frozenConfig</span>) <span style="color:#a6e22e">Marshal</span>(<span style="color:#a6e22e">v</span> <span style="color:#66d9ef">interface</span>{}) ([]<span style="color:#66d9ef">byte</span>, <span style="color:#66d9ef">error</span>) {
-	<span style="color:#a6e22e">stream</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">cfg</span>.<span style="color:#a6e22e">BorrowStream</span>(<span style="color:#66d9ef">nil</span>)
-	<span style="color:#66d9ef">defer</span> <span style="color:#a6e22e">cfg</span>.<span style="color:#a6e22e">ReturnStream</span>(<span style="color:#a6e22e">stream</span>)
-	<span style="color:#a6e22e">stream</span>.<span style="color:#a6e22e">WriteVal</span>(<span style="color:#a6e22e">v</span>)
-	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">stream</span>.<span style="color:#a6e22e">Error</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
-		<span style="color:#66d9ef">return</span> <span style="color:#66d9ef">nil</span>, <span style="color:#a6e22e">stream</span>.<span style="color:#a6e22e">Error</span>
-	}
-	<span style="color:#a6e22e">result</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">stream</span>.<span style="color:#a6e22e">Buffer</span>()
-	<span style="color:#a6e22e">copied</span> <span style="color:#f92672">:=</span> make([]<span style="color:#66d9ef">byte</span>, len(<span style="color:#a6e22e">result</span>))
-	copy(<span style="color:#a6e22e">copied</span>, <span style="color:#a6e22e">result</span>)
-	<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">copied</span>, <span style="color:#66d9ef">nil</span>
-}
-
-
-<span style="color:#75715e">// WriteVal copy the go interface into underlying JSON, same as json.Marshal
-</span><span style="color:#75715e"></span><span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">stream</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">Stream</span>) <span style="color:#a6e22e">WriteVal</span>(<span style="color:#a6e22e">val</span> <span style="color:#66d9ef">interface</span>{}) {
-	<span style="color:#66d9ef">if</span> <span style="color:#66d9ef">nil</span> <span style="color:#f92672">==</span> <span style="color:#a6e22e">val</span> {
-		<span style="color:#a6e22e">stream</span>.<span style="color:#a6e22e">WriteNil</span>()
-		<span style="color:#66d9ef">return</span>
-	}
-	<span style="color:#75715e">// 省略其他代码
-</span><span style="color:#75715e"></span>}
-
-</code></pre></div><p>根据panic栈知道是因为空指针造成了panic，而<code>(*frozenConfig).Marshal</code>函数内部已经做了非空判断。到此，老许真的已经别无他法只得战略性放弃解决此次panic。毕竟，这个影响也没那么大，而且程序员哪有修的完的bug呢。经过这样一番安慰，心里确实容易接受多了。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">cfg</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">frozenConfig</span>) <span style="color:#a6e22e">Marshal</span>(<span style="color:#a6e22e">v</span> <span style="color:#66d9ef">interface</span>{}) ([]<span style="color:#66d9ef">byte</span>, <span style="color:#66d9ef">error</span>) {
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">stream</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">cfg</span>.<span style="color:#a6e22e">BorrowStream</span>(<span style="color:#66d9ef">nil</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">defer</span> <span style="color:#a6e22e">cfg</span>.<span style="color:#a6e22e">ReturnStream</span>(<span style="color:#a6e22e">stream</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">stream</span>.<span style="color:#a6e22e">WriteVal</span>(<span style="color:#a6e22e">v</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">stream</span>.<span style="color:#a6e22e">Error</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">return</span> <span style="color:#66d9ef">nil</span>, <span style="color:#a6e22e">stream</span>.<span style="color:#a6e22e">Error</span>
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">result</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">stream</span>.<span style="color:#a6e22e">Buffer</span>()
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">copied</span> <span style="color:#f92672">:=</span> make([]<span style="color:#66d9ef">byte</span>, len(<span style="color:#a6e22e">result</span>))
+</span></span><span style="display:flex;"><span>	copy(<span style="color:#a6e22e">copied</span>, <span style="color:#a6e22e">result</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">copied</span>, <span style="color:#66d9ef">nil</span>
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// WriteVal copy the go interface into underlying JSON, same as json.Marshal
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">stream</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">Stream</span>) <span style="color:#a6e22e">WriteVal</span>(<span style="color:#a6e22e">val</span> <span style="color:#66d9ef">interface</span>{}) {
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">if</span> <span style="color:#66d9ef">nil</span> <span style="color:#f92672">==</span> <span style="color:#a6e22e">val</span> {
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">stream</span>.<span style="color:#a6e22e">WriteNil</span>()
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">return</span>
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// 省略其他代码
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>}
+</span></span></code></pre></div><p>根据panic栈知道是因为空指针造成了panic，而<code>(*frozenConfig).Marshal</code>函数内部已经做了非空判断。到此，老许真的已经别无他法只得战略性放弃解决此次panic。毕竟，这个影响也没那么大，而且程序员哪有修的完的bug呢。经过这样一番安慰，心里确实容易接受多了。</p>
 <p>事实上，在较长一段时间内我都有意识地忽略这个问题，毕竟没有找到问题的根因。这个问题在线上一直持续到一个说不上来什么日子的日子，总而言之就是兴致来了，我再次看了两眼，而这两眼很关键！</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">doReq</span>() {
-    <span style="color:#a6e22e">req</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">paramsPool</span>.<span style="color:#a6e22e">Get</span>().(<span style="color:#f92672">*</span><span style="color:#a6e22e">model</span>.<span style="color:#a6e22e">Params</span>)
-    <span style="color:#75715e">// defer 1
-</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">defer</span> <span style="color:#66d9ef">func</span>() {
-    	<span style="color:#a6e22e">reqBytes</span>, <span style="color:#a6e22e">_</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">json</span>.<span style="color:#a6e22e">Marshal</span>(<span style="color:#a6e22e">req</span>)
-    	<span style="color:#75715e">// 省略其他打印日志的代码
-</span><span style="color:#75715e"></span>    }()
-    <span style="color:#75715e">// defer 2
-</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">defer</span> <span style="color:#a6e22e">paramsPool</span>.<span style="color:#a6e22e">Put</span>(<span style="color:#a6e22e">req</span>)
-    <span style="color:#75715e">// req初始化以及发起请求和其他操作
-</span><span style="color:#75715e"></span>}
-</code></pre></div><blockquote>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">doReq</span>() {
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">req</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">paramsPool</span>.<span style="color:#a6e22e">Get</span>().(<span style="color:#f92672">*</span><span style="color:#a6e22e">model</span>.<span style="color:#a6e22e">Params</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// defer 1
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#66d9ef">defer</span> <span style="color:#66d9ef">func</span>() {
+</span></span><span style="display:flex;"><span>    	<span style="color:#a6e22e">reqBytes</span>, <span style="color:#a6e22e">_</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">json</span>.<span style="color:#a6e22e">Marshal</span>(<span style="color:#a6e22e">req</span>)
+</span></span><span style="display:flex;"><span>    	<span style="color:#75715e">// 省略其他打印日志的代码
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    }()
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// defer 2
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#66d9ef">defer</span> <span style="color:#a6e22e">paramsPool</span>.<span style="color:#a6e22e">Put</span>(<span style="color:#a6e22e">req</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// req初始化以及发起请求和其他操作
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>}
+</span></span></code></pre></div><blockquote>
 <p><strong>注：</strong></p>
 <ol>
 <li>上述代码变量命名已经被老许通用化处理。</li>
@@ -218,25 +212,25 @@ github.com/json-iterator/go.(*frozenConfig).Marshal(0xc00012c640, 0xb78d60, 0xc0
 </ol>
 </blockquote>
 <p>上面代码中<code>paramsPool</code>是<code>sync.Pool</code>类型的变量，而<code>sync.Pool</code>想必大家都很熟悉。<code>sync.Pool</code>是为了复用已经使用过的对象(协程安全)，减少内存分配和降低GC压力。</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">test</span> <span style="color:#66d9ef">struct</span> {
-	<span style="color:#a6e22e">a</span> <span style="color:#66d9ef">string</span>
-}
-
-<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">sp</span> = <span style="color:#a6e22e">sync</span>.<span style="color:#a6e22e">Pool</span>{
-	<span style="color:#a6e22e">New</span>: <span style="color:#66d9ef">func</span>() <span style="color:#66d9ef">interface</span>{} {
-		<span style="color:#66d9ef">return</span> new(<span style="color:#a6e22e">test</span>)
-	},
-}
-
-<span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
-	<span style="color:#a6e22e">t</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">sp</span>.<span style="color:#a6e22e">Get</span>().(<span style="color:#f92672">*</span><span style="color:#a6e22e">test</span>)
-	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">unsafe</span>.<span style="color:#a6e22e">Pointer</span>(<span style="color:#a6e22e">t</span>))
-	<span style="color:#a6e22e">sp</span>.<span style="color:#a6e22e">Put</span>(<span style="color:#a6e22e">t</span>)
-	<span style="color:#a6e22e">t1</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">sp</span>.<span style="color:#a6e22e">Get</span>().(<span style="color:#f92672">*</span><span style="color:#a6e22e">test</span>)
-	<span style="color:#a6e22e">t2</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">sp</span>.<span style="color:#a6e22e">Get</span>().(<span style="color:#f92672">*</span><span style="color:#a6e22e">test</span>)
-	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">unsafe</span>.<span style="color:#a6e22e">Pointer</span>(<span style="color:#a6e22e">t1</span>), <span style="color:#a6e22e">unsafe</span>.<span style="color:#a6e22e">Pointer</span>(<span style="color:#a6e22e">t2</span>))
-}
-</code></pre></div><p><img src="https://note.youdao.com/yws/api/personal/file/WEB30a2f5c4b11b2974a9dacfaa7afc06a8?method=download&amp;shareKey=c81b700ce8b721b4d27062c5f07ef4e3" alt=""></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">test</span> <span style="color:#66d9ef">struct</span> {
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">a</span> <span style="color:#66d9ef">string</span>
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">var</span> <span style="color:#a6e22e">sp</span> = <span style="color:#a6e22e">sync</span>.<span style="color:#a6e22e">Pool</span>{
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">New</span>: <span style="color:#66d9ef">func</span>() <span style="color:#66d9ef">interface</span>{} {
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">return</span> new(<span style="color:#a6e22e">test</span>)
+</span></span><span style="display:flex;"><span>	},
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">t</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">sp</span>.<span style="color:#a6e22e">Get</span>().(<span style="color:#f92672">*</span><span style="color:#a6e22e">test</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">unsafe</span>.<span style="color:#a6e22e">Pointer</span>(<span style="color:#a6e22e">t</span>))
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">sp</span>.<span style="color:#a6e22e">Put</span>(<span style="color:#a6e22e">t</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">t1</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">sp</span>.<span style="color:#a6e22e">Get</span>().(<span style="color:#f92672">*</span><span style="color:#a6e22e">test</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">t2</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">sp</span>.<span style="color:#a6e22e">Get</span>().(<span style="color:#f92672">*</span><span style="color:#a6e22e">test</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">unsafe</span>.<span style="color:#a6e22e">Pointer</span>(<span style="color:#a6e22e">t1</span>), <span style="color:#a6e22e">unsafe</span>.<span style="color:#a6e22e">Pointer</span>(<span style="color:#a6e22e">t2</span>))
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p><img src="https://note.youdao.com/yws/api/personal/file/WEB30a2f5c4b11b2974a9dacfaa7afc06a8?method=download&amp;shareKey=c81b700ce8b721b4d27062c5f07ef4e3" alt=""></p>
 <p>根据上述代码和输出结果知，<code>t1</code>变量和<code>t</code>变量地址一致，因此他们是复用对象。此时再回顾上面的<code>doReq</code>函数就很容易发现问题的根因。</p>
 <p><code>defer 2</code>和<code>defer 1</code>顺序反了！！！</p>
 <p><code>defer 2</code>和<code>defer 1</code>顺序反了！！！</p>
@@ -258,7 +252,7 @@ github.com/json-iterator/go.(*frozenConfig).Marshal(0xc00012c640, 0xb78d60, 0xc0
           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-tag meta-icon">
             <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path>
             <line x1="7" y1="7" x2="7" y2="7"></line>
-          </svg><span class="tag"><a href="https://isites.github.io/tags/go/">Go</a></span>
+          </svg><span class="tag"><a href="https://isites.gitlab.io/gopher/tags/go/">Go</a></span>
         </p>
 
       <p>
@@ -294,7 +288,7 @@ github.com/json-iterator/go.(*frozenConfig).Marshal(0xc00012c640, 0xb78d60, 0xc0
         <div class="pagination__buttons">
           
             <span class="button previous">
-              <a href="https://isites.github.io/timeline/money/">
+              <a href="https://isites.gitlab.io/gopher/timeline/money/">
                 <span class="button__icon">←</span>
                 <span class="button__text">探讨系统中💰钱的精度问题</span>
               </a>
@@ -303,7 +297,7 @@ github.com/json-iterator/go.(*frozenConfig).Marshal(0xc00012c640, 0xb78d60, 0xc0
 
           
             <span class="button next">
-              <a href="https://isites.github.io/timeline/ad-msvv/">
+              <a href="https://isites.gitlab.io/gopher/timeline/ad-msvv/">
                 <span class="button__text">浅谈在线广告分配策略</span>
                 <span class="button__icon">→</span>
               </a>
@@ -392,7 +386,7 @@ github.com/json-iterator/go.(*frozenConfig).Marshal(0xc00012c640, 0xb78d60, 0xc0
 
 
 
-<script type="text/javascript" src="/bundle.min.dc716e9092c9820b77f96da294d0120aeeb189b5bcea9752309ebea27fd53bbe6b13cffb2aca8ecf32525647ceb7001f76091de4199ac5a3caa432c070247f5b.js" integrity="sha512-3HFukJLJggt3&#43;W2ilNASCu6xibW86pdSMJ6&#43;on/VO75rE8/7KsqOzzJSVkfOtwAfdgkd5BmaxaPKpDLAcCR/Ww=="></script>
+<script type="text/javascript" src="/gopher/bundle.min.e2a9675ced043d06ad6d3f13fafb0203d96c89eb2484878d5eb89d6da19559cbed55fb05ca9eae7be1e975cab83e3b2a1193afc357019620a509327c5a6a9c0f.js" integrity="sha512-4qlnXO0EPQatbT8T&#43;vsCA9lsieskhIeNXridbaGVWcvtVfsFyp6ue&#43;Hpdcq4PjsqEZOvw1cBliClCTJ8WmqcDw=="></script>
 
 
     

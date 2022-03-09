@@ -14,12 +14,12 @@
 字段含义和默认值区分 字段含义和默认值区分即不使用对应类型的默认值作为该字段的有效值。接着前面的例子继续描述，is_show为1时表示展示，is_show为2时表示不展示，其他情况则认为is_show未设置值。
 此方案笔者还是比较认可的，唯一问题就是和开发者的默认习惯略微不符。
 使用oneof oneof 的用意是达到 C 语言 union 数据类型的效果，但是诸多大佬还是发现它可以标识缺失字段。
-message Status { oneof show { int32 is_show = 1; } } message Test { int32 bar = 1; Status st = 2; } 上述proto文件生成对应go文件后，Test.St为Status的指针类型，故通过此方案可以区分默认值和缺失字段。但是笔者认为此方案做json序列化时十分不友好，下面是笔者的例子：
-// oneof to json ot1 := oneof.Test{ Bar: 1, St: &amp;amp;oneof.Status{ Show: &amp;amp;oneof.Status_IsShow{ IsShow: 1, }, }, } bts, err := json.Marshal(ot1) fmt.Println(string(bts), err) // json to oneof failed jsonStr := `{&amp;#34;bar&amp;#34;:1,&amp;#34;st&amp;#34;:{&amp;#34;Show&amp;#34;:{&amp;#34;is_show&amp;#34;:1}}}` var ot2 oneof." />
+message Status {  oneof show {  int32 is_show = 1;  } } message Test {  int32 bar = 1;  Status st = 2; } 上述proto文件生成对应go文件后，Test.St为Status的指针类型，故通过此方案可以区分默认值和缺失字段。但是笔者认为此方案做json序列化时十分不友好，下面是笔者的例子：
+// oneof to json ot1 := oneof.Test{  Bar: 1,  St: &amp;amp;oneof.Status{  Show: &amp;amp;oneof.Status_IsShow{  IsShow: 1,  },  }, } bts, err := json." />
 <meta name="keywords" content=", Go" />
 <meta name="robots" content="noodp" />
 <meta name="theme-color" content="" />
-<link rel="canonical" href="https://isites.github.io/timeline/gopb3/" />
+<link rel="canonical" href="https://isites.gitlab.io/gopher/timeline/gopb3/" />
 
 
     <title>
@@ -36,7 +36,7 @@ message Status { oneof show { int32 is_show = 1; } } message Test { int32 bar = 
 
 
 
-<link rel="stylesheet" href="/main.805b1025016494ee5fd67b55b8ecd5e2b7c4a9f0bdda42e300c62b85ddfef68f.css">
+<link rel="stylesheet" href="/gopher/main.805b1025016494ee5fd67b55b8ecd5e2b7c4a9f0bdda42e300c62b85ddfef68f.css">
 
 
   
@@ -62,16 +62,11 @@ message Status { oneof show { int32 is_show = 1; } } message Test { int32 bar = 
 字段含义和默认值区分 字段含义和默认值区分即不使用对应类型的默认值作为该字段的有效值。接着前面的例子继续描述，is_show为1时表示展示，is_show为2时表示不展示，其他情况则认为is_show未设置值。
 此方案笔者还是比较认可的，唯一问题就是和开发者的默认习惯略微不符。
 使用oneof oneof 的用意是达到 C 语言 union 数据类型的效果，但是诸多大佬还是发现它可以标识缺失字段。
-message Status { oneof show { int32 is_show = 1; } } message Test { int32 bar = 1; Status st = 2; } 上述proto文件生成对应go文件后，Test.St为Status的指针类型，故通过此方案可以区分默认值和缺失字段。但是笔者认为此方案做json序列化时十分不友好，下面是笔者的例子：
-// oneof to json ot1 := oneof.Test{ Bar: 1, St: &amp;oneof.Status{ Show: &amp;oneof.Status_IsShow{ IsShow: 1, }, }, } bts, err := json.Marshal(ot1) fmt.Println(string(bts), err) // json to oneof failed jsonStr := `{&#34;bar&#34;:1,&#34;st&#34;:{&#34;Show&#34;:{&#34;is_show&#34;:1}}}` var ot2 oneof.">
-<meta itemprop="datePublished" content="2020-12-01T12:20:38+08:00" />
+message Status {  oneof show {  int32 is_show = 1;  } } message Test {  int32 bar = 1;  Status st = 2; } 上述proto文件生成对应go文件后，Test.St为Status的指针类型，故通过此方案可以区分默认值和缺失字段。但是笔者认为此方案做json序列化时十分不友好，下面是笔者的例子：
+// oneof to json ot1 := oneof.Test{  Bar: 1,  St: &amp;oneof.Status{  Show: &amp;oneof.Status_IsShow{  IsShow: 1,  },  }, } bts, err := json."><meta itemprop="datePublished" content="2020-12-01T12:20:38+08:00" />
 <meta itemprop="dateModified" content="2020-12-01T12:20:38+08:00" />
 <meta itemprop="wordCount" content="286">
-
-
-
 <meta itemprop="keywords" content="Go," />
-
 <meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="区分Protobuf 3中缺失值和默认值"/>
 <meta name="twitter:description" content="这两天翻了翻以前的项目，发现不同项目中关于Protobuf 3缺失值和默认值的区分居然有好几种实现。今天笔者冷饭新炒，结合项目中的实现以及切身经验共总结出如下六种方案。
@@ -83,8 +78,8 @@ message Status { oneof show { int32 is_show = 1; } } message Test { int32 bar = 
 字段含义和默认值区分 字段含义和默认值区分即不使用对应类型的默认值作为该字段的有效值。接着前面的例子继续描述，is_show为1时表示展示，is_show为2时表示不展示，其他情况则认为is_show未设置值。
 此方案笔者还是比较认可的，唯一问题就是和开发者的默认习惯略微不符。
 使用oneof oneof 的用意是达到 C 语言 union 数据类型的效果，但是诸多大佬还是发现它可以标识缺失字段。
-message Status { oneof show { int32 is_show = 1; } } message Test { int32 bar = 1; Status st = 2; } 上述proto文件生成对应go文件后，Test.St为Status的指针类型，故通过此方案可以区分默认值和缺失字段。但是笔者认为此方案做json序列化时十分不友好，下面是笔者的例子：
-// oneof to json ot1 := oneof.Test{ Bar: 1, St: &amp;oneof.Status{ Show: &amp;oneof.Status_IsShow{ IsShow: 1, }, }, } bts, err := json.Marshal(ot1) fmt.Println(string(bts), err) // json to oneof failed jsonStr := `{&#34;bar&#34;:1,&#34;st&#34;:{&#34;Show&#34;:{&#34;is_show&#34;:1}}}` var ot2 oneof."/>
+message Status {  oneof show {  int32 is_show = 1;  } } message Test {  int32 bar = 1;  Status st = 2; } 上述proto文件生成对应go文件后，Test.St为Status的指针类型，故通过此方案可以区分默认值和缺失字段。但是笔者认为此方案做json序列化时十分不友好，下面是笔者的例子：
+// oneof to json ot1 := oneof.Test{  Bar: 1,  St: &amp;oneof.Status{  Show: &amp;oneof.Status_IsShow{  IsShow: 1,  },  }, } bts, err := json."/>
 
 
 
@@ -107,7 +102,7 @@ message Status { oneof show { int32 is_show = 1; } } message Test { int32 bar = 
         <div class="container">
             <header class="header">
     <span class="header__inner">
-        <a href="https://isites.github.io/" style="text-decoration: none;">
+        <a href="https://isites.gitlab.io/gopher/" style="text-decoration: none;">
     <div class="logo">
         
             <span class="logo__mark">Gopher指北</span>
@@ -153,7 +148,7 @@ message Status { oneof show { int32 is_show = 1; } } message Test { int32 bar = 
 
     <article>
       <h1 class="post-title">
-        <a href="https://isites.github.io/timeline/gopb3/">区分Protobuf 3中缺失值和默认值</a>
+        <a href="https://isites.gitlab.io/gopher/timeline/gopb3/">区分Protobuf 3中缺失值和默认值</a>
       </h1>
         <hr />
         <aside id="toc">
@@ -192,112 +187,112 @@ message Status { oneof show { int32 is_show = 1; } } message Test { int32 bar = 
 <p>此方案笔者还是比较认可的，唯一问题就是和开发者的默认习惯略微不符。</p>
 <h3 id="使用oneof">使用oneof</h3>
 <p>oneof 的用意是达到 C 语言 union 数据类型的效果，但是诸多大佬还是发现它可以标识缺失字段。</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#a6e22e">message</span> <span style="color:#a6e22e">Status</span> {
-  <span style="color:#a6e22e">oneof</span> <span style="color:#a6e22e">show</span> {
-    <span style="color:#66d9ef">int32</span> <span style="color:#a6e22e">is_show</span> = <span style="color:#ae81ff">1</span>;
-  }
-}
-<span style="color:#a6e22e">message</span> <span style="color:#a6e22e">Test</span> {
-    <span style="color:#66d9ef">int32</span> <span style="color:#a6e22e">bar</span> = <span style="color:#ae81ff">1</span>;
-    <span style="color:#a6e22e">Status</span> <span style="color:#a6e22e">st</span> = <span style="color:#ae81ff">2</span>;
-}
-</code></pre></div><p>上述proto文件生成对应go文件后，<code>Test.St</code>为<code>Status</code>的指针类型，故通过此方案可以区分默认值和缺失字段。但是笔者认为此方案做json序列化时十分不友好，下面是笔者的例子：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#75715e">// oneof to json
-</span><span style="color:#75715e"></span><span style="color:#a6e22e">ot1</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">oneof</span>.<span style="color:#a6e22e">Test</span>{
-  <span style="color:#a6e22e">Bar</span>: <span style="color:#ae81ff">1</span>,
-  <span style="color:#a6e22e">St</span>: <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">oneof</span>.<span style="color:#a6e22e">Status</span>{
-    <span style="color:#a6e22e">Show</span>: <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">oneof</span>.<span style="color:#a6e22e">Status_IsShow</span>{
-      <span style="color:#a6e22e">IsShow</span>: <span style="color:#ae81ff">1</span>,
-    },
-  },
-}
-<span style="color:#a6e22e">bts</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">json</span>.<span style="color:#a6e22e">Marshal</span>(<span style="color:#a6e22e">ot1</span>)
-<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(string(<span style="color:#a6e22e">bts</span>), <span style="color:#a6e22e">err</span>)
-<span style="color:#75715e">// json to oneof failed
-</span><span style="color:#75715e"></span><span style="color:#a6e22e">jsonStr</span> <span style="color:#f92672">:=</span> <span style="color:#e6db74">`{&#34;bar&#34;:1,&#34;st&#34;:{&#34;Show&#34;:{&#34;is_show&#34;:1}}}`</span>
-<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">ot2</span> <span style="color:#a6e22e">oneof</span>.<span style="color:#a6e22e">Test</span>
-<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">json</span>.<span style="color:#a6e22e">Unmarshal</span>([]byte(<span style="color:#a6e22e">jsonStr</span>), <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">ot2</span>))
-</code></pre></div><p>上述输出结果如下：</p>
-<pre><code>{&quot;bar&quot;:1,&quot;st&quot;:{&quot;Show&quot;:{&quot;is_show&quot;:1}}} &lt;nil&gt;
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#a6e22e">message</span> <span style="color:#a6e22e">Status</span> {
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">oneof</span> <span style="color:#a6e22e">show</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">int32</span> <span style="color:#a6e22e">is_show</span> = <span style="color:#ae81ff">1</span>;
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">message</span> <span style="color:#a6e22e">Test</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">int32</span> <span style="color:#a6e22e">bar</span> = <span style="color:#ae81ff">1</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">Status</span> <span style="color:#a6e22e">st</span> = <span style="color:#ae81ff">2</span>;
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>上述proto文件生成对应go文件后，<code>Test.St</code>为<code>Status</code>的指针类型，故通过此方案可以区分默认值和缺失字段。但是笔者认为此方案做json序列化时十分不友好，下面是笔者的例子：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#75715e">// oneof to json
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#a6e22e">ot1</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">oneof</span>.<span style="color:#a6e22e">Test</span>{
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">Bar</span>: <span style="color:#ae81ff">1</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">St</span>: <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">oneof</span>.<span style="color:#a6e22e">Status</span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">Show</span>: <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">oneof</span>.<span style="color:#a6e22e">Status_IsShow</span>{
+</span></span><span style="display:flex;"><span>      <span style="color:#a6e22e">IsShow</span>: <span style="color:#ae81ff">1</span>,
+</span></span><span style="display:flex;"><span>    },
+</span></span><span style="display:flex;"><span>  },
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">bts</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">json</span>.<span style="color:#a6e22e">Marshal</span>(<span style="color:#a6e22e">ot1</span>)
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(string(<span style="color:#a6e22e">bts</span>), <span style="color:#a6e22e">err</span>)
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// json to oneof failed
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#a6e22e">jsonStr</span> <span style="color:#f92672">:=</span> <span style="color:#e6db74">`{&#34;bar&#34;:1,&#34;st&#34;:{&#34;Show&#34;:{&#34;is_show&#34;:1}}}`</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">var</span> <span style="color:#a6e22e">ot2</span> <span style="color:#a6e22e">oneof</span>.<span style="color:#a6e22e">Test</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">json</span>.<span style="color:#a6e22e">Unmarshal</span>([]byte(<span style="color:#a6e22e">jsonStr</span>), <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">ot2</span>))
+</span></span></code></pre></div><p>上述输出结果如下：</p>
+<pre tabindex="0"><code>{&#34;bar&#34;:1,&#34;st&#34;:{&#34;Show&#34;:{&#34;is_show&#34;:1}}} &lt;nil&gt;
 json: cannot unmarshal object into Go struct field Status.st.Show of type oneof.isStatus_Show
 </code></pre><p>通过上述输出知，oneof的<code>json.Marshal</code>输出结果会额外多一层，而<code>json.Unmarshal</code>还会失败，因此使用oneof时需谨慎。</p>
 <h3 id="使用wrapper类型">使用wrapper类型</h3>
 <p>这应该是google官方提出的解决方案，我们看看下面的例子：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#f92672">import</span> <span style="color:#e6db74">&#34;google/protobuf/wrappers.proto&#34;</span>;
-<span style="color:#a6e22e">message</span> <span style="color:#a6e22e">Status</span> {
-    <span style="color:#a6e22e">google</span>.<span style="color:#a6e22e">protobuf</span>.<span style="color:#a6e22e">Int32Value</span> <span style="color:#a6e22e">is_show</span> = <span style="color:#ae81ff">1</span>;
-}
-<span style="color:#a6e22e">message</span> <span style="color:#a6e22e">Test</span> {
-    <span style="color:#66d9ef">int32</span> <span style="color:#a6e22e">bar</span> = <span style="color:#ae81ff">1</span>;
-    <span style="color:#a6e22e">Status</span> <span style="color:#a6e22e">st</span> = <span style="color:#ae81ff">2</span>;
-}
-</code></pre></div><p>使用此方案需要引入<code>google/protobuf/wrappers.proto</code>。此方案生成对应go文件后，<code>Test.St</code>也是<code>Status</code>的指针类型。同样，我们也看一下它的json序列化效果：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#a6e22e">wra1</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">wrapper</span>.<span style="color:#a6e22e">Test</span>{
-  <span style="color:#a6e22e">Bar</span>: <span style="color:#ae81ff">1</span>,
-  <span style="color:#a6e22e">St</span>: <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">wrapper</span>.<span style="color:#a6e22e">Status</span>{
-    <span style="color:#a6e22e">IsShow</span>: <span style="color:#a6e22e">wrapperspb</span>.<span style="color:#a6e22e">Int32</span>(<span style="color:#ae81ff">1</span>),
-  },
-}
-<span style="color:#a6e22e">bts</span>, <span style="color:#a6e22e">err</span> = <span style="color:#a6e22e">json</span>.<span style="color:#a6e22e">Marshal</span>(<span style="color:#a6e22e">wra1</span>)
-<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(string(<span style="color:#a6e22e">bts</span>), <span style="color:#a6e22e">err</span>)
-<span style="color:#a6e22e">jsonStr</span> = <span style="color:#e6db74">`{&#34;bar&#34;:1,&#34;st&#34;:{&#34;is_show&#34;:{&#34;value&#34;:1}}}`</span>
-<span style="color:#75715e">// 可正常转json
-</span><span style="color:#75715e"></span><span style="color:#66d9ef">var</span> <span style="color:#a6e22e">wra2</span> <span style="color:#a6e22e">wrapper</span>.<span style="color:#a6e22e">Test</span>
-<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">json</span>.<span style="color:#a6e22e">Unmarshal</span>([]byte(<span style="color:#a6e22e">jsonStr</span>), <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">wra2</span>))
-</code></pre></div><p>上述输出结果如下：</p>
-<pre><code>{&quot;bar&quot;:1,&quot;st&quot;:{&quot;is_show&quot;:{&quot;value&quot;:1}}} &lt;nil&gt;
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#f92672">import</span> <span style="color:#e6db74">&#34;google/protobuf/wrappers.proto&#34;</span>;
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">message</span> <span style="color:#a6e22e">Status</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">google</span>.<span style="color:#a6e22e">protobuf</span>.<span style="color:#a6e22e">Int32Value</span> <span style="color:#a6e22e">is_show</span> = <span style="color:#ae81ff">1</span>;
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">message</span> <span style="color:#a6e22e">Test</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">int32</span> <span style="color:#a6e22e">bar</span> = <span style="color:#ae81ff">1</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">Status</span> <span style="color:#a6e22e">st</span> = <span style="color:#ae81ff">2</span>;
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>使用此方案需要引入<code>google/protobuf/wrappers.proto</code>。此方案生成对应go文件后，<code>Test.St</code>也是<code>Status</code>的指针类型。同样，我们也看一下它的json序列化效果：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#a6e22e">wra1</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">wrapper</span>.<span style="color:#a6e22e">Test</span>{
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">Bar</span>: <span style="color:#ae81ff">1</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">St</span>: <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">wrapper</span>.<span style="color:#a6e22e">Status</span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">IsShow</span>: <span style="color:#a6e22e">wrapperspb</span>.<span style="color:#a6e22e">Int32</span>(<span style="color:#ae81ff">1</span>),
+</span></span><span style="display:flex;"><span>  },
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">bts</span>, <span style="color:#a6e22e">err</span> = <span style="color:#a6e22e">json</span>.<span style="color:#a6e22e">Marshal</span>(<span style="color:#a6e22e">wra1</span>)
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(string(<span style="color:#a6e22e">bts</span>), <span style="color:#a6e22e">err</span>)
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">jsonStr</span> = <span style="color:#e6db74">`{&#34;bar&#34;:1,&#34;st&#34;:{&#34;is_show&#34;:{&#34;value&#34;:1}}}`</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// 可正常转json
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">var</span> <span style="color:#a6e22e">wra2</span> <span style="color:#a6e22e">wrapper</span>.<span style="color:#a6e22e">Test</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">json</span>.<span style="color:#a6e22e">Unmarshal</span>([]byte(<span style="color:#a6e22e">jsonStr</span>), <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">wra2</span>))
+</span></span></code></pre></div><p>上述输出结果如下：</p>
+<pre tabindex="0"><code>{&#34;bar&#34;:1,&#34;st&#34;:{&#34;is_show&#34;:{&#34;value&#34;:1}}} &lt;nil&gt;
 &lt;nil&gt;
 </code></pre><p>和oneof方案相比wrapper方案的json反序列化是没问题的，但是<code>json.Marshal</code>的输出结果也会额外多一层。另外，经笔者在本地试验，此方案无法和<code>gogoproto</code>一起使用。</p>
 <h3 id="允许proto3使用optional标签">允许proto3使用<code>optional</code>标签</h3>
 <p>前面几个方案估计在实践中还是不够尽善尽美。于是2020年5月16日<code>protoc v3.12.0</code>发布，该编译器允许proto3的字段也可使用 <code>optional</code>修饰。</p>
 <p>下面看看例子：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#a6e22e">message</span> <span style="color:#a6e22e">Status</span> {
-  <span style="color:#a6e22e">optional</span> <span style="color:#66d9ef">int32</span> <span style="color:#a6e22e">is_show</span> = <span style="color:#ae81ff">1</span>;
-}
-<span style="color:#a6e22e">message</span> <span style="color:#a6e22e">Test</span> {
-    <span style="color:#66d9ef">int32</span> <span style="color:#a6e22e">bar</span> = <span style="color:#ae81ff">1</span>;
-    <span style="color:#a6e22e">Status</span> <span style="color:#a6e22e">st</span> = <span style="color:#ae81ff">2</span>;
-}
-</code></pre></div><p>此方案需要使用新版本的<code>protoc</code>且必须使用<code>--experimental_allow_proto3_optional</code>开启此特性。protoc升级教程见https://github.com/protocolbuffers/protobuf#protocol-compiler-installation。下面继续看看该方案的json序列化效果</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">var</span> <span style="color:#a6e22e">isShow</span> <span style="color:#66d9ef">int32</span> = <span style="color:#ae81ff">1</span>
-<span style="color:#a6e22e">p3o1</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">p3optional</span>.<span style="color:#a6e22e">Test</span>{
-  <span style="color:#a6e22e">Bar</span>: <span style="color:#ae81ff">1</span>,
-  <span style="color:#a6e22e">St</span>:  <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">p3optional</span>.<span style="color:#a6e22e">Status</span>{<span style="color:#a6e22e">IsShow</span>: <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">isShow</span>},
-}
-<span style="color:#a6e22e">bts</span>, <span style="color:#a6e22e">err</span> = <span style="color:#a6e22e">json</span>.<span style="color:#a6e22e">Marshal</span>(<span style="color:#a6e22e">p3o1</span>)
-<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(string(<span style="color:#a6e22e">bts</span>), <span style="color:#a6e22e">err</span>)
-<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">p3o2</span> <span style="color:#a6e22e">p3optional</span>.<span style="color:#a6e22e">Test</span>
-<span style="color:#a6e22e">jsonStr</span> = <span style="color:#e6db74">`{&#34;bar&#34;:1,&#34;st&#34;:{&#34;is_show&#34;:1}}`</span>
-<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">json</span>.<span style="color:#a6e22e">Unmarshal</span>([]byte(<span style="color:#a6e22e">jsonStr</span>), <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">p3o2</span>))
-</code></pre></div><p>上述输出结果如下：</p>
-<pre><code>{&quot;bar&quot;:1,&quot;st&quot;:{&quot;is_show&quot;:1}} &lt;nil&gt;
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#a6e22e">message</span> <span style="color:#a6e22e">Status</span> {
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">optional</span> <span style="color:#66d9ef">int32</span> <span style="color:#a6e22e">is_show</span> = <span style="color:#ae81ff">1</span>;
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">message</span> <span style="color:#a6e22e">Test</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">int32</span> <span style="color:#a6e22e">bar</span> = <span style="color:#ae81ff">1</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">Status</span> <span style="color:#a6e22e">st</span> = <span style="color:#ae81ff">2</span>;
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>此方案需要使用新版本的<code>protoc</code>且必须使用<code>--experimental_allow_proto3_optional</code>开启此特性。protoc升级教程见https://github.com/protocolbuffers/protobuf#protocol-compiler-installation。下面继续看看该方案的json序列化效果</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">var</span> <span style="color:#a6e22e">isShow</span> <span style="color:#66d9ef">int32</span> = <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">p3o1</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">p3optional</span>.<span style="color:#a6e22e">Test</span>{
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">Bar</span>: <span style="color:#ae81ff">1</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">St</span>:  <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">p3optional</span>.<span style="color:#a6e22e">Status</span>{<span style="color:#a6e22e">IsShow</span>: <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">isShow</span>},
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">bts</span>, <span style="color:#a6e22e">err</span> = <span style="color:#a6e22e">json</span>.<span style="color:#a6e22e">Marshal</span>(<span style="color:#a6e22e">p3o1</span>)
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(string(<span style="color:#a6e22e">bts</span>), <span style="color:#a6e22e">err</span>)
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">var</span> <span style="color:#a6e22e">p3o2</span> <span style="color:#a6e22e">p3optional</span>.<span style="color:#a6e22e">Test</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">jsonStr</span> = <span style="color:#e6db74">`{&#34;bar&#34;:1,&#34;st&#34;:{&#34;is_show&#34;:1}}`</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">json</span>.<span style="color:#a6e22e">Unmarshal</span>([]byte(<span style="color:#a6e22e">jsonStr</span>), <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">p3o2</span>))
+</span></span></code></pre></div><p>上述输出结果如下：</p>
+<pre tabindex="0"><code>{&#34;bar&#34;:1,&#34;st&#34;:{&#34;is_show&#34;:1}} &lt;nil&gt;
 &lt;nil&gt;
 </code></pre><p>据上述结果知，此方案与oneof以及wrapper方案的json序列化相比更加符合预期，同样，经笔者在本地试验，此方案无法和<code>gogoproto</code>一起使用。</p>
 <h3 id="proto2和proto3结合使用">proto2和proto3结合使用</h3>
 <p>作为一个<code>gogoproto</code>的忠实用户，笔者希望在能区分默认值和缺失值的同时还可以继续使用<code>gogoproto</code>的特性。于是便产生了proto2和proto3结合使用的野路子。</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#75715e">// proto2
-</span><span style="color:#75715e"></span><span style="color:#a6e22e">message</span> <span style="color:#a6e22e">Status</span> {
-    <span style="color:#a6e22e">optional</span> <span style="color:#66d9ef">int32</span> <span style="color:#a6e22e">is_show</span> = <span style="color:#ae81ff">2</span>;
-}
-<span style="color:#75715e">// proto3
-</span><span style="color:#75715e"></span><span style="color:#a6e22e">message</span> <span style="color:#a6e22e">Test</span> {
-    <span style="color:#66d9ef">int32</span> <span style="color:#a6e22e">bar</span> = <span style="color:#ae81ff">1</span> [(<span style="color:#a6e22e">gogoproto</span>.<span style="color:#a6e22e">moretags</span>) = <span style="color:#960050;background-color:#1e0010">&#39;</span><span style="color:#a6e22e">form</span>:<span style="color:#e6db74">&#34;more_bar&#34;</span><span style="color:#960050;background-color:#1e0010">&#39;</span>, (<span style="color:#a6e22e">gogoproto</span>.<span style="color:#a6e22e">jsontag</span>) = <span style="color:#960050;background-color:#1e0010">&#39;</span><span style="color:#a6e22e">custom_tag</span><span style="color:#960050;background-color:#1e0010">&#39;</span>];
-    <span style="color:#a6e22e">p3p2</span>.<span style="color:#a6e22e">Status</span> <span style="color:#a6e22e">st</span> = <span style="color:#ae81ff">2</span>;
-}
-</code></pre></div><p>需要区分缺失字段和默认值的message定义在语法为proto2的文件中，proto3通过<code>import</code>导入proto2的message以达区分目的。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#75715e">// proto2
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#a6e22e">message</span> <span style="color:#a6e22e">Status</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">optional</span> <span style="color:#66d9ef">int32</span> <span style="color:#a6e22e">is_show</span> = <span style="color:#ae81ff">2</span>;
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// proto3
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#a6e22e">message</span> <span style="color:#a6e22e">Test</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">int32</span> <span style="color:#a6e22e">bar</span> = <span style="color:#ae81ff">1</span> [(<span style="color:#a6e22e">gogoproto</span>.<span style="color:#a6e22e">moretags</span>) = <span style="color:#960050;background-color:#1e0010">&#39;</span><span style="color:#a6e22e">form</span>:<span style="color:#e6db74">&#34;more_bar&#34;</span><span style="color:#960050;background-color:#1e0010">&#39;</span>, (<span style="color:#a6e22e">gogoproto</span>.<span style="color:#a6e22e">jsontag</span>) = <span style="color:#960050;background-color:#1e0010">&#39;</span><span style="color:#a6e22e">custom_tag</span><span style="color:#960050;background-color:#1e0010">&#39;</span>];
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">p3p2</span>.<span style="color:#a6e22e">Status</span> <span style="color:#a6e22e">st</span> = <span style="color:#ae81ff">2</span>;
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>需要区分缺失字段和默认值的message定义在语法为proto2的文件中，proto3通过<code>import</code>导入proto2的message以达区分目的。</p>
 <p><code>optional</code>修饰的字段在Go中会生成指针类型，因此区分缺失值和默认值就变的十分容易了。下面看看此方案的json序列化效果：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#75715e">// p3p2 to json
-</span><span style="color:#75715e"></span><span style="color:#a6e22e">p3p21</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">p3p2</span>.<span style="color:#a6e22e">Test</span>{
-  <span style="color:#a6e22e">Bar</span>: <span style="color:#ae81ff">1</span>,
-  <span style="color:#a6e22e">St</span>:  <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">p3p2</span>.<span style="color:#a6e22e">Status</span>{<span style="color:#a6e22e">IsShow</span>: <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">isShow</span>},
-}
-<span style="color:#a6e22e">bts</span>, <span style="color:#a6e22e">err</span> = <span style="color:#a6e22e">json</span>.<span style="color:#a6e22e">Marshal</span>(<span style="color:#a6e22e">p3p21</span>)
-<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(string(<span style="color:#a6e22e">bts</span>), <span style="color:#a6e22e">err</span>)
-<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">p3p22</span> <span style="color:#a6e22e">p3p2</span>.<span style="color:#a6e22e">Test</span>
-<span style="color:#a6e22e">jsonStr</span> = <span style="color:#e6db74">`{&#34;custom_tag&#34;:1,&#34;st&#34;:{&#34;is_show&#34;:1}}`</span>
-<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">json</span>.<span style="color:#a6e22e">Unmarshal</span>([]byte(<span style="color:#a6e22e">jsonStr</span>), <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">p3p22</span>))
-</code></pre></div><p>上述输出结果如下：</p>
-<pre><code>{&quot;custom_tag&quot;:1,&quot;st&quot;:{&quot;is_show&quot;:1}} &lt;nil&gt;
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#75715e">// p3p2 to json
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#a6e22e">p3p21</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">p3p2</span>.<span style="color:#a6e22e">Test</span>{
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">Bar</span>: <span style="color:#ae81ff">1</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">St</span>:  <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">p3p2</span>.<span style="color:#a6e22e">Status</span>{<span style="color:#a6e22e">IsShow</span>: <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">isShow</span>},
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">bts</span>, <span style="color:#a6e22e">err</span> = <span style="color:#a6e22e">json</span>.<span style="color:#a6e22e">Marshal</span>(<span style="color:#a6e22e">p3p21</span>)
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(string(<span style="color:#a6e22e">bts</span>), <span style="color:#a6e22e">err</span>)
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">var</span> <span style="color:#a6e22e">p3p22</span> <span style="color:#a6e22e">p3p2</span>.<span style="color:#a6e22e">Test</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">jsonStr</span> = <span style="color:#e6db74">`{&#34;custom_tag&#34;:1,&#34;st&#34;:{&#34;is_show&#34;:1}}`</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">json</span>.<span style="color:#a6e22e">Unmarshal</span>([]byte(<span style="color:#a6e22e">jsonStr</span>), <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">p3p22</span>))
+</span></span></code></pre></div><p>上述输出结果如下：</p>
+<pre tabindex="0"><code>{&#34;custom_tag&#34;:1,&#34;st&#34;:{&#34;is_show&#34;:1}} &lt;nil&gt;
 &lt;nil&gt;
 </code></pre><p>根据上述结果知，此方案不仅能够活用<code>gogoproto</code>的各种tag，其结果也和<strong>在proto3中直接使用optional</strong>效果一致。虽然笔者已经在自己的项目中使用了此方案，但是仍然要提醒一句：“写本篇文章时，笔者特意去github看了gogoproto的发布日志，gogoproto最新一个版本发布时间为<code>2019年10月14日</code>，笔者大胆预言gogoproto以后不会再更新了，所以此方案还请大家酌情使用”。</p>
 <p>最后，衷心希望本文能够对各位读者有一定的帮助。</p>
@@ -322,7 +317,7 @@ json: cannot unmarshal object into Go struct field Status.st.Show of type oneof.
           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-tag meta-icon">
             <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path>
             <line x1="7" y1="7" x2="7" y2="7"></line>
-          </svg><span class="tag"><a href="https://isites.github.io/tags/go/">Go</a></span>
+          </svg><span class="tag"><a href="https://isites.gitlab.io/gopher/tags/go/">Go</a></span>
         </p>
 
       <p>
@@ -358,7 +353,7 @@ json: cannot unmarshal object into Go struct field Status.st.Show of type oneof.
         <div class="pagination__buttons">
           
             <span class="button previous">
-              <a href="https://isites.github.io/timeline/gotls1.2/">
+              <a href="https://isites.gitlab.io/gopher/timeline/gotls1.2/">
                 <span class="button__icon">←</span>
                 <span class="button__text">码了2000多行代码就是为了讲清楚TLS握手流程（续）</span>
               </a>
@@ -367,7 +362,7 @@ json: cannot unmarshal object into Go struct field Status.st.Show of type oneof.
 
           
             <span class="button next">
-              <a href="https://isites.github.io/timeline/go-reciver/">
+              <a href="https://isites.gitlab.io/gopher/timeline/go-reciver/">
                 <span class="button__text">为什么go中的receiver name不推荐使用this或者self</span>
                 <span class="button__icon">→</span>
               </a>
@@ -456,7 +451,7 @@ json: cannot unmarshal object into Go struct field Status.st.Show of type oneof.
 
 
 
-<script type="text/javascript" src="/bundle.min.dc716e9092c9820b77f96da294d0120aeeb189b5bcea9752309ebea27fd53bbe6b13cffb2aca8ecf32525647ceb7001f76091de4199ac5a3caa432c070247f5b.js" integrity="sha512-3HFukJLJggt3&#43;W2ilNASCu6xibW86pdSMJ6&#43;on/VO75rE8/7KsqOzzJSVkfOtwAfdgkd5BmaxaPKpDLAcCR/Ww=="></script>
+<script type="text/javascript" src="/gopher/bundle.min.e2a9675ced043d06ad6d3f13fafb0203d96c89eb2484878d5eb89d6da19559cbed55fb05ca9eae7be1e975cab83e3b2a1193afc357019620a509327c5a6a9c0f.js" integrity="sha512-4qlnXO0EPQatbT8T&#43;vsCA9lsieskhIeNXridbaGVWcvtVfsFyp6ue&#43;Hpdcq4PjsqEZOvw1cBliClCTJ8WmqcDw=="></script>
 
 
     

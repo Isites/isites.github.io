@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="author" content="">
+<meta name="description" content="在一次性能分析中，发现线上服务CompareVersion占用了较长的CPU时间。如下图所示。
+其中占用时间最长的为strings.Split函数，这个函数对Gopher来说应该是非常熟悉的。而CompareVersion就是基于strings.Split函数来实现版本比较的，下面看一下CompareVersion的实现。
+// 判断是否全为0 func zeroRune(s []rune) bool {  for _, r := range s {  if r != &amp;#39;0&amp;#39; &amp;amp;&amp;amp; r != &amp;#39;.&amp;#39; {  return false  }  }  return true } // CompareVersion 比较两个appversion的大小 // return 0 means ver1 == ver2 // return 1 means ver1 &amp;gt; ver2 // return -1 means ver1 &amp;lt; ver2 func CompareVersion(ver1, ver2 string) int {  // fast path  if ver1 == ver2 {  return 0  }  // slow path  vers1 := strings." />
+<meta name="keywords" content=", Go" />
+<meta name="robots" content="noodp" />
+<meta name="theme-color" content="" />
+<link rel="canonical" href="https://isites.gitlab.io/gopher/timeline/version-compare/" />
+
+
+    <title>
+        
+            一顿骚操作版本号比较性能提升300% :: Gopher指北 
+        
+    </title>
+
+
+
+<link href="https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/3.2.1/css/flag-icon.min.css" rel="stylesheet"
+    type="text/css"> 
+
+
+
+
+<link rel="stylesheet" href="/gopher/main.805b1025016494ee5fd67b55b8ecd5e2b7c4a9f0bdda42e300c62b85ddfef68f.css">
+
+
+  
+
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest">
+    <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#252627">
+    <link rel="shortcut icon" href="/favicon.ico">
+    <meta name="msapplication-TileColor" content="#252627">
+    <meta name="theme-color" content="#252627">
+
+
+
+<meta itemprop="name" content="一顿骚操作版本号比较性能提升300%">
+<meta itemprop="description" content="在一次性能分析中，发现线上服务CompareVersion占用了较长的CPU时间。如下图所示。
+其中占用时间最长的为strings.Split函数，这个函数对Gopher来说应该是非常熟悉的。而CompareVersion就是基于strings.Split函数来实现版本比较的，下面看一下CompareVersion的实现。
+// 判断是否全为0 func zeroRune(s []rune) bool {  for _, r := range s {  if r != &#39;0&#39; &amp;&amp; r != &#39;.&#39; {  return false  }  }  return true } // CompareVersion 比较两个appversion的大小 // return 0 means ver1 == ver2 // return 1 means ver1 &gt; ver2 // return -1 means ver1 &lt; ver2 func CompareVersion(ver1, ver2 string) int {  // fast path  if ver1 == ver2 {  return 0  }  // slow path  vers1 := strings."><meta itemprop="datePublished" content="2022-01-24T20:30:38+08:00" />
+<meta itemprop="dateModified" content="2022-01-24T20:30:38+08:00" />
+<meta itemprop="wordCount" content="1373">
+<meta itemprop="keywords" content="Go," />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="一顿骚操作版本号比较性能提升300%"/>
+<meta name="twitter:description" content="在一次性能分析中，发现线上服务CompareVersion占用了较长的CPU时间。如下图所示。
+其中占用时间最长的为strings.Split函数，这个函数对Gopher来说应该是非常熟悉的。而CompareVersion就是基于strings.Split函数来实现版本比较的，下面看一下CompareVersion的实现。
+// 判断是否全为0 func zeroRune(s []rune) bool {  for _, r := range s {  if r != &#39;0&#39; &amp;&amp; r != &#39;.&#39; {  return false  }  }  return true } // CompareVersion 比较两个appversion的大小 // return 0 means ver1 == ver2 // return 1 means ver1 &gt; ver2 // return -1 means ver1 &lt; ver2 func CompareVersion(ver1, ver2 string) int {  // fast path  if ver1 == ver2 {  return 0  }  // slow path  vers1 := strings."/>
+
+
+
+
+
+
+
+    <meta property="article:published_time" content="2022-01-24 20:30:38 &#43;0800 CST" />
+
+
+
+
+
+
+
+
+    </head>
+
+    <body class="">
+        <div class="container">
+            <header class="header">
+    <span class="header__inner">
+        <a href="https://isites.gitlab.io/gopher/" style="text-decoration: none;">
+    <div class="logo">
+        
+            <span class="logo__mark">Gopher指北</span>
+            <span class="logo__text"></span>
+            <span class="logo__cursor" style=
+                  "
+                   
+                   ">
+            </span>
+        
+    </div>
+</a>
+
+
+        <span class="header__right">
+             
+            <span class="theme-toggle unselectable"><svg class="theme-toggler" width="24" height="24" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <path d="M22 41C32.4934 41 41 32.4934 41 22C41 11.5066 32.4934 3 22
+  3C11.5066 3 3 11.5066 3 22C3 32.4934 11.5066 41 22 41ZM7 22C7
+  13.7157 13.7157 7 22 7V37C13.7157 37 7 30.2843 7 22Z"/>
+</svg>
+</span>
+        </span>
+    </span>
+</header>
+
+
+            <div class="content">
+                
+  <main class="post">
+
+    <div class="post-info">
+      <p>
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-clock">
+          <circle cx="12" cy="12" r="10"></circle>
+          <polyline points="12 6 12 12 16 14"></polyline>
+        </svg>
+        7 minutes
+
+        
+      </p>
+    </div>
+
+    <article>
+      <h1 class="post-title">
+        <a href="https://isites.gitlab.io/gopher/timeline/version-compare/">一顿骚操作版本号比较性能提升300%</a>
+      </h1>
+        <hr />
+        <aside id="toc">
+          <div class="toc-title">Table of Contents</div>
+          <nav id="TableOfContents">
+  <ul>
+    <li><a href="#尝试优化stringssplit函数">尝试优化strings.Split函数</a></li>
+    <li><a href="#尝试引入缓存">尝试引入缓存</a></li>
+    <li><a href="#自实现过期缓存">自实现过期缓存</a></li>
+    <li><a href="#引入lru缓存">引入LRU缓存</a></li>
+    <li><a href="#自实现lru缓存">自实现LRU缓存</a>
+      <ul>
+        <li><a href="#减少lru缓存锁竞争">减少LRU缓存锁竞争</a></li>
+      </ul>
+    </li>
+    <li><a href="#有的人就是老天爷赏饭吃">有的人就是老天爷赏饭吃</a></li>
+  </ul>
+</nav>
+        </aside>
+        <hr />
+
+      
+
+      <div class="post-content">
+        <p>在一次性能分析中，发现线上服务<code>CompareVersion</code>占用了较长的CPU时间。如下图所示。</p>
+<p><img src="https://note.youdao.com/yws/api/personal/file/WEB9da6b92a54f075dda60c5dd9b3e6fb14?method=download&amp;shareKey=bcb8a12eb6ab81902045f5d429f0ead9" alt=""></p>
+<p>其中占用时间最长的为<code>strings.Split</code>函数，这个函数对Gopher来说应该是非常熟悉的。而<code>CompareVersion</code>就是基于<code>strings.Split</code>函数来实现版本比较的，下面看一下<code>CompareVersion</code>的实现。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#75715e">// 判断是否全为0
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">zeroRune</span>(<span style="color:#a6e22e">s</span> []<span style="color:#66d9ef">rune</span>) <span style="color:#66d9ef">bool</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> <span style="color:#a6e22e">_</span>, <span style="color:#a6e22e">r</span> <span style="color:#f92672">:=</span> <span style="color:#66d9ef">range</span> <span style="color:#a6e22e">s</span> {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">r</span> <span style="color:#f92672">!=</span> <span style="color:#e6db74">&#39;0&#39;</span> <span style="color:#f92672">&amp;&amp;</span> <span style="color:#a6e22e">r</span> <span style="color:#f92672">!=</span> <span style="color:#e6db74">&#39;.&#39;</span> {
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">false</span>
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">true</span>
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// CompareVersion 比较两个appversion的大小
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// return 0 means ver1 == ver2
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// return 1 means ver1 &gt; ver2
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// return -1 means ver1 &lt; ver2
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">CompareVersion</span>(<span style="color:#a6e22e">ver1</span>, <span style="color:#a6e22e">ver2</span> <span style="color:#66d9ef">string</span>) <span style="color:#66d9ef">int</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// fast path
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">ver1</span> <span style="color:#f92672">==</span> <span style="color:#a6e22e">ver2</span> {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// slow path
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#a6e22e">vers1</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">strings</span>.<span style="color:#a6e22e">Split</span>(<span style="color:#a6e22e">ver1</span>, <span style="color:#e6db74">&#34;.&#34;</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">vers2</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">strings</span>.<span style="color:#a6e22e">Split</span>(<span style="color:#a6e22e">ver2</span>, <span style="color:#e6db74">&#34;.&#34;</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">var</span> (
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">v1l</span>, <span style="color:#a6e22e">v2l</span> = len(<span style="color:#a6e22e">vers1</span>), len(<span style="color:#a6e22e">vers2</span>)
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">i</span>        = <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>    )
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> ; <span style="color:#a6e22e">i</span> &lt; <span style="color:#a6e22e">v1l</span> <span style="color:#f92672">&amp;&amp;</span> <span style="color:#a6e22e">i</span> &lt; <span style="color:#a6e22e">v2l</span>; <span style="color:#a6e22e">i</span><span style="color:#f92672">++</span> {
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">a</span>, <span style="color:#a6e22e">e1</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">strconv</span>.<span style="color:#a6e22e">Atoi</span>(<span style="color:#a6e22e">vers1</span>[<span style="color:#a6e22e">i</span>])
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">b</span>, <span style="color:#a6e22e">e2</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">strconv</span>.<span style="color:#a6e22e">Atoi</span>(<span style="color:#a6e22e">vers2</span>[<span style="color:#a6e22e">i</span>])
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">res</span> <span style="color:#f92672">:=</span> <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e">// 如果不能转换为数字，使用go默认的字符串比较
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>        <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">e1</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> <span style="color:#f92672">||</span> <span style="color:#a6e22e">e2</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+</span></span><span style="display:flex;"><span>            <span style="color:#a6e22e">res</span> = <span style="color:#a6e22e">strings</span>.<span style="color:#a6e22e">Compare</span>(<span style="color:#a6e22e">vers1</span>[<span style="color:#a6e22e">i</span>], <span style="color:#a6e22e">vers2</span>[<span style="color:#a6e22e">i</span>])
+</span></span><span style="display:flex;"><span>        } <span style="color:#66d9ef">else</span> {
+</span></span><span style="display:flex;"><span>            <span style="color:#a6e22e">res</span> = <span style="color:#a6e22e">a</span> <span style="color:#f92672">-</span> <span style="color:#a6e22e">b</span>
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e">// 根据比较结果进行返回， 如果res=0，则此部分相等
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>        <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">res</span> &gt; <span style="color:#ae81ff">0</span> {
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">return</span> <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>        } <span style="color:#66d9ef">else</span> <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">res</span> &lt; <span style="color:#ae81ff">0</span> {
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">return</span> <span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// 最后谁仍有剩余且不为0，则谁大
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">i</span> &lt; <span style="color:#a6e22e">v1l</span> {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">for</span> ; <span style="color:#a6e22e">i</span> &lt; <span style="color:#a6e22e">v1l</span>; <span style="color:#a6e22e">i</span><span style="color:#f92672">++</span> {
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">if</span> !<span style="color:#a6e22e">zeroRune</span>([]rune(<span style="color:#a6e22e">vers1</span>[<span style="color:#a6e22e">i</span>])) {
+</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">return</span> <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    } <span style="color:#66d9ef">else</span> <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">i</span> &lt; <span style="color:#a6e22e">v2l</span> {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">for</span> ; <span style="color:#a6e22e">i</span> &lt; <span style="color:#a6e22e">v2l</span>; <span style="color:#a6e22e">i</span><span style="color:#f92672">++</span> {
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">if</span> !<span style="color:#a6e22e">zeroRune</span>([]rune(<span style="color:#a6e22e">vers2</span>[<span style="color:#a6e22e">i</span>])) {
+</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">return</span> <span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h2 id="尝试优化stringssplit函数">尝试优化strings.Split函数</h2>
+<p><code>CompareVersion</code>的逻辑清晰且简单，而根据火焰图知性能主要消耗在<code>strings.Split</code>函数上，所以老许的第一目标是尝试优化<code>strings.Split</code>函数。</p>
+<p>每当此时老许首先想到的方法就是百度大法和谷歌大法，最后在某篇文章中发现<code>strings.FieldsFunc</code>函数，根据该文章描述，<code>strings.FieldsFunc</code>函数分割字符串的速度远快于<code>strings.Split</code>函数。那么我们到底能不能使用<code>strings.FieldsFunc</code>函数替换<code>strings.Split</code>函数请看下面测试结果。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">BenchmarkSplit</span>(<span style="color:#a6e22e">b</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">testing</span>.<span style="color:#a6e22e">B</span>) {
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">b</span>.<span style="color:#a6e22e">ResetTimer</span>()
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> <span style="color:#a6e22e">i</span> <span style="color:#f92672">:=</span> <span style="color:#ae81ff">0</span>; <span style="color:#a6e22e">i</span> &lt; <span style="color:#a6e22e">b</span>.<span style="color:#a6e22e">N</span>; <span style="color:#a6e22e">i</span><span style="color:#f92672">++</span> {
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">strings</span>.<span style="color:#a6e22e">Split</span>(<span style="color:#e6db74">&#34;7.0.09.000&#34;</span>, <span style="color:#e6db74">&#34;.&#34;</span>)
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">strings</span>.<span style="color:#a6e22e">Split</span>(<span style="color:#e6db74">&#34;7.0.09&#34;</span>, <span style="color:#e6db74">&#34;.&#34;</span>)
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">strings</span>.<span style="color:#a6e22e">Split</span>(<span style="color:#e6db74">&#34;9.01&#34;</span>, <span style="color:#e6db74">&#34;.&#34;</span>)
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">BenchmarkFieldsFunc</span>(<span style="color:#a6e22e">b</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">testing</span>.<span style="color:#a6e22e">B</span>) {
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">b</span>.<span style="color:#a6e22e">ResetTimer</span>()
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> <span style="color:#a6e22e">i</span> <span style="color:#f92672">:=</span> <span style="color:#ae81ff">0</span>; <span style="color:#a6e22e">i</span> &lt; <span style="color:#a6e22e">b</span>.<span style="color:#a6e22e">N</span>; <span style="color:#a6e22e">i</span><span style="color:#f92672">++</span> {
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">strings</span>.<span style="color:#a6e22e">FieldsFunc</span>(<span style="color:#e6db74">&#34;7.0.09.000&#34;</span>, <span style="color:#66d9ef">func</span>(<span style="color:#a6e22e">r</span> <span style="color:#66d9ef">rune</span>) <span style="color:#66d9ef">bool</span> { <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">r</span> <span style="color:#f92672">==</span> <span style="color:#e6db74">&#39;.&#39;</span> })
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">strings</span>.<span style="color:#a6e22e">FieldsFunc</span>(<span style="color:#e6db74">&#34;7.0.09&#34;</span>, <span style="color:#66d9ef">func</span>(<span style="color:#a6e22e">r</span> <span style="color:#66d9ef">rune</span>) <span style="color:#66d9ef">bool</span> { <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">r</span> <span style="color:#f92672">==</span> <span style="color:#e6db74">&#39;.&#39;</span> })
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">strings</span>.<span style="color:#a6e22e">FieldsFunc</span>(<span style="color:#e6db74">&#34;9.01&#34;</span>, <span style="color:#66d9ef">func</span>(<span style="color:#a6e22e">r</span> <span style="color:#66d9ef">rune</span>) <span style="color:#66d9ef">bool</span> { <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">r</span> <span style="color:#f92672">==</span> <span style="color:#e6db74">&#39;.&#39;</span> })
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>上述benchmark测试在老许的机器上某次运行结果如下：</p>
+<pre tabindex="0"><code>cpu: Intel(R) Core(TM) i7-7567U CPU @ 3.50GHz
+BenchmarkSplit-4                 3718506               303.2 ns/op           144 B/op          3 allocs/op
+BenchmarkSplit-4                 4144340               287.6 ns/op           144 B/op          3 allocs/op
+BenchmarkSplit-4                 3859644               304.5 ns/op           144 B/op          3 allocs/op
+BenchmarkSplit-4                 3729241               287.9 ns/op           144 B/op          3 allocs/op
+BenchmarkFieldsFunc-4            3459463               336.5 ns/op           144 B/op          3 allocs/op
+BenchmarkFieldsFunc-4            3604345               335.5 ns/op           144 B/op          3 allocs/op
+BenchmarkFieldsFunc-4            3411564               313.9 ns/op           144 B/op          3 allocs/op
+BenchmarkFieldsFunc-4            3661268               309.6 ns/op           144 B/op          3 allocs/op
+</code></pre><p>根据输出知，<code>strings.FieldsFunc</code>函数没有想象中那么快，甚至还比不过<code>strings.Split</code>函数。既然此路不通，老许只好再另寻他法。</p>
+<h2 id="尝试引入缓存">尝试引入缓存</h2>
+<p>按照最卷的公司来，假如我们每周一个版本，且全年无休则一个公司要发布1000个版本需<code>19年</code>（1000/(365 / 7)）。基于这个内卷的数据，我们如果能够把这些版本都缓存起来，然后再比较大小，其执行速度绝对有一个质的提升。</p>
+<h2 id="自实现过期缓存">自实现过期缓存</h2>
+<p>要引入缓存的话，老许第一个想到的就是过期缓存。同时为了尽可能的轻量所以自己实现一个过期缓存无疑是一个不错的方案。</p>
+<p>1、定义一个包含过期时间和数据的结构体</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">cacheItem</span> <span style="color:#66d9ef">struct</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">data</span>      <span style="color:#66d9ef">interface</span>{}
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">expiredAt</span> <span style="color:#66d9ef">int64</span>
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// IsExpired 判断缓存内容是否到期
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">c</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">cacheItem</span>) <span style="color:#a6e22e">IsExpired</span>() <span style="color:#66d9ef">bool</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">c</span>.<span style="color:#a6e22e">expiredAt</span> &gt; <span style="color:#ae81ff">0</span> <span style="color:#f92672">&amp;&amp;</span> <span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">Now</span>().<span style="color:#a6e22e">Unix</span>() <span style="color:#f92672">&gt;=</span> <span style="color:#a6e22e">c</span>.<span style="color:#a6e22e">expiredAt</span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>2、使用<code>sync.Map</code>作为并发安全的缓存</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">var</span> (
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">cacheMap</span> <span style="color:#a6e22e">sync</span>.<span style="color:#a6e22e">Map</span>
+</span></span><span style="display:flex;"><span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// Set 增加缓存
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">Set</span>(<span style="color:#a6e22e">key</span> <span style="color:#66d9ef">string</span>, <span style="color:#a6e22e">val</span> <span style="color:#66d9ef">interface</span>{}, <span style="color:#a6e22e">expiredAt</span> <span style="color:#66d9ef">int64</span>) {
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">cv</span> <span style="color:#f92672">:=</span> <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">cacheItem</span>{<span style="color:#a6e22e">val</span>, <span style="color:#a6e22e">expiredAt</span>}
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">cacheMap</span>.<span style="color:#a6e22e">Store</span>(<span style="color:#a6e22e">key</span>, <span style="color:#a6e22e">cv</span>)
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// Get 得到缓存中的值
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">Get</span>(<span style="color:#a6e22e">key</span> <span style="color:#66d9ef">string</span>) (<span style="color:#66d9ef">interface</span>{}, <span style="color:#66d9ef">bool</span>) {
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// 不存在缓存
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#a6e22e">cv</span>, <span style="color:#a6e22e">isExists</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">cacheMap</span>.<span style="color:#a6e22e">Load</span>(<span style="color:#a6e22e">key</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> !<span style="color:#a6e22e">isExists</span> {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">nil</span>, <span style="color:#66d9ef">false</span>
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// 缓存不正确
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#a6e22e">citem</span>, <span style="color:#a6e22e">ok</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">cv</span>.(<span style="color:#f92672">*</span><span style="color:#a6e22e">cacheItem</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> !<span style="color:#a6e22e">ok</span> {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">nil</span>, <span style="color:#66d9ef">false</span>
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// 读数据时删除缓存
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">citem</span>.<span style="color:#a6e22e">IsExpired</span>() {
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">cacheMap</span>.<span style="color:#a6e22e">Delete</span>(<span style="color:#a6e22e">key</span>)
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">nil</span>, <span style="color:#66d9ef">false</span>
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// 最后返回结果
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">citem</span>.<span style="color:#a6e22e">Data</span>(), <span style="color:#66d9ef">true</span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>3、定义一个通过<code>.</code>分割可存储每部分数据的结构体</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#75715e">// 缓存一个完整的版本使用切片即可
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">cmVal</span> <span style="color:#66d9ef">struct</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">iv</span> <span style="color:#66d9ef">int</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">sv</span> <span style="color:#66d9ef">string</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// 能否转换为整形
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#a6e22e">canInt</span> <span style="color:#66d9ef">bool</span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>4、将app版本转为切片以方便缓存</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">strs2cmVs</span>(<span style="color:#a6e22e">strs</span> []<span style="color:#66d9ef">string</span>) []<span style="color:#f92672">*</span><span style="color:#a6e22e">cmVal</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">cmvs</span> <span style="color:#f92672">:=</span> make([]<span style="color:#f92672">*</span><span style="color:#a6e22e">cmVal</span>, <span style="color:#ae81ff">0</span>, len(<span style="color:#a6e22e">strs</span>))
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> <span style="color:#a6e22e">_</span>, <span style="color:#a6e22e">v</span> <span style="color:#f92672">:=</span> <span style="color:#66d9ef">range</span> <span style="color:#a6e22e">strs</span> {
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">it</span>, <span style="color:#a6e22e">e</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">strconv</span>.<span style="color:#a6e22e">Atoi</span>(<span style="color:#a6e22e">v</span>)
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e">// 全部数据都保存
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>        <span style="color:#a6e22e">cmvs</span> = append(<span style="color:#a6e22e">cmvs</span>, <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">cmVal</span>{<span style="color:#a6e22e">it</span>, <span style="color:#a6e22e">v</span>, <span style="color:#a6e22e">e</span> <span style="color:#f92672">==</span> <span style="color:#66d9ef">nil</span>})
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">cmvs</span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>5、使用带缓存的方式进行版本大小比较</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">CompareVersionWithCache1</span>(<span style="color:#a6e22e">ver1</span>, <span style="color:#a6e22e">ver2</span> <span style="color:#66d9ef">string</span>) <span style="color:#66d9ef">int</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// fast path
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">ver1</span> <span style="color:#f92672">==</span> <span style="color:#a6e22e">ver2</span> {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// slow path
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#66d9ef">var</span> (
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">cmv1</span>, <span style="color:#a6e22e">cmv2</span>             []<span style="color:#f92672">*</span><span style="color:#a6e22e">cmVal</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">cmv1Exists</span>, <span style="color:#a6e22e">cmv2Exists</span> <span style="color:#66d9ef">bool</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">expire</span>                 <span style="color:#66d9ef">int64</span> = <span style="color:#ae81ff">200</span> <span style="color:#f92672">*</span> <span style="color:#ae81ff">60</span>
+</span></span><span style="display:flex;"><span>    )
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// read cache 1
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#a6e22e">cmv</span>, <span style="color:#a6e22e">cmvExists</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">Get</span>(<span style="color:#a6e22e">ver1</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">cmvExists</span> {
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">cmv1</span>, <span style="color:#a6e22e">cmv1Exists</span> = <span style="color:#a6e22e">cmv</span>.([]<span style="color:#f92672">*</span><span style="color:#a6e22e">cmVal</span>)
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> !<span style="color:#a6e22e">cmv1Exists</span> {
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e">// set val and cache
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>        <span style="color:#a6e22e">cmv1</span> = <span style="color:#a6e22e">strs2cmVs</span>(<span style="color:#a6e22e">strings</span>.<span style="color:#a6e22e">Split</span>(<span style="color:#a6e22e">ver1</span>, <span style="color:#e6db74">&#34;.&#34;</span>))
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">Set</span>(<span style="color:#a6e22e">ver1</span>, <span style="color:#a6e22e">cmv1</span>, <span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">Now</span>().<span style="color:#a6e22e">Unix</span>()<span style="color:#f92672">+</span><span style="color:#a6e22e">expire</span>)
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// read cache 2
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#a6e22e">cmv</span>, <span style="color:#a6e22e">cmvExists</span> = <span style="color:#a6e22e">Get</span>(<span style="color:#a6e22e">ver2</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">cmvExists</span> {
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">cmv2</span>, <span style="color:#a6e22e">cmv2Exists</span> = <span style="color:#a6e22e">cmv</span>.([]<span style="color:#f92672">*</span><span style="color:#a6e22e">cmVal</span>)
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> !<span style="color:#a6e22e">cmv2Exists</span> {
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e">// set val and cache
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>        <span style="color:#a6e22e">cmv2</span> = <span style="color:#a6e22e">strs2cmVs</span>(<span style="color:#a6e22e">strings</span>.<span style="color:#a6e22e">Split</span>(<span style="color:#a6e22e">ver2</span>, <span style="color:#e6db74">&#34;.&#34;</span>))
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">Set</span>(<span style="color:#a6e22e">ver2</span>, <span style="color:#a6e22e">cmv2</span>, <span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">Now</span>().<span style="color:#a6e22e">Unix</span>()<span style="color:#f92672">+</span><span style="color:#a6e22e">expire</span>)
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// compare ver str
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#66d9ef">var</span> (
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">v1l</span>, <span style="color:#a6e22e">v2l</span> = len(<span style="color:#a6e22e">cmv1</span>), len(<span style="color:#a6e22e">cmv2</span>)
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">i</span>        = <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>    )
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> ; <span style="color:#a6e22e">i</span> &lt; len(<span style="color:#a6e22e">cmv1</span>) <span style="color:#f92672">&amp;&amp;</span> <span style="color:#a6e22e">i</span> &lt; len(<span style="color:#a6e22e">cmv2</span>); <span style="color:#a6e22e">i</span><span style="color:#f92672">++</span> {
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">res</span> <span style="color:#f92672">:=</span> <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e">// can use int compare
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>        <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">cmv1</span>[<span style="color:#a6e22e">i</span>].<span style="color:#a6e22e">canInt</span> <span style="color:#f92672">&amp;&amp;</span> <span style="color:#a6e22e">cmv2</span>[<span style="color:#a6e22e">i</span>].<span style="color:#a6e22e">canInt</span> {
+</span></span><span style="display:flex;"><span>            <span style="color:#a6e22e">res</span> = <span style="color:#a6e22e">cmv1</span>[<span style="color:#a6e22e">i</span>].<span style="color:#a6e22e">iv</span> <span style="color:#f92672">-</span> <span style="color:#a6e22e">cmv2</span>[<span style="color:#a6e22e">i</span>].<span style="color:#a6e22e">iv</span>
+</span></span><span style="display:flex;"><span>        } <span style="color:#66d9ef">else</span> {
+</span></span><span style="display:flex;"><span>            <span style="color:#a6e22e">res</span> = <span style="color:#a6e22e">strings</span>.<span style="color:#a6e22e">Compare</span>(<span style="color:#a6e22e">cmv1</span>[<span style="color:#a6e22e">i</span>].<span style="color:#a6e22e">sv</span>, <span style="color:#a6e22e">cmv2</span>[<span style="color:#a6e22e">i</span>].<span style="color:#a6e22e">sv</span>)
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">res</span> &gt; <span style="color:#ae81ff">0</span> {
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">return</span> <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>        } <span style="color:#66d9ef">else</span> <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">res</span> &lt; <span style="color:#ae81ff">0</span> {
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">return</span> <span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">i</span> &lt; <span style="color:#a6e22e">v1l</span> {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">for</span> ; <span style="color:#a6e22e">i</span> &lt; <span style="color:#a6e22e">v1l</span>; <span style="color:#a6e22e">i</span><span style="color:#f92672">++</span> {
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">cmv1</span>[<span style="color:#a6e22e">i</span>].<span style="color:#a6e22e">canInt</span> <span style="color:#f92672">&amp;&amp;</span> <span style="color:#a6e22e">cmv1</span>[<span style="color:#a6e22e">i</span>].<span style="color:#a6e22e">iv</span> <span style="color:#f92672">!=</span> <span style="color:#ae81ff">0</span> {
+</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">return</span> <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">if</span> !<span style="color:#a6e22e">zeroRune</span>([]rune(<span style="color:#a6e22e">cmv1</span>[<span style="color:#a6e22e">i</span>].<span style="color:#a6e22e">sv</span>)) {
+</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">return</span> <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    } <span style="color:#66d9ef">else</span> <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">i</span> &lt; <span style="color:#a6e22e">v2l</span> {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">for</span> ; <span style="color:#a6e22e">i</span> &lt; <span style="color:#a6e22e">v2l</span>; <span style="color:#a6e22e">i</span><span style="color:#f92672">++</span> {
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">for</span> ; <span style="color:#a6e22e">i</span> &lt; <span style="color:#a6e22e">v1l</span>; <span style="color:#a6e22e">i</span><span style="color:#f92672">++</span> {
+</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">cmv2</span>[<span style="color:#a6e22e">i</span>].<span style="color:#a6e22e">canInt</span> <span style="color:#f92672">&amp;&amp;</span> <span style="color:#a6e22e">cmv2</span>[<span style="color:#a6e22e">i</span>].<span style="color:#a6e22e">iv</span> <span style="color:#f92672">!=</span> <span style="color:#ae81ff">0</span> {
+</span></span><span style="display:flex;"><span>                    <span style="color:#66d9ef">return</span> <span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>                }
+</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">if</span> !<span style="color:#a6e22e">zeroRune</span>([]rune(<span style="color:#a6e22e">cmv2</span>[<span style="color:#a6e22e">i</span>].<span style="color:#a6e22e">sv</span>)) {
+</span></span><span style="display:flex;"><span>                    <span style="color:#66d9ef">return</span> <span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>                }
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p><code>CompareVersionWithCache1</code>函数比较步骤为：</p>
+<ul>
+<li>如果版本字符串相等直接返回</li>
+<li>分别读取两个版本对应的缓存数据，如果没有缓存数据数据则生成缓存数据并缓存</li>
+<li>分别对比两个版本对应的<code>[]*cmVal</code>数据，返回大小</li>
+</ul>
+<p>最后进行性能验证，以下为<code>CompareVersionWithCache1</code>函数和<code>CompareVersion</code>函数的benchmark对比。</p>
+<pre tabindex="0"><code>cpu: Intel(R) Core(TM) i7-7567U CPU @ 3.50GHz
+BenchmarkCompareVersion-4                  1642657           767.6 ns/op         304 B/op           6 allocs/op
+BenchmarkCompareVersionWithCache1-4        1296520           844.9 ns/op           0 B/op           0 allocs/op
+</code></pre><p>通过上述结果分析知，使用缓存后唯一的优化只是减少了微乎其微的内存分配。这个结果实在令老许充满了疑惑，在使用pprof分析后终于发现性能没有提升的原因。以下为benchmark期间<code>BenchmarkCompareVersionWithCache1</code>函数的火焰图。</p>
+<p><img src="https://note.youdao.com/yws/api/personal/file/WEB763dd3e7cd65369adac37e61368d482e?method=download&amp;shareKey=b2bcdbc121af2c92f7799d18faf4c57d" alt=""></p>
+<p>因为考虑到app版本数量较小，所以使用了惰性淘汰的方式淘汰过期缓存，在每次读取数据时判断缓存是否过期。根据火焰图知性能损耗最大的就是判断缓存是否过期，每次判断缓存是否过期都需要调用<code> time.Now().Unix()</code>得到当前时间戳。也就是因为<code>time.Now()</code>的这个调用导致这次优化功亏一篑。</p>
+<h2 id="引入lru缓存">引入LRU缓存</h2>
+<p>考虑到版本数量本身不多，且对于常用的版本可以尽可能永久缓存，因此引入LRU缓存做进一步性能优化尝试。</p>
+<p>1、引入开源的LRU缓存，对应开源库为: github.com/hashicorp/golang-lru</p>
+<p>2、在<code>CompareVersionWithCache1</code>函数的基础上将读写缓存替换为引入的LRU缓存</p>
+<p>最后进行性能验证，以下为<code>CompareVersionWithCache2</code>函数和<code>CompareVersion</code>函数的benchmark对比。</p>
+<pre tabindex="0"><code>cpu: Intel(R) Core(TM) i7-7567U CPU @ 3.50GHz
+BenchmarkCompareVersion-4                  1583202           841.7 ns/op         304 B/op           6 allocs/op
+BenchmarkCompareVersionWithCache2-4        1671758           633.9 ns/op          96 B/op           6 allocs/op
+</code></pre><p>哎，这个结果终于有点样子了，但优化效果并不明显，还有进一步提升的空间。</p>
+<h2 id="自实现lru缓存">自实现LRU缓存</h2>
+<p>选择LRU缓存是有效果的，在这个基础上老许决定自己实现一个极简的LRU缓存。</p>
+<p>1、定义一个缓存节点结构体</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">lruCacheItem</span> <span style="color:#66d9ef">struct</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// 双向链表
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#a6e22e">prev</span>, <span style="color:#a6e22e">next</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">lruCacheItem</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// 缓存数据
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#a6e22e">data</span>       <span style="color:#66d9ef">interface</span>{}
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// 缓存数据对应的key
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#a6e22e">key</span>        <span style="color:#66d9ef">string</span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>2、 定义一个操作LRU缓存的结构体</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">lruc</span> <span style="color:#66d9ef">struct</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// 链表头指针和尾指针
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#a6e22e">head</span>, <span style="color:#a6e22e">tail</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">lruCacheItem</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// 一个map存储各个链表的指针，以方便o(1)的复杂度读取数据
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#a6e22e">lruMap</span>     <span style="color:#66d9ef">map</span>[<span style="color:#66d9ef">string</span>]<span style="color:#f92672">*</span><span style="color:#a6e22e">lruCacheItem</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">rw</span>         <span style="color:#a6e22e">sync</span>.<span style="color:#a6e22e">RWMutex</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">size</span>       <span style="color:#66d9ef">int64</span>
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">NewLRU</span>(<span style="color:#a6e22e">size</span> <span style="color:#66d9ef">int64</span>) <span style="color:#f92672">*</span><span style="color:#a6e22e">lruc</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">size</span> &lt; <span style="color:#ae81ff">0</span> {
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">size</span> = <span style="color:#ae81ff">100</span>
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">lru</span> <span style="color:#f92672">:=</span> <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">lruc</span>{
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">head</span>:   new(<span style="color:#a6e22e">lruCacheItem</span>),
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">tail</span>:   new(<span style="color:#a6e22e">lruCacheItem</span>),
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">lruMap</span>: make(<span style="color:#66d9ef">map</span>[<span style="color:#66d9ef">string</span>]<span style="color:#f92672">*</span><span style="color:#a6e22e">lruCacheItem</span>),
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">size</span>:   <span style="color:#a6e22e">size</span>,
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">lru</span>.<span style="color:#a6e22e">head</span>.<span style="color:#a6e22e">next</span> = <span style="color:#a6e22e">lru</span>.<span style="color:#a6e22e">tail</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">lru</span>.<span style="color:#a6e22e">tail</span>.<span style="color:#a6e22e">prev</span> = <span style="color:#a6e22e">lru</span>.<span style="color:#a6e22e">head</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">lru</span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>3、LRU缓存的Set方法</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">lru</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">lruc</span>) <span style="color:#a6e22e">Set</span>(<span style="color:#a6e22e">key</span> <span style="color:#66d9ef">string</span>, <span style="color:#a6e22e">v</span> <span style="color:#66d9ef">interface</span>{}) {
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// fast path
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">_</span>, <span style="color:#a6e22e">exist</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">lru</span>.<span style="color:#a6e22e">lruMap</span>[<span style="color:#a6e22e">key</span>]; <span style="color:#a6e22e">exist</span> {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span>
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">node</span> <span style="color:#f92672">:=</span> <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">lruCacheItem</span>{
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">data</span>: <span style="color:#a6e22e">v</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">prev</span>: <span style="color:#a6e22e">lru</span>.<span style="color:#a6e22e">head</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">next</span>: <span style="color:#a6e22e">lru</span>.<span style="color:#a6e22e">head</span>.<span style="color:#a6e22e">next</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">key</span>:  <span style="color:#a6e22e">key</span>,
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// add first
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#a6e22e">lru</span>.<span style="color:#a6e22e">rw</span>.<span style="color:#a6e22e">Lock</span>()
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// double check
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">_</span>, <span style="color:#a6e22e">exist</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">lru</span>.<span style="color:#a6e22e">lruMap</span>[<span style="color:#a6e22e">key</span>]; !<span style="color:#a6e22e">exist</span> {
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">lru</span>.<span style="color:#a6e22e">lruMap</span>[<span style="color:#a6e22e">key</span>] = <span style="color:#a6e22e">node</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">lru</span>.<span style="color:#a6e22e">head</span>.<span style="color:#a6e22e">next</span> = <span style="color:#a6e22e">node</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">node</span>.<span style="color:#a6e22e">next</span>.<span style="color:#a6e22e">prev</span> = <span style="color:#a6e22e">node</span>
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> len(<span style="color:#a6e22e">lru</span>.<span style="color:#a6e22e">lruMap</span>) &gt; int(<span style="color:#a6e22e">lru</span>.<span style="color:#a6e22e">size</span>) {
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e">// delete tail
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>        <span style="color:#a6e22e">prev</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">lru</span>.<span style="color:#a6e22e">tail</span>.<span style="color:#a6e22e">prev</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">prev</span>.<span style="color:#a6e22e">prev</span>.<span style="color:#a6e22e">next</span> = <span style="color:#a6e22e">lru</span>.<span style="color:#a6e22e">tail</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">lru</span>.<span style="color:#a6e22e">tail</span>.<span style="color:#a6e22e">prev</span> = <span style="color:#a6e22e">prev</span>.<span style="color:#a6e22e">prev</span>
+</span></span><span style="display:flex;"><span>        delete(<span style="color:#a6e22e">lru</span>.<span style="color:#a6e22e">lruMap</span>, <span style="color:#a6e22e">prev</span>.<span style="color:#a6e22e">key</span>)
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">lru</span>.<span style="color:#a6e22e">rw</span>.<span style="color:#a6e22e">Unlock</span>()
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>4、LRU缓存的Get方法</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">lru</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">lruc</span>) <span style="color:#a6e22e">Get</span>(<span style="color:#a6e22e">key</span> <span style="color:#66d9ef">string</span>) (<span style="color:#66d9ef">interface</span>{}, <span style="color:#66d9ef">bool</span>) {
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">lru</span>.<span style="color:#a6e22e">rw</span>.<span style="color:#a6e22e">RLock</span>()
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">v</span>, <span style="color:#a6e22e">ok</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">lru</span>.<span style="color:#a6e22e">lruMap</span>[<span style="color:#a6e22e">key</span>]
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">lru</span>.<span style="color:#a6e22e">rw</span>.<span style="color:#a6e22e">RUnlock</span>()
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">ok</span> {
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e">// move to head.next
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>        <span style="color:#a6e22e">lru</span>.<span style="color:#a6e22e">rw</span>.<span style="color:#a6e22e">Lock</span>()
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">v</span>.<span style="color:#a6e22e">prev</span>.<span style="color:#a6e22e">next</span> = <span style="color:#a6e22e">v</span>.<span style="color:#a6e22e">next</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">v</span>.<span style="color:#a6e22e">next</span>.<span style="color:#a6e22e">prev</span> = <span style="color:#a6e22e">v</span>.<span style="color:#a6e22e">prev</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">v</span>.<span style="color:#a6e22e">prev</span> = <span style="color:#a6e22e">lru</span>.<span style="color:#a6e22e">head</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">v</span>.<span style="color:#a6e22e">next</span> = <span style="color:#a6e22e">lru</span>.<span style="color:#a6e22e">head</span>.<span style="color:#a6e22e">next</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">lru</span>.<span style="color:#a6e22e">head</span>.<span style="color:#a6e22e">next</span> = <span style="color:#a6e22e">v</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">lru</span>.<span style="color:#a6e22e">rw</span>.<span style="color:#a6e22e">Unlock</span>()
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">v</span>.<span style="color:#a6e22e">data</span>, <span style="color:#66d9ef">true</span>
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">nil</span>, <span style="color:#66d9ef">false</span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>5、在<code>CompareVersionWithCache1</code>函数的基础上将读写缓存替换为自实现的LRU缓存</p>
+<p>最后进行性能验证，以下为<code>CompareVersionWithCache3</code>函数和<code>CompareVersion</code>函数的benchmark对比：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#a6e22e">cpu</span>: <span style="color:#a6e22e">Intel</span>(<span style="color:#a6e22e">R</span>) <span style="color:#a6e22e">Core</span>(<span style="color:#a6e22e">TM</span>) <span style="color:#a6e22e">i7</span><span style="color:#f92672">-</span><span style="color:#ae81ff">7567</span><span style="color:#a6e22e">U</span> <span style="color:#a6e22e">CPU</span> <span style="color:#960050;background-color:#1e0010">@</span> <span style="color:#ae81ff">3.50</span><span style="color:#a6e22e">GHz</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">BenchmarkCompareVersion</span><span style="color:#f92672">-</span><span style="color:#ae81ff">4</span>                  <span style="color:#ae81ff">1575007</span>           <span style="color:#ae81ff">763.1</span> <span style="color:#a6e22e">ns</span><span style="color:#f92672">/</span><span style="color:#a6e22e">op</span>         <span style="color:#ae81ff">304</span> <span style="color:#a6e22e">B</span><span style="color:#f92672">/</span><span style="color:#a6e22e">op</span>           <span style="color:#ae81ff">6</span> <span style="color:#a6e22e">allocs</span><span style="color:#f92672">/</span><span style="color:#a6e22e">op</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">BenchmarkCompareVersionWithCache3</span><span style="color:#f92672">-</span><span style="color:#ae81ff">4</span>        <span style="color:#ae81ff">3285632</span>           <span style="color:#ae81ff">317.6</span> <span style="color:#a6e22e">ns</span><span style="color:#f92672">/</span><span style="color:#a6e22e">op</span>           <span style="color:#ae81ff">0</span> <span style="color:#a6e22e">B</span><span style="color:#f92672">/</span><span style="color:#a6e22e">op</span>           <span style="color:#ae81ff">0</span> <span style="color:#a6e22e">allocs</span><span style="color:#f92672">/</span><span style="color:#a6e22e">op</span>
+</span></span></code></pre></div><p>引入自实现的LRU缓存后，性能足足提升了一倍，到这里老许几乎准备去公司装逼了，但是心里总有个声音在问我有没有无锁的方式读取缓存。</p>
+<h3 id="减少lru缓存锁竞争">减少LRU缓存锁竞争</h3>
+<p>无锁的方式确实没有想到，只想到了两种减少锁竞争的方式。</p>
+<ul>
+<li>不需要每次读数据时都将节点移动到链表头，只有当LRU缓存数量接近Size上限的时候才将最新读取的数据移动到链表头</li>
+<li>既然是LRU缓存，那么访问频率越高，缓存节点越靠近链表头，基于这个特性可以考虑在每次访问的时候加入随机数以减小锁的竞争(即访问频率越高越有机会通过随机数控制将缓存节点移动到链表头)。</li>
+</ul>
+<p>加入随机数后的实现如下：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">lru</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">lruc</span>) <span style="color:#a6e22e">Get</span>(<span style="color:#a6e22e">key</span> <span style="color:#66d9ef">string</span>) (<span style="color:#66d9ef">interface</span>{}, <span style="color:#66d9ef">bool</span>) {
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">lru</span>.<span style="color:#a6e22e">rw</span>.<span style="color:#a6e22e">RLock</span>()
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">v</span>, <span style="color:#a6e22e">ok</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">lru</span>.<span style="color:#a6e22e">lruMap</span>[<span style="color:#a6e22e">key</span>]
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">lru</span>.<span style="color:#a6e22e">rw</span>.<span style="color:#a6e22e">RUnlock</span>()
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">ok</span> {
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e">// 这里随机写100
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>        <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">rand</span>.<span style="color:#a6e22e">Int</span>()<span style="color:#f92672">%</span><span style="color:#ae81ff">100</span> <span style="color:#f92672">==</span> <span style="color:#ae81ff">1</span> {
+</span></span><span style="display:flex;"><span>            <span style="color:#a6e22e">lru</span>.<span style="color:#a6e22e">rw</span>.<span style="color:#a6e22e">Lock</span>()
+</span></span><span style="display:flex;"><span>            <span style="color:#a6e22e">v</span>.<span style="color:#a6e22e">prev</span>.<span style="color:#a6e22e">next</span> = <span style="color:#a6e22e">v</span>.<span style="color:#a6e22e">next</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#a6e22e">v</span>.<span style="color:#a6e22e">next</span>.<span style="color:#a6e22e">prev</span> = <span style="color:#a6e22e">v</span>.<span style="color:#a6e22e">prev</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>            <span style="color:#a6e22e">v</span>.<span style="color:#a6e22e">prev</span> = <span style="color:#a6e22e">lru</span>.<span style="color:#a6e22e">head</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#a6e22e">v</span>.<span style="color:#a6e22e">next</span> = <span style="color:#a6e22e">lru</span>.<span style="color:#a6e22e">head</span>.<span style="color:#a6e22e">next</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#a6e22e">lru</span>.<span style="color:#a6e22e">head</span>.<span style="color:#a6e22e">next</span> = <span style="color:#a6e22e">v</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#a6e22e">lru</span>.<span style="color:#a6e22e">rw</span>.<span style="color:#a6e22e">Unlock</span>()
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">v</span>.<span style="color:#a6e22e">data</span>, <span style="color:#66d9ef">true</span>
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">nil</span>, <span style="color:#66d9ef">false</span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>加入随机数后的<code>CompareVersionWithCache3</code>函数和<code>CompareVersion</code>函数的benchmark对比如下：</p>
+<pre tabindex="0"><code>cpu: Intel(R) Core(TM) i7-7567U CPU @ 3.50GHz
+BenchmarkCompareVersion-4                  1617837           761.5 ns/op         304 B/op           6 allocs/op
+BenchmarkCompareVersionWithCache3-4        4817722           251.3 ns/op           0 B/op           0 allocs/op
+</code></pre><p>加入随机数后，<code>CompareVersionWithCache3</code>函数性能再次提升<code>20%</code>左右。优化还没结束，当缓存数量远不足设置的缓存上限时不需要移动到链表头。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">lru</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">lruc</span>) <span style="color:#a6e22e">Get</span>(<span style="color:#a6e22e">key</span> <span style="color:#66d9ef">string</span>) (<span style="color:#66d9ef">interface</span>{}, <span style="color:#66d9ef">bool</span>) {
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">lru</span>.<span style="color:#a6e22e">rw</span>.<span style="color:#a6e22e">RLock</span>()
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">v</span>, <span style="color:#a6e22e">ok</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">lru</span>.<span style="color:#a6e22e">lruMap</span>[<span style="color:#a6e22e">key</span>]
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">lru</span>.<span style="color:#a6e22e">rw</span>.<span style="color:#a6e22e">RUnlock</span>()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">ok</span> {
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e">// move to head.next
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>        <span style="color:#66d9ef">if</span> len(<span style="color:#a6e22e">lru</span>.<span style="color:#a6e22e">lruMap</span>) &gt; int(<span style="color:#a6e22e">lru</span>.<span style="color:#a6e22e">size</span>)<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span> <span style="color:#f92672">&amp;&amp;</span> <span style="color:#a6e22e">rand</span>.<span style="color:#a6e22e">Int</span>()<span style="color:#f92672">%</span><span style="color:#ae81ff">100</span> <span style="color:#f92672">==</span> <span style="color:#ae81ff">1</span> {
+</span></span><span style="display:flex;"><span>            <span style="color:#a6e22e">lru</span>.<span style="color:#a6e22e">rw</span>.<span style="color:#a6e22e">Lock</span>()
+</span></span><span style="display:flex;"><span>            <span style="color:#a6e22e">v</span>.<span style="color:#a6e22e">prev</span>.<span style="color:#a6e22e">next</span> = <span style="color:#a6e22e">v</span>.<span style="color:#a6e22e">next</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#a6e22e">v</span>.<span style="color:#a6e22e">next</span>.<span style="color:#a6e22e">prev</span> = <span style="color:#a6e22e">v</span>.<span style="color:#a6e22e">prev</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>            <span style="color:#a6e22e">v</span>.<span style="color:#a6e22e">prev</span> = <span style="color:#a6e22e">lru</span>.<span style="color:#a6e22e">head</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#a6e22e">v</span>.<span style="color:#a6e22e">next</span> = <span style="color:#a6e22e">lru</span>.<span style="color:#a6e22e">head</span>.<span style="color:#a6e22e">next</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#a6e22e">lru</span>.<span style="color:#a6e22e">head</span>.<span style="color:#a6e22e">next</span> = <span style="color:#a6e22e">v</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#a6e22e">lru</span>.<span style="color:#a6e22e">rw</span>.<span style="color:#a6e22e">Unlock</span>()
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">v</span>.<span style="color:#a6e22e">data</span>, <span style="color:#66d9ef">true</span>
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">nil</span>, <span style="color:#66d9ef">false</span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>引入上述优化后，benchmark对比如下：</p>
+<pre tabindex="0"><code>cpu: Intel(R) Core(TM) i7-7567U CPU @ 3.50GHz
+BenchmarkCompareVersion-4                1633576               793.2 ns/op           304 B/op          6 allocs/op
+BenchmarkCompareVersion-4                1619822               882.7 ns/op           304 B/op          6 allocs/op
+BenchmarkCompareVersion-4                1639792               737.2 ns/op           304 B/op          6 allocs/op
+BenchmarkCompareVersion-4                1630004               758.3 ns/op           304 B/op          6 allocs/op
+BenchmarkCompareVersionWithCache3-4      7538025               155.9 ns/op             0 B/op          0 allocs/op
+BenchmarkCompareVersionWithCache3-4      7514742               150.1 ns/op             0 B/op          0 allocs/op
+BenchmarkCompareVersionWithCache3-4      8357704               162.9 ns/op             0 B/op          0 allocs/op
+BenchmarkCompareVersionWithCache3-4      7748578               148.0 ns/op             0 B/op          0 allocs/op
+</code></pre><p>至此，最终版的版本比较实现在理想情况下（缓存空间较足）性能达到原先的<code>4</code>倍。</p>
+<h2 id="有的人就是老天爷赏饭吃">有的人就是老天爷赏饭吃</h2>
+<p>本来老许都准备去公司装逼了，万万没想到同事已经搞了一个更加合理且稳定的版本比较算法，让老许自愧不如。</p>
+<p>该算法思路如下：</p>
+<ul>
+<li>不使用<code>strings.Split</code>函数将版本以<code>.</code>分割，而是从左到右依次对比每一个字符直至遇到不同的字符，并分别记录索引<code>i,j</code></li>
+<li>遍历两个版本剩余部分字符串，以<code>i、j</code>为始直至遇到第一个<code>.</code>，将这两部分字符串转为整形进行比较</li>
+<li>如果前两步完成后仍相等，则谁还有剩余字符则谁大</li>
+</ul>
+<p>三种算法benchmark如下：</p>
+<pre tabindex="0"><code>cpu: Intel(R) Core(TM) i7-7567U CPU @ 3.50GHz
+BenchmarkCompareVersion-4                1803190               674.8 ns/op           304 B/op          6 allocs/op
+BenchmarkCompareVersion-4                1890308               630.9 ns/op           304 B/op          6 allocs/op
+BenchmarkCompareVersion-4                1855741               631.8 ns/op           304 B/op          6 allocs/op
+BenchmarkCompareVersion-4                1850410               629.4 ns/op           304 B/op          6 allocs/op
+BenchmarkCompareVersionWithCache3-4      8877466               132.2 ns/op             0 B/op          0 allocs/op
+BenchmarkCompareVersionWithCache3-4      8489661               132.6 ns/op             0 B/op          0 allocs/op
+BenchmarkCompareVersionWithCache3-4      8358210               132.6 ns/op             0 B/op          0 allocs/op
+BenchmarkCompareVersionWithCache3-4      8456853               131.9 ns/op             0 B/op          0 allocs/op
+BenchmarkCompareVersionNoSplit-4         6309705               178.9 ns/op             8 B/op          2 allocs/op
+BenchmarkCompareVersionNoSplit-4         6228823               181.2 ns/op             8 B/op          2 allocs/op
+BenchmarkCompareVersionNoSplit-4         6370544               177.8 ns/op             8 B/op          2 allocs/op
+BenchmarkCompareVersionNoSplit-4         6351043               180.0 ns/op             8 B/op          2 allocs/op
+</code></pre><p><code>BenchmarkCompareVersionNoSplit</code>函数不需要引入缓存，也不会像<code>BenchmarkCompareVersionWithCache3</code>中的缓存数量接近上限后会有一定的性能损失，几乎是我目前发现的最为理想的版本比较方案。</p>
+<p>老许也不说什么当局者迷，旁观者清这种酸葡萄一般的话，只得承认有的人就是老天爷赏饭吃。有一说一碰上这种人是我的幸运，我相信他只要有口饭吃，我就能在他屁股后面蹭口汤喝。关于文中最后提到的版本号比较算法完整实现请至下面的github仓库查看：</p>
+<p><a href="https://github.com/Isites/ares/tree/main/strs">https://github.com/Isites/ares/tree/main/strs</a></p>
+<p>最后，衷心希望本文能够对各位读者有一定的帮助。</p>
+<blockquote>
+<p>注：</p>
+<p>写本文时， 笔者所用go版本为: go1.16.6</p>
+<p>文章中所用完整例子：https://github.com/Isites/go-coder/tree/master/strs</p>
+</blockquote>
+<p>【关注公众号】</p>
+<p><img src="https://note.youdao.com/yws/api/personal/file/WEBa3ee67b2b867e98cb5c587f4adfa6801?method=download&amp;shareKey=0fbb95d0aec6170b854e7b890d50d559" alt=""></p>
+
+      </div>
+    </article>
+
+    <hr />
+
+    <div class="post-info">
+        <p>
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-tag meta-icon">
+            <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path>
+            <line x1="7" y1="7" x2="7" y2="7"></line>
+          </svg><span class="tag"><a href="https://isites.gitlab.io/gopher/tags/go/">Go</a></span>
+        </p>
+
+      <p>
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file-text">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+          <polyline points="14 2 14 8 20 8"></polyline>
+          <line x1="16" y1="13" x2="8" y2="13"></line>
+          <line x1="16" y1="17" x2="8" y2="17"></line>
+          <polyline points="10 9 9 9 8 9"></polyline>
+        </svg>
+        1373 Words
+      </p>
+
+      <p>
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-calendar">
+          <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+          <line x1="16" y1="2" x2="16" y2="6"></line>
+          <line x1="8" y1="2" x2="8" y2="6"></line>
+          <line x1="3" y1="10" x2="21" y2="10"></line>
+        </svg>
+        2022-01-24 20:30 &#43;0800
+      </p>
+ 
+    </div>
+
+    
+      <div class="pagination">
+        <div class="pagination__title">
+          <span class="pagination__title-h"></span>
+          <hr />
+        </div>
+
+        <div class="pagination__buttons">
+          
+
+          
+            <span class="button next">
+              <a href="https://isites.gitlab.io/gopher/timeline/money/">
+                <span class="button__text">探讨系统中💰钱的精度问题</span>
+                <span class="button__icon">→</span>
+              </a>
+            </span>
+          
+        </div>
+      </div>
+    
+
+
+    
+
+  </main>
+
+            </div>
+
+            
+                <footer class="footer">
+    <div class="footer__inner">
+        <div class="footer__content">
+            <span>&copy; 2022</span>
+            
+             
+        </div>
+    </div> 
+</footer>
+<script type="text/javascript">
+    $(function(){
+
+  window.sr = ScrollReveal();
+
+  if ($(window).width() < 768) {
+
+    if ($('.timeline-content').hasClass('js--fadeInLeft')) {
+        $('.timeline-content').removeClass('js--fadeInLeft').addClass('js--fadeInRight');
+    }
+
+    sr.reveal('.js--fadeInRight', {
+        origin: 'right',
+        distance: '300px',
+        easing: 'ease-in-out',
+        duration: 800,
+      });
+
+  } else {
+    
+    sr.reveal('.js--fadeInLeft', {
+        origin: 'left',
+        distance: '300px',
+          easing: 'ease-in-out',
+        duration: 800,
+      });
+
+      sr.reveal('.js--fadeInRight', {
+        origin: 'right',
+        distance: '300px',
+        easing: 'ease-in-out',
+        duration: 800,
+      });
+
+  }
+  
+  sr.reveal('.js--fadeInLeft', {
+        origin: 'left',
+        distance: '300px',
+          easing: 'ease-in-out',
+        duration: 800,
+      });
+
+      sr.reveal('.js--fadeInRight', {
+        origin: 'right',
+        distance: '300px',
+        easing: 'ease-in-out',
+        duration: 800,
+      });
+
+
+});
+
+</script>
+            
+        </div>
+
+        
+
+
+
+
+<script type="text/javascript" src="/gopher/bundle.min.e2a9675ced043d06ad6d3f13fafb0203d96c89eb2484878d5eb89d6da19559cbed55fb05ca9eae7be1e975cab83e3b2a1193afc357019620a509327c5a6a9c0f.js" integrity="sha512-4qlnXO0EPQatbT8T&#43;vsCA9lsieskhIeNXridbaGVWcvtVfsFyp6ue&#43;Hpdcq4PjsqEZOvw1cBliClCTJ8WmqcDw=="></script>
+
+
+    
+        <script src="/js/bd-hm.js"></script>
+    
+
+
+    </body>
+</html>

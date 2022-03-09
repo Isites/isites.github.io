@@ -27,7 +27,7 @@ eCPM(Effective Cost Per Mille): 指的是每一千次展示可以获得的广告
 <meta name="keywords" content=", 广告" />
 <meta name="robots" content="noodp" />
 <meta name="theme-color" content="" />
-<link rel="canonical" href="https://isites.github.io/timeline/ad-msvv/" />
+<link rel="canonical" href="https://isites.gitlab.io/gopher/timeline/ad-msvv/" />
 
 
     <title>
@@ -44,7 +44,7 @@ eCPM(Effective Cost Per Mille): 指的是每一千次展示可以获得的广告
 
 
 
-<link rel="stylesheet" href="/main.805b1025016494ee5fd67b55b8ecd5e2b7c4a9f0bdda42e300c62b85ddfef68f.css">
+<link rel="stylesheet" href="/gopher/main.805b1025016494ee5fd67b55b8ecd5e2b7c4a9f0bdda42e300c62b85ddfef68f.css">
 
 
   
@@ -79,15 +79,10 @@ eCPM(Effective Cost Per Mille): 指的是每一千次展示可以获得的广告
    广告 出价($) 预算($) 定向     A 0.5 100 男,游戏   B 1 100 男,游戏,运动    以上述广告为例，现有男,游戏和男,运动请求各100。理想最大收益为150$，但是按照上述策略分配广告时，会出现男,游戏这100请求先到达时优先消耗B广告，男,运动这100请求达到时无广告可消耗。按照ecpm排序的算法又称为Greedy算法，该算法会让高价值广告快速消耗。
 合适的才是最好的 Balance算法 与Greedy算法不同的是，Kalyanasundaram和Pruhs提出的Balance算法忽略单个bidder的出价，尽可能平衡所有bidder的预算消耗，使得其在线时间尽可能⻓，即尽量使得所有⼴告都保持匀速投放。其算法描述如下：
 当一个满足一些定向广告的请求到达时： if 广告预算消耗完 { continue } else { 选择一个（消耗/预算）值最小的一个广告 } 相比贪心算法，Balance算法平衡所有广告的消耗速度，能够有效解决贪心算法广告快速消耗的问题，但在广告消耗不尽的问题上依旧不是最佳解决方案。我们看下面特殊例子：
-   广告 出价($) 预算($) 定向     A 1 100 男,游戏   B 0.">
-<meta itemprop="datePublished" content="2021-10-30T12:20:38+08:00" />
+   广告 出价($) 预算($) 定向     A 1 100 男,游戏   B 0."><meta itemprop="datePublished" content="2021-10-30T12:20:38+08:00" />
 <meta itemprop="dateModified" content="2021-10-30T12:20:38+08:00" />
 <meta itemprop="wordCount" content="224">
-
-
-
 <meta itemprop="keywords" content="广告," />
-
 <meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="浅谈在线广告分配策略"/>
 <meta name="twitter:description" content="在线广告，也称网络广告、互联网广告，顾名思义，指的是在线媒体上投放的广告。平时我们在刷信息流、短视频、新闻和微博均可以看见它的影子。对于比较大的广告平台，用户定向后依旧会有大量的广告可以下发，而从大量的广告中选择合适的广告展现给用户就是本篇要讨论的主题——在线广告分配策略。
@@ -131,7 +126,7 @@ eCPM(Effective Cost Per Mille): 指的是每一千次展示可以获得的广告
         <div class="container">
             <header class="header">
     <span class="header__inner">
-        <a href="https://isites.github.io/" style="text-decoration: none;">
+        <a href="https://isites.gitlab.io/gopher/" style="text-decoration: none;">
     <div class="logo">
         
             <span class="logo__mark">Gopher指北</span>
@@ -177,7 +172,7 @@ eCPM(Effective Cost Per Mille): 指的是每一千次展示可以获得的广告
 
     <article>
       <h1 class="post-title">
-        <a href="https://isites.github.io/timeline/ad-msvv/">浅谈在线广告分配策略</a>
+        <a href="https://isites.gitlab.io/gopher/timeline/ad-msvv/">浅谈在线广告分配策略</a>
       </h1>
         <hr />
         <aside id="toc">
@@ -257,7 +252,7 @@ eCPM(Effective Cost Per Mille): 指的是每一千次展示可以获得的广告
 <h2 id="合适的才是最好的">合适的才是最好的</h2>
 <h3 id="balance算法">Balance算法</h3>
 <p>与Greedy算法不同的是，Kalyanasundaram和Pruhs提出的Balance算法忽略单个bidder的出价，尽可能平衡所有bidder的预算消耗，使得其在线时间尽可能⻓，即尽量使得所有⼴告都保持匀速投放。其算法描述如下：</p>
-<pre><code>当一个满足一些定向广告的请求到达时：
+<pre tabindex="0"><code>当一个满足一些定向广告的请求到达时：
 if 广告预算消耗完 {
     continue
 } else {
@@ -308,54 +303,52 @@ if 广告预算消耗完 {
 <li>缩放出价：<code>$出价 * \Psi(\upsilon)$</code></li>
 </ul>
 <p>算法描述如下：</p>
-<pre><code>当一个满足一些定向广告的请求到达时：
+<pre tabindex="0"><code>当一个满足一些定向广告的请求到达时：
 if 广告预算消耗完 {
     continue
 } else {
     选择一个`缩放出价`值最大的广告
 }
-
 </code></pre><p>上述的权衡函数为一个单调下降的函数，且<code>$\upsilon$</code>取值范围为[0,1]。权衡函数分布图如下：</p>
 <p><img src="https://note.youdao.com/yws/api/personal/file/WEB8bb2b7ed66ccf56a83ea30e5691bd87d?method=download&amp;shareKey=4af409d9a077a10f90e7b10d4a4d04b4" alt=""></p>
 <p>当所有广告出价相等时，由于权衡函数是一个单调下降的函数，因此MSVV算法就正好退化成Balance算法。另一方面，如果出价差异非常大时，MSVV算法在大多数情况都不会改变出价的顺序，此时MSVV表现更接近Greedy算法。考虑更极端的情况，当所有广告预算都是无限时，MSVV算法直接退化为Greedy算法，因为此时权衡函数为常量<code>$1 - {\frac 1 e}$</code>。</p>
 <p>为了验证MSVV算法的适应性，我们看下面的代码：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">ad</span> <span style="color:#66d9ef">struct</span> {
-	<span style="color:#a6e22e">cost</span>  <span style="color:#66d9ef">float64</span>
-	<span style="color:#a6e22e">total</span> <span style="color:#66d9ef">float64</span>
-	<span style="color:#a6e22e">price</span> <span style="color:#66d9ef">float64</span>
-}
-
-<span style="color:#66d9ef">func</span> <span style="color:#a6e22e">scaled</span>(<span style="color:#a6e22e">price</span>, <span style="color:#a6e22e">cost</span>, <span style="color:#a6e22e">total</span> <span style="color:#66d9ef">float64</span>) <span style="color:#66d9ef">float64</span> {
-	<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">price</span> <span style="color:#f92672">*</span> (<span style="color:#ae81ff">1.0</span> <span style="color:#f92672">-</span> <span style="color:#a6e22e">math</span>.<span style="color:#a6e22e">Pow</span>(<span style="color:#a6e22e">math</span>.<span style="color:#a6e22e">E</span>, <span style="color:#a6e22e">cost</span><span style="color:#f92672">/</span><span style="color:#a6e22e">total</span><span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>))
-}
-
-<span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
-	<span style="color:#a6e22e">a</span> <span style="color:#f92672">:=</span> <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">ad</span>{<span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">100</span>, <span style="color:#ae81ff">1</span>}
-	<span style="color:#a6e22e">b</span> <span style="color:#f92672">:=</span> <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">ad</span>{<span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">100</span>, <span style="color:#ae81ff">0.01</span>}
-	<span style="color:#75715e">// 模拟`男,游戏`到达时，a和b同时消耗
-</span><span style="color:#75715e"></span>	<span style="color:#66d9ef">for</span> <span style="color:#a6e22e">i</span> <span style="color:#f92672">:=</span> <span style="color:#ae81ff">0</span>; <span style="color:#a6e22e">i</span> &lt; <span style="color:#ae81ff">100</span>; <span style="color:#a6e22e">i</span><span style="color:#f92672">++</span> {
-		<span style="color:#a6e22e">aCp</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">scaled</span>(<span style="color:#a6e22e">a</span>.<span style="color:#a6e22e">price</span>, <span style="color:#a6e22e">a</span>.<span style="color:#a6e22e">cost</span>, <span style="color:#a6e22e">a</span>.<span style="color:#a6e22e">total</span>)
-		<span style="color:#a6e22e">bCp</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">scaled</span>(<span style="color:#a6e22e">b</span>.<span style="color:#a6e22e">price</span>, <span style="color:#a6e22e">b</span>.<span style="color:#a6e22e">cost</span>, <span style="color:#a6e22e">b</span>.<span style="color:#a6e22e">total</span>)
-		<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">a</span>.<span style="color:#a6e22e">cost</span> <span style="color:#f92672">&gt;=</span> <span style="color:#a6e22e">a</span>.<span style="color:#a6e22e">total</span> <span style="color:#f92672">||</span> <span style="color:#a6e22e">b</span>.<span style="color:#a6e22e">cost</span> <span style="color:#f92672">&gt;=</span> <span style="color:#a6e22e">b</span>.<span style="color:#a6e22e">total</span> {
-			<span style="color:#66d9ef">break</span>
-		}
-		<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">aCp</span> <span style="color:#f92672">&gt;=</span> <span style="color:#a6e22e">bCp</span> {
-			<span style="color:#a6e22e">a</span>.<span style="color:#a6e22e">cost</span> <span style="color:#f92672">+=</span> <span style="color:#a6e22e">a</span>.<span style="color:#a6e22e">price</span>
-		} <span style="color:#66d9ef">else</span> {
-			<span style="color:#a6e22e">b</span>.<span style="color:#a6e22e">cost</span> <span style="color:#f92672">+=</span> <span style="color:#a6e22e">b</span>.<span style="color:#a6e22e">price</span>
-		}
-	}
-	<span style="color:#75715e">// 模拟`男,运动`到达时，仅b可消耗
-</span><span style="color:#75715e"></span>	<span style="color:#66d9ef">for</span> <span style="color:#a6e22e">i</span> <span style="color:#f92672">:=</span> <span style="color:#ae81ff">0</span>; <span style="color:#a6e22e">i</span> &lt; <span style="color:#ae81ff">100</span>; <span style="color:#a6e22e">i</span><span style="color:#f92672">++</span> {
-		<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">b</span>.<span style="color:#a6e22e">cost</span> <span style="color:#f92672">&gt;=</span> <span style="color:#a6e22e">b</span>.<span style="color:#a6e22e">total</span> {
-			<span style="color:#66d9ef">break</span>
-		}
-		<span style="color:#a6e22e">b</span>.<span style="color:#a6e22e">cost</span> <span style="color:#f92672">+=</span> <span style="color:#a6e22e">b</span>.<span style="color:#a6e22e">price</span>
-	}
-	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">a</span>.<span style="color:#a6e22e">cost</span> <span style="color:#f92672">+</span> <span style="color:#a6e22e">b</span>.<span style="color:#a6e22e">cost</span>)
-}
-
-</code></pre></div><p>MSVV算法在前面的极值例子中收益分别为<code>116.5</code>和<code>101</code>，其整体表现基本符合预期。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">ad</span> <span style="color:#66d9ef">struct</span> {
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">cost</span>  <span style="color:#66d9ef">float64</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">total</span> <span style="color:#66d9ef">float64</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">price</span> <span style="color:#66d9ef">float64</span>
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">scaled</span>(<span style="color:#a6e22e">price</span>, <span style="color:#a6e22e">cost</span>, <span style="color:#a6e22e">total</span> <span style="color:#66d9ef">float64</span>) <span style="color:#66d9ef">float64</span> {
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">price</span> <span style="color:#f92672">*</span> (<span style="color:#ae81ff">1.0</span> <span style="color:#f92672">-</span> <span style="color:#a6e22e">math</span>.<span style="color:#a6e22e">Pow</span>(<span style="color:#a6e22e">math</span>.<span style="color:#a6e22e">E</span>, <span style="color:#a6e22e">cost</span><span style="color:#f92672">/</span><span style="color:#a6e22e">total</span><span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>))
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">a</span> <span style="color:#f92672">:=</span> <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">ad</span>{<span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">100</span>, <span style="color:#ae81ff">1</span>}
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">b</span> <span style="color:#f92672">:=</span> <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">ad</span>{<span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">100</span>, <span style="color:#ae81ff">0.01</span>}
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// 模拟`男,游戏`到达时，a和b同时消耗
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#66d9ef">for</span> <span style="color:#a6e22e">i</span> <span style="color:#f92672">:=</span> <span style="color:#ae81ff">0</span>; <span style="color:#a6e22e">i</span> &lt; <span style="color:#ae81ff">100</span>; <span style="color:#a6e22e">i</span><span style="color:#f92672">++</span> {
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">aCp</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">scaled</span>(<span style="color:#a6e22e">a</span>.<span style="color:#a6e22e">price</span>, <span style="color:#a6e22e">a</span>.<span style="color:#a6e22e">cost</span>, <span style="color:#a6e22e">a</span>.<span style="color:#a6e22e">total</span>)
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">bCp</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">scaled</span>(<span style="color:#a6e22e">b</span>.<span style="color:#a6e22e">price</span>, <span style="color:#a6e22e">b</span>.<span style="color:#a6e22e">cost</span>, <span style="color:#a6e22e">b</span>.<span style="color:#a6e22e">total</span>)
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">a</span>.<span style="color:#a6e22e">cost</span> <span style="color:#f92672">&gt;=</span> <span style="color:#a6e22e">a</span>.<span style="color:#a6e22e">total</span> <span style="color:#f92672">||</span> <span style="color:#a6e22e">b</span>.<span style="color:#a6e22e">cost</span> <span style="color:#f92672">&gt;=</span> <span style="color:#a6e22e">b</span>.<span style="color:#a6e22e">total</span> {
+</span></span><span style="display:flex;"><span>			<span style="color:#66d9ef">break</span>
+</span></span><span style="display:flex;"><span>		}
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">aCp</span> <span style="color:#f92672">&gt;=</span> <span style="color:#a6e22e">bCp</span> {
+</span></span><span style="display:flex;"><span>			<span style="color:#a6e22e">a</span>.<span style="color:#a6e22e">cost</span> <span style="color:#f92672">+=</span> <span style="color:#a6e22e">a</span>.<span style="color:#a6e22e">price</span>
+</span></span><span style="display:flex;"><span>		} <span style="color:#66d9ef">else</span> {
+</span></span><span style="display:flex;"><span>			<span style="color:#a6e22e">b</span>.<span style="color:#a6e22e">cost</span> <span style="color:#f92672">+=</span> <span style="color:#a6e22e">b</span>.<span style="color:#a6e22e">price</span>
+</span></span><span style="display:flex;"><span>		}
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// 模拟`男,运动`到达时，仅b可消耗
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#66d9ef">for</span> <span style="color:#a6e22e">i</span> <span style="color:#f92672">:=</span> <span style="color:#ae81ff">0</span>; <span style="color:#a6e22e">i</span> &lt; <span style="color:#ae81ff">100</span>; <span style="color:#a6e22e">i</span><span style="color:#f92672">++</span> {
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">b</span>.<span style="color:#a6e22e">cost</span> <span style="color:#f92672">&gt;=</span> <span style="color:#a6e22e">b</span>.<span style="color:#a6e22e">total</span> {
+</span></span><span style="display:flex;"><span>			<span style="color:#66d9ef">break</span>
+</span></span><span style="display:flex;"><span>		}
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">b</span>.<span style="color:#a6e22e">cost</span> <span style="color:#f92672">+=</span> <span style="color:#a6e22e">b</span>.<span style="color:#a6e22e">price</span>
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">a</span>.<span style="color:#a6e22e">cost</span> <span style="color:#f92672">+</span> <span style="color:#a6e22e">b</span>.<span style="color:#a6e22e">cost</span>)
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>MSVV算法在前面的极值例子中收益分别为<code>116.5</code>和<code>101</code>，其整体表现基本符合预期。</p>
 <h2 id="总结">总结</h2>
 <p>现在回顾前面的问题，消耗过快以及减缓曝光速度都在Balance算法的射程内（广告资源不足只有通过其他手段解决了）。从广告平台的收益角度考虑Greedy算法更佳。那么结合两者优点的MSVV算法可谓是每个广告平台居家旅行之必备利器。</p>
 <p>在线广告老许也是初次接触，而且正在努力储备知识，以期日后可持续发展。如果文中有不正确的地方欢迎各位读者指正和交流。</p>
@@ -372,7 +365,7 @@ if 广告预算消耗完 {
           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-tag meta-icon">
             <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path>
             <line x1="7" y1="7" x2="7" y2="7"></line>
-          </svg><span class="tag"><a href="https://isites.github.io/tags/%E5%B9%BF%E5%91%8A/">广告</a></span>
+          </svg><span class="tag"><a href="https://isites.gitlab.io/gopher/tags/%E5%B9%BF%E5%91%8A/">广告</a></span>
         </p>
 
       <p>
@@ -408,7 +401,7 @@ if 广告预算消耗完 {
         <div class="pagination__buttons">
           
             <span class="button previous">
-              <a href="https://isites.github.io/timeline/defer-sync-pool/">
+              <a href="https://isites.gitlab.io/gopher/timeline/defer-sync-pool/">
                 <span class="button__icon">←</span>
                 <span class="button__text">终于解决了这个线上偶现的panic问题</span>
               </a>
@@ -417,7 +410,7 @@ if 广告预算消耗完 {
 
           
             <span class="button next">
-              <a href="https://isites.github.io/timeline/http-url/">
+              <a href="https://isites.gitlab.io/gopher/timeline/http-url/">
                 <span class="button__text">URL中的空格、加号究竟应该使用何种方式编码</span>
                 <span class="button__icon">→</span>
               </a>
@@ -506,7 +499,7 @@ if 广告预算消耗完 {
 
 
 
-<script type="text/javascript" src="/bundle.min.dc716e9092c9820b77f96da294d0120aeeb189b5bcea9752309ebea27fd53bbe6b13cffb2aca8ecf32525647ceb7001f76091de4199ac5a3caa432c070247f5b.js" integrity="sha512-3HFukJLJggt3&#43;W2ilNASCu6xibW86pdSMJ6&#43;on/VO75rE8/7KsqOzzJSVkfOtwAfdgkd5BmaxaPKpDLAcCR/Ww=="></script>
+<script type="text/javascript" src="/gopher/bundle.min.e2a9675ced043d06ad6d3f13fafb0203d96c89eb2484878d5eb89d6da19559cbed55fb05ca9eae7be1e975cab83e3b2a1193afc357019620a509327c5a6a9c0f.js" integrity="sha512-4qlnXO0EPQatbT8T&#43;vsCA9lsieskhIeNXridbaGVWcvtVfsFyp6ue&#43;Hpdcq4PjsqEZOvw1cBliClCTJ8WmqcDw=="></script>
 
 
     

@@ -8,11 +8,11 @@
 <meta name="description" content="提到并发编程，不得不想到Go并发编程中的一句经典名言
 Do not communicate by sharing memory; instead, share memory by communicating. 本次分享目标  避免Go并发编程一些常见的坑 理解为什么Go原生网络编程模型为什么这么爽  并发编程踩坑目录 优雅的代码不好定义，每位开发也有自己的风格，但是坑总是相似的。
 channel误用 Case-1
-func main() { wg := sync.WaitGroup{} ch := make(chan int, 10) for i := 0; i &amp;lt; 10; i&#43;&#43; { ch &amp;lt;- i // put task into channel 	} close(ch) wg.Add(4) for j := 0; j &amp;lt; 4; j&#43;&#43; { go func() { for { task := &amp;lt;-ch // do sth 	fmt." />
+func main() { 	wg := sync.WaitGroup{} 	ch := make(chan int, 10) 	for i := 0; i &amp;lt; 10; i&#43;&#43; { 	ch &amp;lt;- i // put task into channel 	}  	close(ch)  	wg.Add(4) 	for j := 0; j &amp;lt; 4; j&#43;&#43; { 	go func() { 	for { 	task := &amp;lt;-ch 	// do sth 	fmt." />
 <meta name="keywords" content=", Go" />
 <meta name="robots" content="noodp" />
 <meta name="theme-color" content="" />
-<link rel="canonical" href="https://isites.github.io/timeline/go-share/" />
+<link rel="canonical" href="https://isites.gitlab.io/gopher/timeline/go-share/" />
 
 
     <title>
@@ -29,7 +29,7 @@ func main() { wg := sync.WaitGroup{} ch := make(chan int, 10) for i := 0; i &amp
 
 
 
-<link rel="stylesheet" href="/main.805b1025016494ee5fd67b55b8ecd5e2b7c4a9f0bdda42e300c62b85ddfef68f.css">
+<link rel="stylesheet" href="/gopher/main.805b1025016494ee5fd67b55b8ecd5e2b7c4a9f0bdda42e300c62b85ddfef68f.css">
 
 
   
@@ -49,21 +49,16 @@ func main() { wg := sync.WaitGroup{} ch := make(chan int, 10) for i := 0; i &amp
 <meta itemprop="description" content="提到并发编程，不得不想到Go并发编程中的一句经典名言
 Do not communicate by sharing memory; instead, share memory by communicating. 本次分享目标  避免Go并发编程一些常见的坑 理解为什么Go原生网络编程模型为什么这么爽  并发编程踩坑目录 优雅的代码不好定义，每位开发也有自己的风格，但是坑总是相似的。
 channel误用 Case-1
-func main() { wg := sync.WaitGroup{} ch := make(chan int, 10) for i := 0; i &lt; 10; i&#43;&#43; { ch &lt;- i // put task into channel 	} close(ch) wg.Add(4) for j := 0; j &lt; 4; j&#43;&#43; { go func() { for { task := &lt;-ch // do sth 	fmt.">
-<meta itemprop="datePublished" content="2021-08-17T21:00:00+08:00" />
+func main() { 	wg := sync.WaitGroup{} 	ch := make(chan int, 10) 	for i := 0; i &lt; 10; i&#43;&#43; { 	ch &lt;- i // put task into channel 	}  	close(ch)  	wg.Add(4) 	for j := 0; j &lt; 4; j&#43;&#43; { 	go func() { 	for { 	task := &lt;-ch 	// do sth 	fmt."><meta itemprop="datePublished" content="2021-08-17T21:00:00+08:00" />
 <meta itemprop="dateModified" content="2021-08-17T21:00:00+08:00" />
 <meta itemprop="wordCount" content="1919">
-
-
-
 <meta itemprop="keywords" content="Go," />
-
 <meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="公司内一次分享-Go并发编程"/>
 <meta name="twitter:description" content="提到并发编程，不得不想到Go并发编程中的一句经典名言
 Do not communicate by sharing memory; instead, share memory by communicating. 本次分享目标  避免Go并发编程一些常见的坑 理解为什么Go原生网络编程模型为什么这么爽  并发编程踩坑目录 优雅的代码不好定义，每位开发也有自己的风格，但是坑总是相似的。
 channel误用 Case-1
-func main() { wg := sync.WaitGroup{} ch := make(chan int, 10) for i := 0; i &lt; 10; i&#43;&#43; { ch &lt;- i // put task into channel 	} close(ch) wg.Add(4) for j := 0; j &lt; 4; j&#43;&#43; { go func() { for { task := &lt;-ch // do sth 	fmt."/>
+func main() { 	wg := sync.WaitGroup{} 	ch := make(chan int, 10) 	for i := 0; i &lt; 10; i&#43;&#43; { 	ch &lt;- i // put task into channel 	}  	close(ch)  	wg.Add(4) 	for j := 0; j &lt; 4; j&#43;&#43; { 	go func() { 	for { 	task := &lt;-ch 	// do sth 	fmt."/>
 
 
 
@@ -86,7 +81,7 @@ func main() { wg := sync.WaitGroup{} ch := make(chan int, 10) for i := 0; i &lt;
         <div class="container">
             <header class="header">
     <span class="header__inner">
-        <a href="https://isites.github.io/" style="text-decoration: none;">
+        <a href="https://isites.gitlab.io/gopher/" style="text-decoration: none;">
     <div class="logo">
         
             <span class="logo__mark">Gopher指北</span>
@@ -132,7 +127,7 @@ func main() { wg := sync.WaitGroup{} ch := make(chan int, 10) for i := 0; i &lt;
 
     <article>
       <h1 class="post-title">
-        <a href="https://isites.github.io/timeline/go-share/">公司内一次分享-Go并发编程</a>
+        <a href="https://isites.gitlab.io/gopher/timeline/go-share/">公司内一次分享-Go并发编程</a>
       </h1>
         <hr />
         <aside id="toc">
@@ -206,7 +201,7 @@ func main() { wg := sync.WaitGroup{} ch := make(chan int, 10) for i := 0; i &lt;
 
       <div class="post-content">
         <p>提到并发编程，不得不想到Go并发编程中的一句<a href="https://blog.golang.org/codelab-share">经典名言</a></p>
-<pre><code>Do not communicate by sharing memory; instead, share memory by communicating.
+<pre tabindex="0"><code>Do not communicate by sharing memory; instead, share memory by communicating.
 </code></pre><h1 id="本次分享目标">本次分享目标</h1>
 <ul>
 <li>避免Go并发编程一些常见的坑</li>
@@ -216,82 +211,81 @@ func main() { wg := sync.WaitGroup{} ch := make(chan int, 10) for i := 0; i &lt;
 <p>优雅的代码不好定义，每位开发也有自己的风格，但是坑总是相似的。</p>
 <h2 id="channel误用">channel误用</h2>
 <p><strong>Case-1</strong></p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
-	<span style="color:#a6e22e">wg</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">sync</span>.<span style="color:#a6e22e">WaitGroup</span>{}
-	<span style="color:#a6e22e">ch</span> <span style="color:#f92672">:=</span> make(<span style="color:#66d9ef">chan</span> <span style="color:#66d9ef">int</span>, <span style="color:#ae81ff">10</span>)
-	<span style="color:#66d9ef">for</span> <span style="color:#a6e22e">i</span> <span style="color:#f92672">:=</span> <span style="color:#ae81ff">0</span>; <span style="color:#a6e22e">i</span> &lt; <span style="color:#ae81ff">10</span>; <span style="color:#a6e22e">i</span><span style="color:#f92672">++</span> {
-		<span style="color:#a6e22e">ch</span> <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">i</span> <span style="color:#75715e">// put task into channel
-</span><span style="color:#75715e"></span>	}
-
-	close(<span style="color:#a6e22e">ch</span>)
-
-	<span style="color:#a6e22e">wg</span>.<span style="color:#a6e22e">Add</span>(<span style="color:#ae81ff">4</span>)
-	<span style="color:#66d9ef">for</span> <span style="color:#a6e22e">j</span> <span style="color:#f92672">:=</span> <span style="color:#ae81ff">0</span>; <span style="color:#a6e22e">j</span> &lt; <span style="color:#ae81ff">4</span>; <span style="color:#a6e22e">j</span><span style="color:#f92672">++</span> {
-		<span style="color:#66d9ef">go</span> <span style="color:#66d9ef">func</span>() {
-			<span style="color:#66d9ef">for</span> {
-				<span style="color:#a6e22e">task</span> <span style="color:#f92672">:=</span> <span style="color:#f92672">&lt;-</span><span style="color:#a6e22e">ch</span>
-				<span style="color:#75715e">// do sth
-</span><span style="color:#75715e"></span>				<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">task</span>)
-			}
-			<span style="color:#a6e22e">wg</span>.<span style="color:#a6e22e">Done</span>()
-		}()
-	}
-	<span style="color:#a6e22e">wg</span>.<span style="color:#a6e22e">Wait</span>()
-}
-</code></pre></div><!-- raw HTML omitted -->
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">wg</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">sync</span>.<span style="color:#a6e22e">WaitGroup</span>{}
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">ch</span> <span style="color:#f92672">:=</span> make(<span style="color:#66d9ef">chan</span> <span style="color:#66d9ef">int</span>, <span style="color:#ae81ff">10</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">for</span> <span style="color:#a6e22e">i</span> <span style="color:#f92672">:=</span> <span style="color:#ae81ff">0</span>; <span style="color:#a6e22e">i</span> &lt; <span style="color:#ae81ff">10</span>; <span style="color:#a6e22e">i</span><span style="color:#f92672">++</span> {
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">ch</span> <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">i</span> <span style="color:#75715e">// put task into channel
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	close(<span style="color:#a6e22e">ch</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">wg</span>.<span style="color:#a6e22e">Add</span>(<span style="color:#ae81ff">4</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">for</span> <span style="color:#a6e22e">j</span> <span style="color:#f92672">:=</span> <span style="color:#ae81ff">0</span>; <span style="color:#a6e22e">j</span> &lt; <span style="color:#ae81ff">4</span>; <span style="color:#a6e22e">j</span><span style="color:#f92672">++</span> {
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">go</span> <span style="color:#66d9ef">func</span>() {
+</span></span><span style="display:flex;"><span>			<span style="color:#66d9ef">for</span> {
+</span></span><span style="display:flex;"><span>				<span style="color:#a6e22e">task</span> <span style="color:#f92672">:=</span> <span style="color:#f92672">&lt;-</span><span style="color:#a6e22e">ch</span>
+</span></span><span style="display:flex;"><span>				<span style="color:#75715e">// do sth
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>				<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">task</span>)
+</span></span><span style="display:flex;"><span>			}
+</span></span><span style="display:flex;"><span>			<span style="color:#a6e22e">wg</span>.<span style="color:#a6e22e">Done</span>()
+</span></span><span style="display:flex;"><span>		}()
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">wg</span>.<span style="color:#a6e22e">Wait</span>()
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><!-- raw HTML omitted -->
 <!-- raw HTML omitted -->
 <p>2、使用for range读取，当channel关闭时，for循环会自动退出。</p>
 <!-- raw HTML omitted -->
 <p><strong>Case-2</strong></p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
-	<span style="color:#75715e">// ... ...
-</span><span style="color:#75715e"></span>	<span style="color:#a6e22e">handler</span>()
-	<span style="color:#75715e">// ... ...
-</span><span style="color:#75715e"></span>}
-
-<span style="color:#66d9ef">func</span> <span style="color:#a6e22e">handler</span>() {
-	<span style="color:#a6e22e">ch</span> <span style="color:#f92672">:=</span> make(<span style="color:#66d9ef">chan</span> <span style="color:#66d9ef">string</span>)
-	<span style="color:#66d9ef">go</span> <span style="color:#66d9ef">func</span>() {
-		<span style="color:#75715e">// do sth then put result
-</span><span style="color:#75715e"></span>		<span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">Sleep</span>(<span style="color:#ae81ff">3</span> <span style="color:#f92672">*</span> <span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">Second</span>)
-		<span style="color:#a6e22e">ch</span> <span style="color:#f92672">&lt;-</span> <span style="color:#e6db74">&#34;job result&#34;</span>
-	}()
-
-	<span style="color:#66d9ef">select</span> {
-	<span style="color:#66d9ef">case</span> <span style="color:#a6e22e">result</span> <span style="color:#f92672">:=</span> <span style="color:#f92672">&lt;-</span><span style="color:#a6e22e">ch</span>:
-		<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">result</span>)
-	<span style="color:#66d9ef">case</span> <span style="color:#f92672">&lt;-</span><span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">After</span>(<span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">Second</span>): <span style="color:#75715e">//timeout
-</span><span style="color:#75715e"></span>		<span style="color:#66d9ef">return</span>
-	}
-}
-
-</code></pre></div><!-- raw HTML omitted -->
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// ... ...
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#a6e22e">handler</span>()
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// ... ...
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">handler</span>() {
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">ch</span> <span style="color:#f92672">:=</span> make(<span style="color:#66d9ef">chan</span> <span style="color:#66d9ef">string</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">go</span> <span style="color:#66d9ef">func</span>() {
+</span></span><span style="display:flex;"><span>		<span style="color:#75715e">// do sth then put result
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>		<span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">Sleep</span>(<span style="color:#ae81ff">3</span> <span style="color:#f92672">*</span> <span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">Second</span>)
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">ch</span> <span style="color:#f92672">&lt;-</span> <span style="color:#e6db74">&#34;job result&#34;</span>
+</span></span><span style="display:flex;"><span>	}()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">select</span> {
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">case</span> <span style="color:#a6e22e">result</span> <span style="color:#f92672">:=</span> <span style="color:#f92672">&lt;-</span><span style="color:#a6e22e">ch</span>:
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">result</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">case</span> <span style="color:#f92672">&lt;-</span><span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">After</span>(<span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">Second</span>): <span style="color:#75715e">//timeout
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>		<span style="color:#66d9ef">return</span>
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><!-- raw HTML omitted -->
 <!-- raw HTML omitted -->
 <p>2、使用有buffer的channel。</p>
 <!-- raw HTML omitted -->
 <p><strong>Case-3</strong></p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
-	<span style="color:#66d9ef">var</span> (
-		<span style="color:#a6e22e">wg</span>  <span style="color:#a6e22e">sync</span>.<span style="color:#a6e22e">WaitGroup</span>
-		<span style="color:#a6e22e">ch</span>  = make(<span style="color:#66d9ef">chan</span> <span style="color:#66d9ef">int64</span>, <span style="color:#ae81ff">1</span>)
-		<span style="color:#a6e22e">res</span> <span style="color:#66d9ef">int64</span>
-	)
-	<span style="color:#a6e22e">wg</span>.<span style="color:#a6e22e">Add</span>(<span style="color:#ae81ff">2</span>)
-	<span style="color:#66d9ef">go</span> <span style="color:#66d9ef">func</span>() {
-		<span style="color:#66d9ef">defer</span> <span style="color:#a6e22e">wg</span>.<span style="color:#a6e22e">Done</span>()
-		<span style="color:#a6e22e">ch</span> <span style="color:#f92672">&lt;-</span> <span style="color:#ae81ff">4</span>
-		<span style="color:#75715e">// do sth
-</span><span style="color:#75715e"></span>		<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">atomic</span>.<span style="color:#a6e22e">LoadInt64</span>(<span style="color:#f92672">&amp;</span><span style="color:#a6e22e">res</span>))
-	}()
-	<span style="color:#66d9ef">go</span> <span style="color:#66d9ef">func</span>() {
-		<span style="color:#66d9ef">defer</span> <span style="color:#a6e22e">wg</span>.<span style="color:#a6e22e">Done</span>()
-		<span style="color:#75715e">// do sth
-</span><span style="color:#75715e"></span>		<span style="color:#a6e22e">atomic</span>.<span style="color:#a6e22e">AddInt64</span>(<span style="color:#f92672">&amp;</span><span style="color:#a6e22e">res</span>, <span style="color:#f92672">&lt;-</span><span style="color:#a6e22e">ch</span>)
-	}()
-	<span style="color:#a6e22e">wg</span>.<span style="color:#a6e22e">Wait</span>()
-	close(<span style="color:#a6e22e">ch</span>)
-}
-</code></pre></div><!-- raw HTML omitted -->
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">var</span> (
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">wg</span>  <span style="color:#a6e22e">sync</span>.<span style="color:#a6e22e">WaitGroup</span>
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">ch</span>  = make(<span style="color:#66d9ef">chan</span> <span style="color:#66d9ef">int64</span>, <span style="color:#ae81ff">1</span>)
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">res</span> <span style="color:#66d9ef">int64</span>
+</span></span><span style="display:flex;"><span>	)
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">wg</span>.<span style="color:#a6e22e">Add</span>(<span style="color:#ae81ff">2</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">go</span> <span style="color:#66d9ef">func</span>() {
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">defer</span> <span style="color:#a6e22e">wg</span>.<span style="color:#a6e22e">Done</span>()
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">ch</span> <span style="color:#f92672">&lt;-</span> <span style="color:#ae81ff">4</span>
+</span></span><span style="display:flex;"><span>		<span style="color:#75715e">// do sth
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>		<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">atomic</span>.<span style="color:#a6e22e">LoadInt64</span>(<span style="color:#f92672">&amp;</span><span style="color:#a6e22e">res</span>))
+</span></span><span style="display:flex;"><span>	}()
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">go</span> <span style="color:#66d9ef">func</span>() {
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">defer</span> <span style="color:#a6e22e">wg</span>.<span style="color:#a6e22e">Done</span>()
+</span></span><span style="display:flex;"><span>		<span style="color:#75715e">// do sth
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>		<span style="color:#a6e22e">atomic</span>.<span style="color:#a6e22e">AddInt64</span>(<span style="color:#f92672">&amp;</span><span style="color:#a6e22e">res</span>, <span style="color:#f92672">&lt;-</span><span style="color:#a6e22e">ch</span>)
+</span></span><span style="display:flex;"><span>	}()
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">wg</span>.<span style="color:#a6e22e">Wait</span>()
+</span></span><span style="display:flex;"><span>	close(<span style="color:#a6e22e">ch</span>)
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><!-- raw HTML omitted -->
 <p>1、不一定符合预期。可能是0也可能是4。</p>
 <p>2、即使是无buffer的channel也不一定符合预期</p>
 <!-- raw HTML omitted -->
@@ -299,60 +293,59 @@ func main() { wg := sync.WaitGroup{} ch := make(chan int, 10) for i := 0; i &lt;
 <p>2、如果业务场景允许，在两个gorutine结束后再查询。</p>
 <!-- raw HTML omitted -->
 <p><strong>Case-4</strong></p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
-	<span style="color:#66d9ef">var</span> (
-		<span style="color:#a6e22e">l</span>  <span style="color:#a6e22e">sync</span>.<span style="color:#a6e22e">Mutex</span>
-		<span style="color:#a6e22e">wg</span> <span style="color:#a6e22e">sync</span>.<span style="color:#a6e22e">WaitGroup</span>
-		<span style="color:#a6e22e">ch</span> = make(<span style="color:#66d9ef">chan</span> <span style="color:#66d9ef">int</span>, <span style="color:#ae81ff">1</span>)
-	)
-	<span style="color:#a6e22e">wg</span>.<span style="color:#a6e22e">Add</span>(<span style="color:#ae81ff">2</span>)
-	<span style="color:#66d9ef">go</span> <span style="color:#66d9ef">func</span>() {
-		<span style="color:#66d9ef">defer</span> <span style="color:#a6e22e">wg</span>.<span style="color:#a6e22e">Done</span>()
-		<span style="color:#a6e22e">l</span>.<span style="color:#a6e22e">Lock</span>()
-		<span style="color:#66d9ef">for</span> <span style="color:#a6e22e">i</span> <span style="color:#f92672">:=</span> <span style="color:#ae81ff">0</span>; <span style="color:#a6e22e">i</span> &lt; <span style="color:#ae81ff">4</span>; <span style="color:#a6e22e">i</span><span style="color:#f92672">++</span> {
-			<span style="color:#a6e22e">ch</span> <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">i</span>
-		}
-		<span style="color:#a6e22e">l</span>.<span style="color:#a6e22e">Unlock</span>()
-	}()
-	<span style="color:#66d9ef">go</span> <span style="color:#66d9ef">func</span>() {
-		<span style="color:#66d9ef">defer</span> <span style="color:#a6e22e">wg</span>.<span style="color:#a6e22e">Done</span>()
-		<span style="color:#66d9ef">for</span> <span style="color:#a6e22e">a</span> <span style="color:#f92672">:=</span> <span style="color:#66d9ef">range</span> <span style="color:#a6e22e">ch</span> {
-			<span style="color:#a6e22e">l</span>.<span style="color:#a6e22e">Lock</span>()
-			<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">a</span>)
-			<span style="color:#a6e22e">l</span>.<span style="color:#a6e22e">Unlock</span>()
-		}
-
-	}()
-	<span style="color:#a6e22e">wg</span>.<span style="color:#a6e22e">Wait</span>()
-	close(<span style="color:#a6e22e">ch</span>)
-}
-
-</code></pre></div><!-- raw HTML omitted -->
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">var</span> (
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">l</span>  <span style="color:#a6e22e">sync</span>.<span style="color:#a6e22e">Mutex</span>
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">wg</span> <span style="color:#a6e22e">sync</span>.<span style="color:#a6e22e">WaitGroup</span>
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">ch</span> = make(<span style="color:#66d9ef">chan</span> <span style="color:#66d9ef">int</span>, <span style="color:#ae81ff">1</span>)
+</span></span><span style="display:flex;"><span>	)
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">wg</span>.<span style="color:#a6e22e">Add</span>(<span style="color:#ae81ff">2</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">go</span> <span style="color:#66d9ef">func</span>() {
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">defer</span> <span style="color:#a6e22e">wg</span>.<span style="color:#a6e22e">Done</span>()
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">l</span>.<span style="color:#a6e22e">Lock</span>()
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">for</span> <span style="color:#a6e22e">i</span> <span style="color:#f92672">:=</span> <span style="color:#ae81ff">0</span>; <span style="color:#a6e22e">i</span> &lt; <span style="color:#ae81ff">4</span>; <span style="color:#a6e22e">i</span><span style="color:#f92672">++</span> {
+</span></span><span style="display:flex;"><span>			<span style="color:#a6e22e">ch</span> <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">i</span>
+</span></span><span style="display:flex;"><span>		}
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">l</span>.<span style="color:#a6e22e">Unlock</span>()
+</span></span><span style="display:flex;"><span>	}()
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">go</span> <span style="color:#66d9ef">func</span>() {
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">defer</span> <span style="color:#a6e22e">wg</span>.<span style="color:#a6e22e">Done</span>()
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">for</span> <span style="color:#a6e22e">a</span> <span style="color:#f92672">:=</span> <span style="color:#66d9ef">range</span> <span style="color:#a6e22e">ch</span> {
+</span></span><span style="display:flex;"><span>			<span style="color:#a6e22e">l</span>.<span style="color:#a6e22e">Lock</span>()
+</span></span><span style="display:flex;"><span>			<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">a</span>)
+</span></span><span style="display:flex;"><span>			<span style="color:#a6e22e">l</span>.<span style="color:#a6e22e">Unlock</span>()
+</span></span><span style="display:flex;"><span>		}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	}()
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">wg</span>.<span style="color:#a6e22e">Wait</span>()
+</span></span><span style="display:flex;"><span>	close(<span style="color:#a6e22e">ch</span>)
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><!-- raw HTML omitted -->
 <p>生产者先获取锁再生产，消费者先消费再获取锁。生产者将channel填满，而消费者阻塞在获取锁的逻辑，最终导致死锁。</p>
 <!-- raw HTML omitted -->
 <!-- raw HTML omitted -->
 <h3 id="channel底层实现">channel底层实现</h3>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">hchan</span> <span style="color:#66d9ef">struct</span> {
-	<span style="color:#a6e22e">qcount</span>   <span style="color:#66d9ef">uint</span>           <span style="color:#75715e">// 当前队列中剩余元素个数，即len
-</span><span style="color:#75715e"></span>	<span style="color:#a6e22e">dataqsiz</span> <span style="color:#66d9ef">uint</span>           <span style="color:#75715e">// 环形队列长度，即可以存放的元素个数，cap
-</span><span style="color:#75715e"></span>	<span style="color:#a6e22e">buf</span>      <span style="color:#a6e22e">unsafe</span>.<span style="color:#a6e22e">Pointer</span> <span style="color:#75715e">// 环形队列指针：队列缓存，头指针，环形数组实现
-</span><span style="color:#75715e"></span>	<span style="color:#a6e22e">elemsize</span> <span style="color:#66d9ef">uint16</span>         <span style="color:#75715e">// 每个元素的大小
-</span><span style="color:#75715e"></span>	<span style="color:#a6e22e">closed</span>   <span style="color:#66d9ef">uint32</span>         <span style="color:#75715e">// 关闭标志位
-</span><span style="color:#75715e"></span>	<span style="color:#a6e22e">elemtype</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">_type</span>         <span style="color:#75715e">// 元素类型
-</span><span style="color:#75715e"></span>	<span style="color:#a6e22e">sendx</span>    <span style="color:#66d9ef">uint</span>           <span style="color:#75715e">// 队列下标，指示元素写入时存放到队列中的位置
-</span><span style="color:#75715e"></span>	<span style="color:#a6e22e">recvx</span>    <span style="color:#66d9ef">uint</span>           <span style="color:#75715e">// 队列下标，指示元素从队列的该位置读出
-</span><span style="color:#75715e"></span>	<span style="color:#a6e22e">recvq</span>    <span style="color:#a6e22e">waitq</span>          <span style="color:#75715e">// 等待读消息的goroutine队列
-</span><span style="color:#75715e"></span>	<span style="color:#a6e22e">sendq</span>    <span style="color:#a6e22e">waitq</span>          <span style="color:#75715e">// 等待写消息的goroutine队列
-</span><span style="color:#75715e"></span>
-	<span style="color:#75715e">// lock protects all fields in hchan, as well as several
-</span><span style="color:#75715e"></span>	<span style="color:#75715e">// fields in sudogs blocked on this channel.
-</span><span style="color:#75715e"></span>	<span style="color:#75715e">//
-</span><span style="color:#75715e"></span>	<span style="color:#75715e">// Do not change another G&#39;s status while holding this lock
-</span><span style="color:#75715e"></span>	<span style="color:#75715e">// (in particular, do not ready a G), as this can deadlock
-</span><span style="color:#75715e"></span>	<span style="color:#75715e">// with stack shrinking.
-</span><span style="color:#75715e"></span>	<span style="color:#a6e22e">lock</span> <span style="color:#a6e22e">mutex</span>              <span style="color:#75715e">// 该锁保护hchan所有字段
-</span><span style="color:#75715e"></span>}
-</code></pre></div><h4 id="发送消息的流程">发送消息的流程</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">hchan</span> <span style="color:#66d9ef">struct</span> {
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">qcount</span>   <span style="color:#66d9ef">uint</span>           <span style="color:#75715e">// 当前队列中剩余元素个数，即len
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#a6e22e">dataqsiz</span> <span style="color:#66d9ef">uint</span>           <span style="color:#75715e">// 环形队列长度，即可以存放的元素个数，cap
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#a6e22e">buf</span>      <span style="color:#a6e22e">unsafe</span>.<span style="color:#a6e22e">Pointer</span> <span style="color:#75715e">// 环形队列指针：队列缓存，头指针，环形数组实现
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#a6e22e">elemsize</span> <span style="color:#66d9ef">uint16</span>         <span style="color:#75715e">// 每个元素的大小
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#a6e22e">closed</span>   <span style="color:#66d9ef">uint32</span>         <span style="color:#75715e">// 关闭标志位
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#a6e22e">elemtype</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">_type</span>         <span style="color:#75715e">// 元素类型
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#a6e22e">sendx</span>    <span style="color:#66d9ef">uint</span>           <span style="color:#75715e">// 队列下标，指示元素写入时存放到队列中的位置
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#a6e22e">recvx</span>    <span style="color:#66d9ef">uint</span>           <span style="color:#75715e">// 队列下标，指示元素从队列的该位置读出
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#a6e22e">recvq</span>    <span style="color:#a6e22e">waitq</span>          <span style="color:#75715e">// 等待读消息的goroutine队列
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#a6e22e">sendq</span>    <span style="color:#a6e22e">waitq</span>          <span style="color:#75715e">// 等待写消息的goroutine队列
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// lock protects all fields in hchan, as well as several
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#75715e">// fields in sudogs blocked on this channel.
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#75715e">//
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#75715e">// Do not change another G&#39;s status while holding this lock
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#75715e">// (in particular, do not ready a G), as this can deadlock
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#75715e">// with stack shrinking.
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#a6e22e">lock</span> <span style="color:#a6e22e">mutex</span>              <span style="color:#75715e">// 该锁保护hchan所有字段
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>}
+</span></span></code></pre></div><h4 id="发送消息的流程">发送消息的流程</h4>
 <p>源码见<code>runtime/chan.go</code>中的<code>chansend</code>函数。</p>
 <p><img src="https://note.youdao.com/yws/api/personal/file/WEB8ecf38653e087013e72abaf66b69e432?method=download&amp;shareKey=dfc2583d4f9c4fff497082679b768120" alt=""></p>
 <p><del>#### 接受消息的流程
@@ -408,103 +401,102 @@ func main() { wg := sync.WaitGroup{} ch := make(chan int, 10) for i := 0; i &lt;
 </table>
 <h2 id="mutextrwmutext误用">mutext/rwmutext误用</h2>
 <p><strong>Case-5</strong></p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">do</span>(<span style="color:#a6e22e">i</span> <span style="color:#66d9ef">int</span>) <span style="color:#66d9ef">error</span> {
-	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">i</span> &lt; <span style="color:#ae81ff">0</span> {
-		<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">errors</span>.<span style="color:#a6e22e">New</span>(<span style="color:#e6db74">&#34;&#34;</span>)
-	}
-	<span style="color:#66d9ef">return</span> <span style="color:#66d9ef">nil</span>
-}
-<span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
-	<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">l</span> <span style="color:#a6e22e">sync</span>.<span style="color:#a6e22e">Mutex</span>
-	<span style="color:#a6e22e">l</span>.<span style="color:#a6e22e">Lock</span>()
-	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">do</span>(<span style="color:#ae81ff">4</span>) <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
-		<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;have err&#34;</span>)
-		<span style="color:#66d9ef">return</span>
-	}
-	<span style="color:#a6e22e">l</span>.<span style="color:#a6e22e">Unlock</span>()
-}
-
-</code></pre></div><!-- raw HTML omitted -->
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">do</span>(<span style="color:#a6e22e">i</span> <span style="color:#66d9ef">int</span>) <span style="color:#66d9ef">error</span> {
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">i</span> &lt; <span style="color:#ae81ff">0</span> {
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">errors</span>.<span style="color:#a6e22e">New</span>(<span style="color:#e6db74">&#34;&#34;</span>)
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">return</span> <span style="color:#66d9ef">nil</span>
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">l</span> <span style="color:#a6e22e">sync</span>.<span style="color:#a6e22e">Mutex</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">l</span>.<span style="color:#a6e22e">Lock</span>()
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">do</span>(<span style="color:#ae81ff">4</span>) <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;have err&#34;</span>)
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">return</span>
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">l</span>.<span style="color:#a6e22e">Unlock</span>()
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><!-- raw HTML omitted -->
 <!-- raw HTML omitted -->
 <ol start="2">
 <li>defer unlock，但是需要注意使用此方式会增加锁粒度</li>
 </ol>
 <!-- raw HTML omitted -->
 <p><strong>Case-6</strong></p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
-	<span style="color:#66d9ef">var</span> (
-		<span style="color:#a6e22e">wg</span> <span style="color:#a6e22e">sync</span>.<span style="color:#a6e22e">WaitGroup</span>
-		<span style="color:#a6e22e">mu</span> <span style="color:#a6e22e">sync</span>.<span style="color:#a6e22e">RWMutex</span>
-	)
-
-	<span style="color:#a6e22e">wg</span>.<span style="color:#a6e22e">Add</span>(<span style="color:#ae81ff">5</span>)
-	<span style="color:#66d9ef">go</span> <span style="color:#66d9ef">func</span>() {
-		<span style="color:#66d9ef">defer</span> <span style="color:#a6e22e">wg</span>.<span style="color:#a6e22e">Done</span>()
-		<span style="color:#a6e22e">mu</span>.<span style="color:#a6e22e">RLock</span>()
-		<span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">Sleep</span>(<span style="color:#ae81ff">5</span> <span style="color:#f92672">*</span> <span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">Second</span>)
-		<span style="color:#a6e22e">mu</span>.<span style="color:#a6e22e">RUnlock</span>()
-	}()
-	<span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">Sleep</span>(<span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">Second</span>)
-	<span style="color:#75715e">// 加写锁，此时reader0还未释放锁
-</span><span style="color:#75715e"></span>	<span style="color:#66d9ef">go</span> <span style="color:#66d9ef">func</span>() {
-		<span style="color:#66d9ef">defer</span> <span style="color:#a6e22e">wg</span>.<span style="color:#a6e22e">Done</span>()
-		<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;writer0 Call Lock&#34;</span>)
-		<span style="color:#a6e22e">mu</span>.<span style="color:#a6e22e">Lock</span>()
-		<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;writer0 Lock&#34;</span>)
-		<span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">Sleep</span>(<span style="color:#ae81ff">5</span> <span style="color:#f92672">*</span> <span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">Second</span>)
-		<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;writer0 Call UnLock&#34;</span>)
-		<span style="color:#a6e22e">mu</span>.<span style="color:#a6e22e">Unlock</span>()
-		<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;writer0 UnLocked&#34;</span>)
-	}()
-	<span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">Sleep</span>(<span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">Second</span>)
-	<span style="color:#75715e">// 加读锁，此时reader0还未释放锁
-</span><span style="color:#75715e"></span>	<span style="color:#66d9ef">for</span> <span style="color:#a6e22e">i</span> <span style="color:#f92672">:=</span> <span style="color:#ae81ff">1</span>; <span style="color:#a6e22e">i</span> <span style="color:#f92672">&lt;=</span> <span style="color:#ae81ff">3</span>; <span style="color:#a6e22e">i</span><span style="color:#f92672">++</span> {
-		<span style="color:#66d9ef">go</span> <span style="color:#66d9ef">func</span>(<span style="color:#a6e22e">idx</span> <span style="color:#66d9ef">int</span>) {
-			<span style="color:#66d9ef">defer</span> <span style="color:#a6e22e">wg</span>.<span style="color:#a6e22e">Done</span>()
-			<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Printf</span>(<span style="color:#e6db74">&#34;reader%d Call RLock\n&#34;</span>, <span style="color:#a6e22e">idx</span>)
-			<span style="color:#a6e22e">mu</span>.<span style="color:#a6e22e">RLock</span>()
-			<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Printf</span>(<span style="color:#e6db74">&#34;reader%d RLock\n&#34;</span>, <span style="color:#a6e22e">idx</span>)
-			<span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">Sleep</span>(<span style="color:#ae81ff">3</span> <span style="color:#f92672">*</span> <span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">Second</span>)
-			<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Printf</span>(<span style="color:#e6db74">&#34;reader%d Call RUnLock\n&#34;</span>, <span style="color:#a6e22e">idx</span>)
-			<span style="color:#a6e22e">mu</span>.<span style="color:#a6e22e">RUnlock</span>()
-			<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Printf</span>(<span style="color:#e6db74">&#34;reader%d RUnLocked\n&#34;</span>, <span style="color:#a6e22e">idx</span>)
-		}(<span style="color:#a6e22e">i</span>)
-	}
-	<span style="color:#a6e22e">wg</span>.<span style="color:#a6e22e">Wait</span>()
-}
-</code></pre></div><!-- raw HTML omitted -->
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">var</span> (
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">wg</span> <span style="color:#a6e22e">sync</span>.<span style="color:#a6e22e">WaitGroup</span>
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">mu</span> <span style="color:#a6e22e">sync</span>.<span style="color:#a6e22e">RWMutex</span>
+</span></span><span style="display:flex;"><span>	)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">wg</span>.<span style="color:#a6e22e">Add</span>(<span style="color:#ae81ff">5</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">go</span> <span style="color:#66d9ef">func</span>() {
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">defer</span> <span style="color:#a6e22e">wg</span>.<span style="color:#a6e22e">Done</span>()
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">mu</span>.<span style="color:#a6e22e">RLock</span>()
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">Sleep</span>(<span style="color:#ae81ff">5</span> <span style="color:#f92672">*</span> <span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">Second</span>)
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">mu</span>.<span style="color:#a6e22e">RUnlock</span>()
+</span></span><span style="display:flex;"><span>	}()
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">Sleep</span>(<span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">Second</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// 加写锁，此时reader0还未释放锁
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#66d9ef">go</span> <span style="color:#66d9ef">func</span>() {
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">defer</span> <span style="color:#a6e22e">wg</span>.<span style="color:#a6e22e">Done</span>()
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;writer0 Call Lock&#34;</span>)
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">mu</span>.<span style="color:#a6e22e">Lock</span>()
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;writer0 Lock&#34;</span>)
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">Sleep</span>(<span style="color:#ae81ff">5</span> <span style="color:#f92672">*</span> <span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">Second</span>)
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;writer0 Call UnLock&#34;</span>)
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">mu</span>.<span style="color:#a6e22e">Unlock</span>()
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;writer0 UnLocked&#34;</span>)
+</span></span><span style="display:flex;"><span>	}()
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">Sleep</span>(<span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">Second</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// 加读锁，此时reader0还未释放锁
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#66d9ef">for</span> <span style="color:#a6e22e">i</span> <span style="color:#f92672">:=</span> <span style="color:#ae81ff">1</span>; <span style="color:#a6e22e">i</span> <span style="color:#f92672">&lt;=</span> <span style="color:#ae81ff">3</span>; <span style="color:#a6e22e">i</span><span style="color:#f92672">++</span> {
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">go</span> <span style="color:#66d9ef">func</span>(<span style="color:#a6e22e">idx</span> <span style="color:#66d9ef">int</span>) {
+</span></span><span style="display:flex;"><span>			<span style="color:#66d9ef">defer</span> <span style="color:#a6e22e">wg</span>.<span style="color:#a6e22e">Done</span>()
+</span></span><span style="display:flex;"><span>			<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Printf</span>(<span style="color:#e6db74">&#34;reader%d Call RLock\n&#34;</span>, <span style="color:#a6e22e">idx</span>)
+</span></span><span style="display:flex;"><span>			<span style="color:#a6e22e">mu</span>.<span style="color:#a6e22e">RLock</span>()
+</span></span><span style="display:flex;"><span>			<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Printf</span>(<span style="color:#e6db74">&#34;reader%d RLock\n&#34;</span>, <span style="color:#a6e22e">idx</span>)
+</span></span><span style="display:flex;"><span>			<span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">Sleep</span>(<span style="color:#ae81ff">3</span> <span style="color:#f92672">*</span> <span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">Second</span>)
+</span></span><span style="display:flex;"><span>			<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Printf</span>(<span style="color:#e6db74">&#34;reader%d Call RUnLock\n&#34;</span>, <span style="color:#a6e22e">idx</span>)
+</span></span><span style="display:flex;"><span>			<span style="color:#a6e22e">mu</span>.<span style="color:#a6e22e">RUnlock</span>()
+</span></span><span style="display:flex;"><span>			<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Printf</span>(<span style="color:#e6db74">&#34;reader%d RUnLocked\n&#34;</span>, <span style="color:#a6e22e">idx</span>)
+</span></span><span style="display:flex;"><span>		}(<span style="color:#a6e22e">i</span>)
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">wg</span>.<span style="color:#a6e22e">Wait</span>()
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><!-- raw HTML omitted -->
 <p>被加读锁时，写操作进来会被阻塞。在写操作阻塞期间，如果有读操作试图进来，它们也会被阻塞。当阻塞写操作的最后一个读操作解读锁时，它只会唤醒被阻塞的写操作，之后进来的读操作需要该写操作完成之后被唤醒。</p>
 <!-- raw HTML omitted -->
 <p><strong>Case-7</strong></p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">var</span> <span style="color:#a6e22e">mu</span> <span style="color:#a6e22e">sync</span>.<span style="color:#a6e22e">RWMutex</span>
-
-<span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
-	<span style="color:#66d9ef">go</span> <span style="color:#a6e22e">A1</span>()
-	<span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">Sleep</span>(<span style="color:#ae81ff">2</span> <span style="color:#f92672">*</span> <span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">Second</span>)
-
-	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;w call lock&#34;</span>)
-	<span style="color:#a6e22e">mu</span>.<span style="color:#a6e22e">Lock</span>()
-	<span style="color:#66d9ef">defer</span> <span style="color:#a6e22e">mu</span>.<span style="color:#a6e22e">Unlock</span>()
-
-}
-<span style="color:#66d9ef">func</span> <span style="color:#a6e22e">A1</span>() {
-	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;a1 call rlock&#34;</span>)
-	<span style="color:#a6e22e">mu</span>.<span style="color:#a6e22e">RLock</span>()
-	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;a1 rlocked&#34;</span>)
-	<span style="color:#66d9ef">defer</span> <span style="color:#a6e22e">mu</span>.<span style="color:#a6e22e">RUnlock</span>()
-	<span style="color:#a6e22e">B2</span>()
-}
-<span style="color:#66d9ef">func</span> <span style="color:#a6e22e">B2</span>() {
-	<span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">Sleep</span>(<span style="color:#ae81ff">5</span> <span style="color:#f92672">*</span> <span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">Second</span>)
-	<span style="color:#a6e22e">C3</span>()
-}
-<span style="color:#66d9ef">func</span> <span style="color:#a6e22e">C3</span>() {
-	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;c3 call rlock&#34;</span>)
-	<span style="color:#a6e22e">mu</span>.<span style="color:#a6e22e">RLock</span>()
-	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;c3 rlocked&#34;</span>)
-	<span style="color:#66d9ef">defer</span> <span style="color:#a6e22e">mu</span>.<span style="color:#a6e22e">RUnlock</span>()
-}
-</code></pre></div><!-- raw HTML omitted -->
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">var</span> <span style="color:#a6e22e">mu</span> <span style="color:#a6e22e">sync</span>.<span style="color:#a6e22e">RWMutex</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">go</span> <span style="color:#a6e22e">A1</span>()
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">Sleep</span>(<span style="color:#ae81ff">2</span> <span style="color:#f92672">*</span> <span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">Second</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;w call lock&#34;</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">mu</span>.<span style="color:#a6e22e">Lock</span>()
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">defer</span> <span style="color:#a6e22e">mu</span>.<span style="color:#a6e22e">Unlock</span>()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">A1</span>() {
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;a1 call rlock&#34;</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">mu</span>.<span style="color:#a6e22e">RLock</span>()
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;a1 rlocked&#34;</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">defer</span> <span style="color:#a6e22e">mu</span>.<span style="color:#a6e22e">RUnlock</span>()
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">B2</span>()
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">B2</span>() {
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">Sleep</span>(<span style="color:#ae81ff">5</span> <span style="color:#f92672">*</span> <span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">Second</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">C3</span>()
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">C3</span>() {
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;c3 call rlock&#34;</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">mu</span>.<span style="color:#a6e22e">RLock</span>()
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;c3 rlocked&#34;</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">defer</span> <span style="color:#a6e22e">mu</span>.<span style="color:#a6e22e">RUnlock</span>()
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><!-- raw HTML omitted -->
 <p>A1使用了defer， 使RLock()递归调用，递归调用导致已经等待Lock发生死锁。</p>
 <!-- raw HTML omitted -->
 <h3 id="一些建议">一些建议</h3>
@@ -526,18 +518,18 @@ func main() { wg := sync.WaitGroup{} ch := make(chan int, 10) for i := 0; i &lt;
 <li>对于在read中的数据删除，并没有真正删除key，而是从key中取出了entry，然后把<code>entry.p</code> 设为nil等待gc回收。</li>
 </ul>
 <p><strong>Go1.15陷阱</strong></p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
-    <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">sm</span> <span style="color:#a6e22e">sync</span>.<span style="color:#a6e22e">Map</span>
-    <span style="color:#66d9ef">for</span> <span style="color:#a6e22e">i</span> <span style="color:#f92672">:=</span> <span style="color:#ae81ff">0</span>; <span style="color:#a6e22e">i</span> &lt; <span style="color:#ae81ff">1</span> <span style="color:#f92672">&lt;&lt;</span> <span style="color:#ae81ff">26</span>; <span style="color:#a6e22e">i</span><span style="color:#f92672">++</span> {
-        <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">value</span> [<span style="color:#ae81ff">1000</span>]<span style="color:#66d9ef">int</span>
-        <span style="color:#a6e22e">value</span>[<span style="color:#ae81ff">0</span>] = <span style="color:#a6e22e">i</span>
-        <span style="color:#a6e22e">sm</span>.<span style="color:#a6e22e">Store</span>(<span style="color:#a6e22e">value</span>, <span style="color:#a6e22e">i</span>)
-        <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">i</span> &gt; <span style="color:#ae81ff">0</span> {
-          <span style="color:#a6e22e">sm</span>.<span style="color:#a6e22e">Delete</span>(<span style="color:#a6e22e">value</span>)
-        }
-    }
-}
-</code></pre></div><p>这段代码只写不读然后删除，在Go1.15中会造成内存泄漏。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">sm</span> <span style="color:#a6e22e">sync</span>.<span style="color:#a6e22e">Map</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> <span style="color:#a6e22e">i</span> <span style="color:#f92672">:=</span> <span style="color:#ae81ff">0</span>; <span style="color:#a6e22e">i</span> &lt; <span style="color:#ae81ff">1</span> <span style="color:#f92672">&lt;&lt;</span> <span style="color:#ae81ff">26</span>; <span style="color:#a6e22e">i</span><span style="color:#f92672">++</span> {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">value</span> [<span style="color:#ae81ff">1000</span>]<span style="color:#66d9ef">int</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">value</span>[<span style="color:#ae81ff">0</span>] = <span style="color:#a6e22e">i</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">sm</span>.<span style="color:#a6e22e">Store</span>(<span style="color:#a6e22e">value</span>, <span style="color:#a6e22e">i</span>)
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">i</span> &gt; <span style="color:#ae81ff">0</span> {
+</span></span><span style="display:flex;"><span>          <span style="color:#a6e22e">sm</span>.<span style="color:#a6e22e">Delete</span>(<span style="color:#a6e22e">value</span>)
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>这段代码只写不读然后删除，在Go1.15中会造成内存泄漏。</p>
 <p>因为只写未读，所以数据一直在dirty中，而go1.15因为下面的提交去掉了对只在dirty中的数据删除时的<code>delete</code>操作，导致dirty中key和value一直存在从而造成内存泄漏。</p>
 <p><a href="https://github.com/golang/go/commit/2e8dbae85ce88d02f651e53338984288057f14cb#diff-4bf757695a75598d57e2b575987c626d4502cc0b2a08c5b0d3e535fa63de0d1e">https://github.com/golang/go/commit/2e8dbae85ce88d02f651e53338984288057f14cb#diff-4bf757695a75598d57e2b575987c626d4502cc0b2a08c5b0d3e535fa63de0d1e</a></p>
 <p>后在1.16中通过下面的提交修复了此问题</p>
@@ -553,7 +545,7 @@ func main() { wg := sync.WaitGroup{} ch := make(chan int, 10) for i := 0; i &lt;
 <h3 id="maprwmutext和syncmap使用场景">map+rwmutext和sync.map使用场景</h3>
 <p>到底是使用<code>map+rwmutext</code>还是使用<code>sync.map</code>， 我汇总了不同的资料。</p>
 <p>1、官方文档注释（<code>sync/map.go</code>）</p>
-<pre><code>// The Map type is optimized for two common use cases: (1) when the entry for a given
+<pre tabindex="0"><code>// The Map type is optimized for two common use cases: (1) when the entry for a given
 // key is only ever written once but read many times, as in caches that only grow,
 // or (2) when multiple goroutines read, write, and overwrite entries for disjoint
 // sets of keys. In these two cases, use of a Map may significantly reduce lock
@@ -570,29 +562,29 @@ func main() { wg := sync.WaitGroup{} ch := make(chan int, 10) for i := 0; i &lt;
 <p>读比较多的场景<code>sync.Map</code>更具有优势，读写相对均衡则<code>map+rwmutext</code>更加适合。</p>
 <h2 id="synconce误用">sync.Once误用</h2>
 <p><strong>Case-8</strong></p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
-	<span style="color:#a6e22e">count</span> <span style="color:#f92672">:=</span> <span style="color:#ae81ff">0</span>
-	<span style="color:#a6e22e">once</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">sync</span>.<span style="color:#a6e22e">Once</span>{}
-	<span style="color:#66d9ef">go</span> <span style="color:#66d9ef">func</span>() {
-		<span style="color:#66d9ef">defer</span> <span style="color:#66d9ef">func</span>() {
-			<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">e</span> <span style="color:#f92672">:=</span> recover(); <span style="color:#a6e22e">e</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
-				<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;recovered from once&#34;</span>)
-			}
-		}()
-		<span style="color:#a6e22e">once</span>.<span style="color:#a6e22e">Do</span>(<span style="color:#66d9ef">func</span>() {
-			<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;once in goroutine&#34;</span>)
-			<span style="color:#a6e22e">count</span> = <span style="color:#ae81ff">1</span> <span style="color:#f92672">/</span> <span style="color:#a6e22e">count</span>
-		})
-	}()
-	
-	<span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">Sleep</span>(<span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">Second</span>)
-	<span style="color:#a6e22e">once</span>.<span style="color:#a6e22e">Do</span>(<span style="color:#66d9ef">func</span>() {
-		<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;once in main&#34;</span>)
-		<span style="color:#a6e22e">count</span> = <span style="color:#ae81ff">1</span> <span style="color:#f92672">/</span> <span style="color:#a6e22e">count</span>
-	})
-	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;end&#34;</span>)
-}
-</code></pre></div><!-- raw HTML omitted -->
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">count</span> <span style="color:#f92672">:=</span> <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">once</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">sync</span>.<span style="color:#a6e22e">Once</span>{}
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">go</span> <span style="color:#66d9ef">func</span>() {
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">defer</span> <span style="color:#66d9ef">func</span>() {
+</span></span><span style="display:flex;"><span>			<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">e</span> <span style="color:#f92672">:=</span> recover(); <span style="color:#a6e22e">e</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+</span></span><span style="display:flex;"><span>				<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;recovered from once&#34;</span>)
+</span></span><span style="display:flex;"><span>			}
+</span></span><span style="display:flex;"><span>		}()
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">once</span>.<span style="color:#a6e22e">Do</span>(<span style="color:#66d9ef">func</span>() {
+</span></span><span style="display:flex;"><span>			<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;once in goroutine&#34;</span>)
+</span></span><span style="display:flex;"><span>			<span style="color:#a6e22e">count</span> = <span style="color:#ae81ff">1</span> <span style="color:#f92672">/</span> <span style="color:#a6e22e">count</span>
+</span></span><span style="display:flex;"><span>		})
+</span></span><span style="display:flex;"><span>	}()
+</span></span><span style="display:flex;"><span>	
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">Sleep</span>(<span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">Second</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">once</span>.<span style="color:#a6e22e">Do</span>(<span style="color:#66d9ef">func</span>() {
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;once in main&#34;</span>)
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">count</span> = <span style="color:#ae81ff">1</span> <span style="color:#f92672">/</span> <span style="color:#a6e22e">count</span>
+</span></span><span style="display:flex;"><span>	})
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;end&#34;</span>)
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><!-- raw HTML omitted -->
 <p>这意味着因为某些未考虑到的极端情况导致初始化未完成，那么整个初始化逻辑不可重入。所以我们在使用once的时候一定要注意可能引起panic的情况。</p>
 <!-- raw HTML omitted -->
 <h3 id="once和单例">once和单例</h3>
@@ -609,21 +601,20 @@ func main() { wg := sync.WaitGroup{} ch := make(chan int, 10) for i := 0; i &lt;
 <p>为避免并发问题，可在init中创建，或者在使用前创建（注意不要并发创建，否则又要加锁）。</p>
 <h2 id="waitgroup误用">WaitGroup误用</h2>
 <p><strong>Case-9</strong></p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
-	<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">wg</span> <span style="color:#a6e22e">sync</span>.<span style="color:#a6e22e">WaitGroup</span>
-	<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">count</span> <span style="color:#66d9ef">int64</span>
-	<span style="color:#66d9ef">for</span> <span style="color:#a6e22e">i</span> <span style="color:#f92672">:=</span> <span style="color:#ae81ff">0</span>; <span style="color:#a6e22e">i</span> &lt; <span style="color:#ae81ff">1000</span>; <span style="color:#a6e22e">i</span><span style="color:#f92672">++</span> {
-		<span style="color:#66d9ef">go</span> <span style="color:#66d9ef">func</span>() {
-			<span style="color:#a6e22e">wg</span>.<span style="color:#a6e22e">Add</span>(<span style="color:#ae81ff">1</span>)
-			<span style="color:#a6e22e">atomic</span>.<span style="color:#a6e22e">AddInt64</span>(<span style="color:#f92672">&amp;</span><span style="color:#a6e22e">count</span>, <span style="color:#ae81ff">1</span>) <span style="color:#75715e">// do sth
-</span><span style="color:#75715e"></span>			<span style="color:#a6e22e">wg</span>.<span style="color:#a6e22e">Done</span>()
-		}()
-	}
-	<span style="color:#a6e22e">wg</span>.<span style="color:#a6e22e">Wait</span>()
-	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Printf</span>(<span style="color:#e6db74">&#34;done! count:%v\n&#34;</span>, <span style="color:#a6e22e">atomic</span>.<span style="color:#a6e22e">LoadInt64</span>(<span style="color:#f92672">&amp;</span><span style="color:#a6e22e">count</span>))
-}
-</code></pre></div><!-- raw HTML omitted -->
-<p><!-- raw HTML omitted --></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">wg</span> <span style="color:#a6e22e">sync</span>.<span style="color:#a6e22e">WaitGroup</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">count</span> <span style="color:#66d9ef">int64</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">for</span> <span style="color:#a6e22e">i</span> <span style="color:#f92672">:=</span> <span style="color:#ae81ff">0</span>; <span style="color:#a6e22e">i</span> &lt; <span style="color:#ae81ff">1000</span>; <span style="color:#a6e22e">i</span><span style="color:#f92672">++</span> {
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">go</span> <span style="color:#66d9ef">func</span>() {
+</span></span><span style="display:flex;"><span>			<span style="color:#a6e22e">wg</span>.<span style="color:#a6e22e">Add</span>(<span style="color:#ae81ff">1</span>)
+</span></span><span style="display:flex;"><span>			<span style="color:#a6e22e">atomic</span>.<span style="color:#a6e22e">AddInt64</span>(<span style="color:#f92672">&amp;</span><span style="color:#a6e22e">count</span>, <span style="color:#ae81ff">1</span>) <span style="color:#75715e">// do sth
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>			<span style="color:#a6e22e">wg</span>.<span style="color:#a6e22e">Done</span>()
+</span></span><span style="display:flex;"><span>		}()
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">wg</span>.<span style="color:#a6e22e">Wait</span>()
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Printf</span>(<span style="color:#e6db74">&#34;done! count:%v\n&#34;</span>, <span style="color:#a6e22e">atomic</span>.<span style="color:#a6e22e">LoadInt64</span>(<span style="color:#f92672">&amp;</span><span style="color:#a6e22e">count</span>))
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><!-- raw HTML omitted -->
 <!-- raw HTML omitted -->
 <h3 id="一些建议-1">一些建议</h3>
 <ul>
@@ -631,27 +622,27 @@ func main() { wg := sync.WaitGroup{} ch := make(chan int, 10) for i := 0; i &lt;
 <li>不能将计数器设置为负数，否则会发生panic。例如：Add 负数或Done调用次数大于总数</li>
 <li>WaitGroup可以重用的，但是需要等上一批的goroutine都调用wait完毕后才能继续重用WaitGroup</li>
 </ul>
-<pre><code>// 还没wait结束就add可能会有这个panic，不过我目前尚未复现
-panic(&quot;sync: WaitGroup is reused before previous Wait has returned&quot;)
+<pre tabindex="0"><code>// 还没wait结束就add可能会有这个panic，不过我目前尚未复现
+panic(&#34;sync: WaitGroup is reused before previous Wait has returned&#34;)
 </code></pre><h2 id="synccond误用">sync.Cond误用</h2>
 <p><strong>使用场景</strong>：</p>
 <p>我需要完成一项任务，但是这项任务需要满足一定条件才可以执行，否则我就等着。
 那我可以怎么获取这个条件呢？一种是循环获取，另一种是条件满足的时候通知我就可以了。显然第二种效率高很多。
 golang里面通知可以用channel的方式进行通知， 但是channel的方式还是比较适用于一对一，一对多则还是sync.Cond更加方便。</p>
 <p><strong>Case-10</strong></p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
-	<span style="color:#a6e22e">m</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">sync</span>.<span style="color:#a6e22e">Mutex</span>{}
-	<span style="color:#a6e22e">c</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">sync</span>.<span style="color:#a6e22e">NewCond</span>(<span style="color:#f92672">&amp;</span><span style="color:#a6e22e">m</span>)
-	<span style="color:#66d9ef">go</span> <span style="color:#66d9ef">func</span>() {
-		<span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">Sleep</span>(<span style="color:#ae81ff">1</span> <span style="color:#f92672">*</span> <span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">Second</span>)
-		<span style="color:#a6e22e">c</span>.<span style="color:#a6e22e">Broadcast</span>()
-	}()
-	<span style="color:#a6e22e">c</span>.<span style="color:#a6e22e">L</span>.<span style="color:#a6e22e">Lock</span>()
-	<span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">Sleep</span>(<span style="color:#ae81ff">2</span> <span style="color:#f92672">*</span> <span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">Second</span>)
-	<span style="color:#a6e22e">c</span>.<span style="color:#a6e22e">Wait</span>()
-	<span style="color:#a6e22e">c</span>.<span style="color:#a6e22e">L</span>.<span style="color:#a6e22e">Unlock</span>()
-}
-</code></pre></div><!-- raw HTML omitted -->
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">m</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">sync</span>.<span style="color:#a6e22e">Mutex</span>{}
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">c</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">sync</span>.<span style="color:#a6e22e">NewCond</span>(<span style="color:#f92672">&amp;</span><span style="color:#a6e22e">m</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">go</span> <span style="color:#66d9ef">func</span>() {
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">Sleep</span>(<span style="color:#ae81ff">1</span> <span style="color:#f92672">*</span> <span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">Second</span>)
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">c</span>.<span style="color:#a6e22e">Broadcast</span>()
+</span></span><span style="display:flex;"><span>	}()
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">c</span>.<span style="color:#a6e22e">L</span>.<span style="color:#a6e22e">Lock</span>()
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">Sleep</span>(<span style="color:#ae81ff">2</span> <span style="color:#f92672">*</span> <span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">Second</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">c</span>.<span style="color:#a6e22e">Wait</span>()
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">c</span>.<span style="color:#a6e22e">L</span>.<span style="color:#a6e22e">Unlock</span>()
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><!-- raw HTML omitted -->
 <h3 id="一些建议-2">一些建议</h3>
 <ul>
 <li><code>Wait</code>调用尽量要在某种条件不满足的情况下才调用，不要使用这种方式将goroutine挂起以达到某种暂停执行的目的。</li>
@@ -662,39 +653,38 @@ golang里面通知可以用channel的方式进行通知， 但是channel的方�
 </blockquote>
 <h2 id="defer误用">defer误用</h2>
 <p><strong>Case-11</strong></p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
-	<span style="color:#a6e22e">wg</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">sync</span>.<span style="color:#a6e22e">WaitGroup</span>{}
-	<span style="color:#a6e22e">wg</span>.<span style="color:#a6e22e">Add</span>(<span style="color:#ae81ff">1</span>)
-	<span style="color:#66d9ef">go</span> <span style="color:#66d9ef">func</span>() {
-		<span style="color:#66d9ef">defer</span> <span style="color:#a6e22e">wg</span>.<span style="color:#a6e22e">Done</span>()
-		<span style="color:#a6e22e">start</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">Now</span>()
-		<span style="color:#66d9ef">defer</span> <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Printf</span>(<span style="color:#e6db74">&#34;logging job cost: %v\n&#34;</span>, <span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">Since</span>(<span style="color:#a6e22e">start</span>))
-		<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Printf</span>(<span style="color:#e6db74">&#34;logging at job start: %v\n&#34;</span>, <span style="color:#a6e22e">start</span>)
-		<span style="color:#75715e">// do sth
-</span><span style="color:#75715e"></span>		<span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">Sleep</span>(<span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">Second</span>)
-	}()
-	<span style="color:#a6e22e">wg</span>.<span style="color:#a6e22e">Wait</span>()
-	<span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">Sleep</span>(<span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">Second</span>)
-}
-</code></pre></div><!-- raw HTML omitted -->
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">wg</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">sync</span>.<span style="color:#a6e22e">WaitGroup</span>{}
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">wg</span>.<span style="color:#a6e22e">Add</span>(<span style="color:#ae81ff">1</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">go</span> <span style="color:#66d9ef">func</span>() {
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">defer</span> <span style="color:#a6e22e">wg</span>.<span style="color:#a6e22e">Done</span>()
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">start</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">Now</span>()
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">defer</span> <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Printf</span>(<span style="color:#e6db74">&#34;logging job cost: %v\n&#34;</span>, <span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">Since</span>(<span style="color:#a6e22e">start</span>))
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Printf</span>(<span style="color:#e6db74">&#34;logging at job start: %v\n&#34;</span>, <span style="color:#a6e22e">start</span>)
+</span></span><span style="display:flex;"><span>		<span style="color:#75715e">// do sth
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>		<span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">Sleep</span>(<span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">Second</span>)
+</span></span><span style="display:flex;"><span>	}()
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">wg</span>.<span style="color:#a6e22e">Wait</span>()
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">Sleep</span>(<span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">Second</span>)
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><!-- raw HTML omitted -->
 <p>更适合的方式是defer+闭包。</p>
 <!-- raw HTML omitted -->
 <p><strong>Case-12</strong></p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
-	<span style="color:#a6e22e">i</span> <span style="color:#f92672">:=</span> <span style="color:#ae81ff">1</span>
-	<span style="color:#a6e22e">j</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">add</span>(<span style="color:#f92672">&amp;</span><span style="color:#a6e22e">i</span>)
-	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;i :&#34;</span>, <span style="color:#a6e22e">i</span>)
-	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;j :&#34;</span>, <span style="color:#a6e22e">j</span>)
-}
-
-<span style="color:#66d9ef">func</span> <span style="color:#a6e22e">add</span>(<span style="color:#a6e22e">n</span> <span style="color:#f92672">*</span><span style="color:#66d9ef">int</span>) <span style="color:#66d9ef">int</span> {
-	<span style="color:#66d9ef">defer</span> <span style="color:#66d9ef">func</span>() {
-		<span style="color:#f92672">*</span><span style="color:#a6e22e">n</span> = <span style="color:#f92672">*</span><span style="color:#a6e22e">n</span> <span style="color:#f92672">+</span> <span style="color:#ae81ff">1</span>
-	}()
-	<span style="color:#66d9ef">return</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">n</span>
-}
-
-</code></pre></div><!-- raw HTML omitted -->
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">i</span> <span style="color:#f92672">:=</span> <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">j</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">add</span>(<span style="color:#f92672">&amp;</span><span style="color:#a6e22e">i</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;i :&#34;</span>, <span style="color:#a6e22e">i</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;j :&#34;</span>, <span style="color:#a6e22e">j</span>)
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">add</span>(<span style="color:#a6e22e">n</span> <span style="color:#f92672">*</span><span style="color:#66d9ef">int</span>) <span style="color:#66d9ef">int</span> {
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">defer</span> <span style="color:#66d9ef">func</span>() {
+</span></span><span style="display:flex;"><span>		<span style="color:#f92672">*</span><span style="color:#a6e22e">n</span> = <span style="color:#f92672">*</span><span style="color:#a6e22e">n</span> <span style="color:#f92672">+</span> <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>	}()
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">return</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">n</span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><!-- raw HTML omitted -->
 <p>函数执行流程：</p>
 <p>1、defer将匿名函数压栈</p>
 <p>2、函数返回时将返回值*n存入函数返回值区域</p>
@@ -703,19 +693,18 @@ golang里面通知可以用channel的方式进行通知， 但是channel的方�
 <p>5、打印i、j</p>
 <!-- raw HTML omitted -->
 <p><strong>Case-13</strong></p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#75715e">// Case-13
-</span><span style="color:#75715e"></span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
-	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">fn</span>())
-}
-<span style="color:#66d9ef">func</span> <span style="color:#a6e22e">fn</span>() (<span style="color:#a6e22e">n</span> <span style="color:#66d9ef">int</span>) {
-	<span style="color:#66d9ef">defer</span> <span style="color:#66d9ef">func</span>() {
-		<span style="color:#a6e22e">n</span> <span style="color:#f92672">+=</span> <span style="color:#a6e22e">n</span>
-	}()
-	<span style="color:#a6e22e">n</span> = <span style="color:#ae81ff">1</span>
-	<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">n</span>
-}
-
-</code></pre></div><!-- raw HTML omitted -->
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#75715e">// Case-13
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">fn</span>())
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">fn</span>() (<span style="color:#a6e22e">n</span> <span style="color:#66d9ef">int</span>) {
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">defer</span> <span style="color:#66d9ef">func</span>() {
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">n</span> <span style="color:#f92672">+=</span> <span style="color:#a6e22e">n</span>
+</span></span><span style="display:flex;"><span>	}()
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">n</span> = <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">n</span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><!-- raw HTML omitted -->
 <p>函数执行流程：</p>
 <p>1、defer将匿名函数压栈的同时将返回值的地址（栈中的地址）传递给defer函数</p>
 <p>2、return语句将1存入函数返回值区域</p>
@@ -732,32 +721,32 @@ golang里面通知可以用channel的方式进行通知， 但是channel的方�
 </ul>
 <h2 id="shadow变量引发的问题">Shadow变量引发的问题</h2>
 <p><strong>Case-14</strong></p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
-	<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">wg</span> <span style="color:#a6e22e">sync</span>.<span style="color:#a6e22e">WaitGroup</span>
-	<span style="color:#a6e22e">wg</span>.<span style="color:#a6e22e">Add</span>(<span style="color:#ae81ff">3</span>)
-	<span style="color:#66d9ef">for</span> <span style="color:#a6e22e">i</span> <span style="color:#f92672">:=</span> <span style="color:#ae81ff">0</span>; <span style="color:#a6e22e">i</span> &lt; <span style="color:#ae81ff">3</span>; <span style="color:#a6e22e">i</span><span style="color:#f92672">++</span> {
-		<span style="color:#66d9ef">go</span> <span style="color:#66d9ef">func</span>() {
-			<span style="color:#66d9ef">defer</span> <span style="color:#a6e22e">wg</span>.<span style="color:#a6e22e">Done</span>()
-			<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">i</span>)
-		}()
-	}
-	<span style="color:#a6e22e">wg</span>.<span style="color:#a6e22e">Wait</span>()
-}
-</code></pre></div><!-- raw HTML omitted -->
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">wg</span> <span style="color:#a6e22e">sync</span>.<span style="color:#a6e22e">WaitGroup</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">wg</span>.<span style="color:#a6e22e">Add</span>(<span style="color:#ae81ff">3</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">for</span> <span style="color:#a6e22e">i</span> <span style="color:#f92672">:=</span> <span style="color:#ae81ff">0</span>; <span style="color:#a6e22e">i</span> &lt; <span style="color:#ae81ff">3</span>; <span style="color:#a6e22e">i</span><span style="color:#f92672">++</span> {
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">go</span> <span style="color:#66d9ef">func</span>() {
+</span></span><span style="display:flex;"><span>			<span style="color:#66d9ef">defer</span> <span style="color:#a6e22e">wg</span>.<span style="color:#a6e22e">Done</span>()
+</span></span><span style="display:flex;"><span>			<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">i</span>)
+</span></span><span style="display:flex;"><span>		}()
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">wg</span>.<span style="color:#a6e22e">Wait</span>()
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><!-- raw HTML omitted -->
 <p>这个比较常见，在for循环中，你就认为i是同一个变量，那么上例中所有gorutine共享i变量，所以打印出的值都一样。</p>
 <!-- raw HTML omitted -->
 <!-- raw HTML omitted -->
 <!-- raw HTML omitted -->
 <p><strong>Case-15</strong></p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
-    <span style="color:#a6e22e">v1</span> <span style="color:#f92672">:=</span> <span style="color:#ae81ff">1</span>
-    <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">v1</span> <span style="color:#f92672">==</span> <span style="color:#ae81ff">1</span> {
-        <span style="color:#a6e22e">v1</span>, <span style="color:#a6e22e">v2</span> <span style="color:#f92672">:=</span> <span style="color:#ae81ff">2</span>, <span style="color:#ae81ff">3</span>
-        <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;Inner:&#34;</span>, <span style="color:#a6e22e">v1</span>, <span style="color:#a6e22e">v2</span>)
-    }
-    <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;Outer:&#34;</span>, <span style="color:#a6e22e">v1</span>)
-}
-</code></pre></div><!-- raw HTML omitted -->
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">v1</span> <span style="color:#f92672">:=</span> <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">v1</span> <span style="color:#f92672">==</span> <span style="color:#ae81ff">1</span> {
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">v1</span>, <span style="color:#a6e22e">v2</span> <span style="color:#f92672">:=</span> <span style="color:#ae81ff">2</span>, <span style="color:#ae81ff">3</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;Inner:&#34;</span>, <span style="color:#a6e22e">v1</span>, <span style="color:#a6e22e">v2</span>)
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;Outer:&#34;</span>, <span style="color:#a6e22e">v1</span>)
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><!-- raw HTML omitted -->
 <p>同名变量使用短声明导致<code>if块中的v1和外层的v1变量不是同一个</code>。这种问题最常见的受害者就是<code>err</code>。</p>
 <!-- raw HTML omitted -->
 <h3 id="总结">总结</h3>
@@ -769,28 +758,28 @@ golang里面通知可以用channel的方式进行通知， 但是channel的方�
 </ul>
 <h2 id="selecttimeafter误用">select+time.After误用</h2>
 <p><strong>Case-16</strong></p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
-	<span style="color:#a6e22e">ctx</span>, <span style="color:#a6e22e">cancel</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">context</span>.<span style="color:#a6e22e">WithCancel</span>(<span style="color:#a6e22e">context</span>.<span style="color:#a6e22e">Background</span>())
-	<span style="color:#66d9ef">go</span> <span style="color:#66d9ef">func</span>() {
-		<span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">Sleep</span>(<span style="color:#ae81ff">5</span> <span style="color:#f92672">*</span> <span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">Second</span>)
-		<span style="color:#a6e22e">cancel</span>()
-	}()
-	<span style="color:#a6e22e">isTimeout</span> <span style="color:#f92672">:=</span> <span style="color:#66d9ef">false</span>
-<span style="color:#a6e22e">Loop</span>:
-	<span style="color:#66d9ef">for</span> {
-		<span style="color:#66d9ef">select</span> {
-		<span style="color:#66d9ef">case</span> <span style="color:#f92672">&lt;-</span><span style="color:#a6e22e">ctx</span>.<span style="color:#a6e22e">Done</span>():
-			<span style="color:#66d9ef">break</span> <span style="color:#a6e22e">Loop</span>
-		<span style="color:#66d9ef">case</span> <span style="color:#f92672">&lt;-</span><span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">After</span>(<span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">Second</span> <span style="color:#f92672">*</span> <span style="color:#ae81ff">2</span>):
-			<span style="color:#a6e22e">isTimeout</span> = <span style="color:#66d9ef">true</span>
-			<span style="color:#66d9ef">break</span> <span style="color:#a6e22e">Loop</span>
-		<span style="color:#66d9ef">default</span>:
-			<span style="color:#75715e">// do sth
-</span><span style="color:#75715e"></span>		}
-	}
-	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Printf</span>(<span style="color:#e6db74">&#34;end with timeout: %v\n&#34;</span>, <span style="color:#a6e22e">isTimeout</span>)
-}
-</code></pre></div><!-- raw HTML omitted -->
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">ctx</span>, <span style="color:#a6e22e">cancel</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">context</span>.<span style="color:#a6e22e">WithCancel</span>(<span style="color:#a6e22e">context</span>.<span style="color:#a6e22e">Background</span>())
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">go</span> <span style="color:#66d9ef">func</span>() {
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">Sleep</span>(<span style="color:#ae81ff">5</span> <span style="color:#f92672">*</span> <span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">Second</span>)
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">cancel</span>()
+</span></span><span style="display:flex;"><span>	}()
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">isTimeout</span> <span style="color:#f92672">:=</span> <span style="color:#66d9ef">false</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">Loop</span>:
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">for</span> {
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">select</span> {
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">case</span> <span style="color:#f92672">&lt;-</span><span style="color:#a6e22e">ctx</span>.<span style="color:#a6e22e">Done</span>():
+</span></span><span style="display:flex;"><span>			<span style="color:#66d9ef">break</span> <span style="color:#a6e22e">Loop</span>
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">case</span> <span style="color:#f92672">&lt;-</span><span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">After</span>(<span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">Second</span> <span style="color:#f92672">*</span> <span style="color:#ae81ff">2</span>):
+</span></span><span style="display:flex;"><span>			<span style="color:#a6e22e">isTimeout</span> = <span style="color:#66d9ef">true</span>
+</span></span><span style="display:flex;"><span>			<span style="color:#66d9ef">break</span> <span style="color:#a6e22e">Loop</span>
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">default</span>:
+</span></span><span style="display:flex;"><span>			<span style="color:#75715e">// do sth
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>		}
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Printf</span>(<span style="color:#e6db74">&#34;end with timeout: %v\n&#34;</span>, <span style="color:#a6e22e">isTimeout</span>)
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><!-- raw HTML omitted -->
 <p>还会造成短时间内的内存暴涨，如果过期时间长内存会持续增张到一个很大的值。</p>
 <p>原因：每次for循环time.After都会新建一个计时器，而这个计时器在时间到期之前gc是不会回收的</p>
 <!-- raw HTML omitted -->
@@ -806,15 +795,15 @@ golang里面通知可以用channel的方式进行通知， 但是channel的方�
 <p><strong>代码检查工具</strong></p>
 <p><img src="https://note.youdao.com/yws/api/personal/file/WEBb62254c50216e1e162e1748715e50fe5?method=download&amp;shareKey=b389745472167639a6ee84d014ec6b96" alt=""></p>
 <p>顺便分享一下我本地的vscode配置，大家有兴趣可以自取</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-json" data-lang="json">{
-    <span style="color:#f92672">&#34;go.autocompleteUnimportedPackages&#34;</span>: <span style="color:#66d9ef">true</span>,
-    <span style="color:#f92672">&#34;go.useCodeSnippetsOnFunctionSuggest&#34;</span>: <span style="color:#66d9ef">true</span>,
-    <span style="color:#f92672">&#34;go.useCodeSnippetsOnFunctionSuggestWithoutType&#34;</span>: <span style="color:#66d9ef">true</span>,
-    <span style="color:#f92672">&#34;go.useLanguageServer&#34;</span>: <span style="color:#66d9ef">true</span>,
-}
-</code></pre></div><p><strong>数据竞争检测</strong></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;go.autocompleteUnimportedPackages&#34;</span>: <span style="color:#66d9ef">true</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;go.useCodeSnippetsOnFunctionSuggest&#34;</span>: <span style="color:#66d9ef">true</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;go.useCodeSnippetsOnFunctionSuggestWithoutType&#34;</span>: <span style="color:#66d9ef">true</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;go.useLanguageServer&#34;</span>: <span style="color:#66d9ef">true</span>,
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p><strong>数据竞争检测</strong></p>
 <p>比较常用的用法如下：</p>
-<pre><code class="language-shel" data-lang="shel">go run -race pkg
+<pre tabindex="0"><code class="language-shel" data-lang="shel">go run -race pkg
 go run -race *.go
 go build -race main.go
 </code></pre><p><strong>Goroutine泄漏检测</strong></p>
@@ -831,73 +820,72 @@ go build -race main.go
 <p><code>epoll_ctl</code>: 注册file descriptor等待的I/O事件到epoll实例上。</p>
 <p><code>epoll_wait</code>: 阻塞监听epoll实例上所有的 file descriptor的I/O事件，它接受一个用户空间上的一块儿内存地址，内核会在I/O事件发生的时候把文件描述符列表复制到这块儿内存地址上，然后epoll_wait解除阻塞并返回，最后用户空间上的程序就可以对相应的fd进行读写了。</p>
 <p>下面看一个简单echo服务体验一下Go的网络编程到底是有多爽。</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">
-<span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
-	<span style="color:#a6e22e">listen</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">net</span>.<span style="color:#a6e22e">Listen</span>(<span style="color:#e6db74">&#34;tcp&#34;</span>, <span style="color:#e6db74">&#34;:2333&#34;</span>)
-	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
-		<span style="color:#a6e22e">log</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;listen error: &#34;</span>, <span style="color:#a6e22e">err</span>)
-		<span style="color:#66d9ef">return</span>
-	}
-	<span style="color:#66d9ef">defer</span> <span style="color:#a6e22e">listen</span>.<span style="color:#a6e22e">Close</span>()
-
-	<span style="color:#66d9ef">for</span> {
-		<span style="color:#a6e22e">conn</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">listen</span>.<span style="color:#a6e22e">Accept</span>()
-		<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
-			<span style="color:#a6e22e">log</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;accept error: &#34;</span>, <span style="color:#a6e22e">err</span>)
-			<span style="color:#66d9ef">break</span>
-		}
-		<span style="color:#66d9ef">go</span> <span style="color:#a6e22e">echo</span>(<span style="color:#a6e22e">conn</span>)
-	}
-}
-
-<span style="color:#66d9ef">func</span> <span style="color:#a6e22e">echo</span>(<span style="color:#a6e22e">conn</span> <span style="color:#a6e22e">net</span>.<span style="color:#a6e22e">Conn</span>) {
-	<span style="color:#66d9ef">defer</span> <span style="color:#a6e22e">conn</span>.<span style="color:#a6e22e">Close</span>()
-	<span style="color:#a6e22e">dt</span> <span style="color:#f92672">:=</span> make([]<span style="color:#66d9ef">byte</span>, <span style="color:#ae81ff">1024</span>)
-	<span style="color:#75715e">// 如果没有数据读取将阻塞
-</span><span style="color:#75715e"></span>	<span style="color:#a6e22e">n</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">conn</span>.<span style="color:#a6e22e">Read</span>(<span style="color:#a6e22e">dt</span>)
-	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
-		<span style="color:#a6e22e">log</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;read socket error: &#34;</span>, <span style="color:#a6e22e">err</span>)
-		<span style="color:#66d9ef">return</span>
-	}
-	<span style="color:#75715e">// 如果连接不可写将阻塞
-</span><span style="color:#75715e"></span>	<span style="color:#a6e22e">_</span>, <span style="color:#a6e22e">_</span> = <span style="color:#a6e22e">conn</span>.<span style="color:#a6e22e">Write</span>(<span style="color:#a6e22e">dt</span>[:<span style="color:#a6e22e">n</span>])
-}
-
-</code></pre></div><p>监听端口只需要一个<code>net.Listen</code>方法、接受新的请求只需要一个<code>(Listener).Accept</code>方法，读写数据分别只需要<code>(Conn).Read</code>和<code>(Conn).Write</code>方法。如此简介且语义化的API让我们的编程体验极其舒适，但这些简洁的API背后都蕴含着复杂的封装。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">listen</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">net</span>.<span style="color:#a6e22e">Listen</span>(<span style="color:#e6db74">&#34;tcp&#34;</span>, <span style="color:#e6db74">&#34;:2333&#34;</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">log</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;listen error: &#34;</span>, <span style="color:#a6e22e">err</span>)
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">return</span>
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">defer</span> <span style="color:#a6e22e">listen</span>.<span style="color:#a6e22e">Close</span>()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">for</span> {
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">conn</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">listen</span>.<span style="color:#a6e22e">Accept</span>()
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+</span></span><span style="display:flex;"><span>			<span style="color:#a6e22e">log</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;accept error: &#34;</span>, <span style="color:#a6e22e">err</span>)
+</span></span><span style="display:flex;"><span>			<span style="color:#66d9ef">break</span>
+</span></span><span style="display:flex;"><span>		}
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">go</span> <span style="color:#a6e22e">echo</span>(<span style="color:#a6e22e">conn</span>)
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">echo</span>(<span style="color:#a6e22e">conn</span> <span style="color:#a6e22e">net</span>.<span style="color:#a6e22e">Conn</span>) {
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">defer</span> <span style="color:#a6e22e">conn</span>.<span style="color:#a6e22e">Close</span>()
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">dt</span> <span style="color:#f92672">:=</span> make([]<span style="color:#66d9ef">byte</span>, <span style="color:#ae81ff">1024</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// 如果没有数据读取将阻塞
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#a6e22e">n</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">conn</span>.<span style="color:#a6e22e">Read</span>(<span style="color:#a6e22e">dt</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">log</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;read socket error: &#34;</span>, <span style="color:#a6e22e">err</span>)
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">return</span>
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// 如果连接不可写将阻塞
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#a6e22e">_</span>, <span style="color:#a6e22e">_</span> = <span style="color:#a6e22e">conn</span>.<span style="color:#a6e22e">Write</span>(<span style="color:#a6e22e">dt</span>[:<span style="color:#a6e22e">n</span>])
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>监听端口只需要一个<code>net.Listen</code>方法、接受新的请求只需要一个<code>(Listener).Accept</code>方法，读写数据分别只需要<code>(Conn).Read</code>和<code>(Conn).Write</code>方法。如此简介且语义化的API让我们的编程体验极其舒适，但这些简洁的API背后都蕴含着复杂的封装。</p>
 <p><code>net.Listen(&quot;tcp&quot;, &quot;:2333&quot;)</code>方法返回的<code>net.Listener</code>接口真实类型为<code>*net.TCPListener</code>, <code>listen.Accept</code>返回的<code>net.Conn</code>接口真实类型为<code>*net.TCPConn</code>。<code>net.TCPListener</code>和<code>net.TCPConn</code>都直接或者间接持有一个<code>*net.netFD</code>类型的网络描述符，而<code>net.Listener</code>的<code>Accept</code>方法和<code>net.Conn</code>的<code>Read/Write</code>方法，都是基于<code>net.netFD</code>的数据结构操作。</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#75715e">// net/fd_posix.go
-</span><span style="color:#75715e">// Network file descriptor.
-</span><span style="color:#75715e"></span><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">netFD</span> <span style="color:#66d9ef">struct</span> {
-	<span style="color:#a6e22e">pfd</span> <span style="color:#a6e22e">poll</span>.<span style="color:#a6e22e">FD</span>
-
-	<span style="color:#75715e">// immutable until Close
-</span><span style="color:#75715e"></span>	<span style="color:#a6e22e">family</span>      <span style="color:#66d9ef">int</span>
-	<span style="color:#a6e22e">sotype</span>      <span style="color:#66d9ef">int</span>
-	<span style="color:#a6e22e">isConnected</span> <span style="color:#66d9ef">bool</span> <span style="color:#75715e">// handshake completed or use of association with peer
-</span><span style="color:#75715e"></span>	<span style="color:#a6e22e">net</span>         <span style="color:#66d9ef">string</span>
-	<span style="color:#a6e22e">laddr</span>       <span style="color:#a6e22e">Addr</span>
-	<span style="color:#a6e22e">raddr</span>       <span style="color:#a6e22e">Addr</span>
-}
-
-<span style="color:#75715e">// internal/poll/fd_unix.go
-</span><span style="color:#75715e"></span><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">FD</span> <span style="color:#66d9ef">struct</span> {
-    <span style="color:#75715e">// 省略了很多其他字段
-</span><span style="color:#75715e"></span>
-    <span style="color:#75715e">// 系统文件描述符
-</span><span style="color:#75715e"></span>	<span style="color:#75715e">// System file descriptor. Immutable until Close.
-</span><span style="color:#75715e"></span>	<span style="color:#a6e22e">Sysfd</span> <span style="color:#66d9ef">int</span>
-
-	<span style="color:#75715e">// 读写超时等操作都是通过调用pollDesc对应方法实现的
-</span><span style="color:#75715e"></span>	<span style="color:#75715e">// I/O poller.
-</span><span style="color:#75715e"></span>	<span style="color:#a6e22e">pd</span> <span style="color:#a6e22e">pollDesc</span>
-
-}
-
-<span style="color:#66d9ef">type</span> <span style="color:#a6e22e">pollDesc</span> <span style="color:#66d9ef">struct</span> {
-    <span style="color:#75715e">// 指向runtime/netpoll.go中的pollDesc类型的指针
-</span><span style="color:#75715e"></span>	<span style="color:#a6e22e">runtimeCtx</span> <span style="color:#66d9ef">uintptr</span>
-}
-</code></pre></div><h2 id="netlisten">net.Listen</h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#75715e">// net/fd_posix.go
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// Network file descriptor.
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">netFD</span> <span style="color:#66d9ef">struct</span> {
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">pfd</span> <span style="color:#a6e22e">poll</span>.<span style="color:#a6e22e">FD</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// immutable until Close
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#a6e22e">family</span>      <span style="color:#66d9ef">int</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">sotype</span>      <span style="color:#66d9ef">int</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">isConnected</span> <span style="color:#66d9ef">bool</span> <span style="color:#75715e">// handshake completed or use of association with peer
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#a6e22e">net</span>         <span style="color:#66d9ef">string</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">laddr</span>       <span style="color:#a6e22e">Addr</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">raddr</span>       <span style="color:#a6e22e">Addr</span>
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// internal/poll/fd_unix.go
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">FD</span> <span style="color:#66d9ef">struct</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// 省略了很多其他字段
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// 系统文件描述符
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#75715e">// System file descriptor. Immutable until Close.
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#a6e22e">Sysfd</span> <span style="color:#66d9ef">int</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// 读写超时等操作都是通过调用pollDesc对应方法实现的
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#75715e">// I/O poller.
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#a6e22e">pd</span> <span style="color:#a6e22e">pollDesc</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">pollDesc</span> <span style="color:#66d9ef">struct</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// 指向runtime/netpoll.go中的pollDesc类型的指针
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#a6e22e">runtimeCtx</span> <span style="color:#66d9ef">uintptr</span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h2 id="netlisten">net.Listen</h2>
 <p><code>net.Listen</code>中部分关键函数的调用路径如下。
 <img src="https://note.youdao.com/yws/api/personal/file/WEBd0dfb27243f2e9c08f75337c130e53b6?method=download&amp;shareKey=9c9d626b8cb4a08ad9582917c8218367" alt=""></p>
 <p>这里需要注意的是<code>internal/poll/fd_poll_runtime.go</code>中的<code>runtime_pollServerInit</code>和<code>runtime_pollOpen</code>函数真实实现分别为<code>runtime/netpoll.go</code>中的<code>poll_runtime_pollServerInit</code>和<code>poll_runtime_pollOpen</code>函数(通过<code>go:linkname</code>将runtime中unexported的方法暴露给其他包使用)。</p>
@@ -913,96 +901,95 @@ go build -race main.go
 <p>当正常获取到文件描述符后会调用<code>(*netFD).init</code>方法，根据前面的内容知，最后会调用<code>epoll_ctl</code>将文件描述符注册到epoll实例中。</p>
 <p><code>runtime_pollWait</code>实际对应<code>runtime/netpoll.go</code>中的<code>poll_runtime_pollWait</code>函数。</p>
 <p>在正式看<code>poll_runtime_pollWait</code>函数逻辑之前，我们先看一下<code>runtime.pollDesc</code>的数据结构</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">pollDesc</span> <span style="color:#66d9ef">struct</span> {
-	<span style="color:#a6e22e">link</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">pollDesc</span> <span style="color:#75715e">// in pollcache, protected by pollcache.lock
-</span><span style="color:#75715e"></span>
-	<span style="color:#75715e">// The lock protects pollOpen, pollSetDeadline, pollUnblock and deadlineimpl operations.
-</span><span style="color:#75715e"></span>	<span style="color:#75715e">// This fully covers seq, rt and wt variables. fd is constant throughout the PollDesc lifetime.
-</span><span style="color:#75715e"></span>	<span style="color:#75715e">// pollReset, pollWait, pollWaitCanceled and runtime·netpollready (IO readiness notification)
-</span><span style="color:#75715e"></span>	<span style="color:#75715e">// proceed w/o taking the lock. So closing, everr, rg, rd, wg and wd are manipulated
-</span><span style="color:#75715e"></span>	<span style="color:#75715e">// in a lock-free way by all operations.
-</span><span style="color:#75715e"></span>	<span style="color:#75715e">// NOTE(dvyukov): the following code uses uintptr to store *g (rg/wg),
-</span><span style="color:#75715e"></span>	<span style="color:#75715e">// that will blow up when GC starts moving objects.
-</span><span style="color:#75715e"></span>	<span style="color:#a6e22e">lock</span>    <span style="color:#a6e22e">mutex</span> <span style="color:#75715e">// protects the following fields
-</span><span style="color:#75715e"></span>	<span style="color:#a6e22e">fd</span>      <span style="color:#66d9ef">uintptr</span>
-	<span style="color:#a6e22e">closing</span> <span style="color:#66d9ef">bool</span>
-	<span style="color:#a6e22e">everr</span>   <span style="color:#66d9ef">bool</span>      <span style="color:#75715e">// marks event scanning error happened
-</span><span style="color:#75715e"></span>	<span style="color:#a6e22e">user</span>    <span style="color:#66d9ef">uint32</span>    <span style="color:#75715e">// user settable cookie
-</span><span style="color:#75715e"></span>	<span style="color:#a6e22e">rseq</span>    <span style="color:#66d9ef">uintptr</span>   <span style="color:#75715e">// protects from stale read timers
-</span><span style="color:#75715e"></span>	<span style="color:#a6e22e">rg</span>      <span style="color:#66d9ef">uintptr</span>   <span style="color:#75715e">// pdReady, pdWait, G waiting for read or nil
-</span><span style="color:#75715e"></span>	<span style="color:#a6e22e">rt</span>      <span style="color:#a6e22e">timer</span>     <span style="color:#75715e">// read deadline timer (set if rt.f != nil)
-</span><span style="color:#75715e"></span>	<span style="color:#a6e22e">rd</span>      <span style="color:#66d9ef">int64</span>     <span style="color:#75715e">// read deadline
-</span><span style="color:#75715e"></span>	<span style="color:#a6e22e">wseq</span>    <span style="color:#66d9ef">uintptr</span>   <span style="color:#75715e">// protects from stale write timers
-</span><span style="color:#75715e"></span>	<span style="color:#a6e22e">wg</span>      <span style="color:#66d9ef">uintptr</span>   <span style="color:#75715e">// pdReady, pdWait, G waiting for write or nil
-</span><span style="color:#75715e"></span>	<span style="color:#a6e22e">wt</span>      <span style="color:#a6e22e">timer</span>     <span style="color:#75715e">// write deadline timer
-</span><span style="color:#75715e"></span>	<span style="color:#a6e22e">wd</span>      <span style="color:#66d9ef">int64</span>     <span style="color:#75715e">// write deadline
-</span><span style="color:#75715e"></span>	<span style="color:#a6e22e">self</span>    <span style="color:#f92672">*</span><span style="color:#a6e22e">pollDesc</span> <span style="color:#75715e">// storage for indirect interface. See (*pollDesc).makeArg.
-</span><span style="color:#75715e"></span>}
-</code></pre></div><p>其中最值得关注的是<code>rg</code>和<code>wg</code>，其取值可能是状态也可以等待i/o就绪的groutine指针。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">pollDesc</span> <span style="color:#66d9ef">struct</span> {
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">link</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">pollDesc</span> <span style="color:#75715e">// in pollcache, protected by pollcache.lock
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// The lock protects pollOpen, pollSetDeadline, pollUnblock and deadlineimpl operations.
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#75715e">// This fully covers seq, rt and wt variables. fd is constant throughout the PollDesc lifetime.
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#75715e">// pollReset, pollWait, pollWaitCanceled and runtime·netpollready (IO readiness notification)
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#75715e">// proceed w/o taking the lock. So closing, everr, rg, rd, wg and wd are manipulated
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#75715e">// in a lock-free way by all operations.
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#75715e">// NOTE(dvyukov): the following code uses uintptr to store *g (rg/wg),
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#75715e">// that will blow up when GC starts moving objects.
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#a6e22e">lock</span>    <span style="color:#a6e22e">mutex</span> <span style="color:#75715e">// protects the following fields
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#a6e22e">fd</span>      <span style="color:#66d9ef">uintptr</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">closing</span> <span style="color:#66d9ef">bool</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">everr</span>   <span style="color:#66d9ef">bool</span>      <span style="color:#75715e">// marks event scanning error happened
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#a6e22e">user</span>    <span style="color:#66d9ef">uint32</span>    <span style="color:#75715e">// user settable cookie
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#a6e22e">rseq</span>    <span style="color:#66d9ef">uintptr</span>   <span style="color:#75715e">// protects from stale read timers
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#a6e22e">rg</span>      <span style="color:#66d9ef">uintptr</span>   <span style="color:#75715e">// pdReady, pdWait, G waiting for read or nil
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#a6e22e">rt</span>      <span style="color:#a6e22e">timer</span>     <span style="color:#75715e">// read deadline timer (set if rt.f != nil)
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#a6e22e">rd</span>      <span style="color:#66d9ef">int64</span>     <span style="color:#75715e">// read deadline
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#a6e22e">wseq</span>    <span style="color:#66d9ef">uintptr</span>   <span style="color:#75715e">// protects from stale write timers
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#a6e22e">wg</span>      <span style="color:#66d9ef">uintptr</span>   <span style="color:#75715e">// pdReady, pdWait, G waiting for write or nil
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#a6e22e">wt</span>      <span style="color:#a6e22e">timer</span>     <span style="color:#75715e">// write deadline timer
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#a6e22e">wd</span>      <span style="color:#66d9ef">int64</span>     <span style="color:#75715e">// write deadline
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#a6e22e">self</span>    <span style="color:#f92672">*</span><span style="color:#a6e22e">pollDesc</span> <span style="color:#75715e">// storage for indirect interface. See (*pollDesc).makeArg.
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>}
+</span></span></code></pre></div><p>其中最值得关注的是<code>rg</code>和<code>wg</code>，其取值可能是状态也可以等待i/o就绪的groutine指针。</p>
 <p>而<code>poll_runtime_pollWait</code>函数的逻辑如下:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">poll_runtime_pollWait</span>(<span style="color:#a6e22e">pd</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">pollDesc</span>, <span style="color:#a6e22e">mode</span> <span style="color:#66d9ef">int</span>) <span style="color:#66d9ef">int</span> {
-	<span style="color:#a6e22e">errcode</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">netpollcheckerr</span>(<span style="color:#a6e22e">pd</span>, int32(<span style="color:#a6e22e">mode</span>))
-	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">errcode</span> <span style="color:#f92672">!=</span> <span style="color:#a6e22e">pollNoError</span> {
-		<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">errcode</span>
-	}
-	<span style="color:#75715e">// As for now only Solaris, illumos, and AIX use level-triggered IO.
-</span><span style="color:#75715e"></span>	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">GOOS</span> <span style="color:#f92672">==</span> <span style="color:#e6db74">&#34;solaris&#34;</span> <span style="color:#f92672">||</span> <span style="color:#a6e22e">GOOS</span> <span style="color:#f92672">==</span> <span style="color:#e6db74">&#34;illumos&#34;</span> <span style="color:#f92672">||</span> <span style="color:#a6e22e">GOOS</span> <span style="color:#f92672">==</span> <span style="color:#e6db74">&#34;aix&#34;</span> {
-		<span style="color:#a6e22e">netpollarm</span>(<span style="color:#a6e22e">pd</span>, <span style="color:#a6e22e">mode</span>)
-	}
-	<span style="color:#75715e">// 进入netpollblock并且判断是否有期待的 I/O 事件发生
-</span><span style="color:#75715e"></span>	<span style="color:#75715e">// 此处for循环是为了一直等待io ready
-</span><span style="color:#75715e"></span>	<span style="color:#66d9ef">for</span> !<span style="color:#a6e22e">netpollblock</span>(<span style="color:#a6e22e">pd</span>, int32(<span style="color:#a6e22e">mode</span>), <span style="color:#66d9ef">false</span>) {
-		<span style="color:#a6e22e">errcode</span> = <span style="color:#a6e22e">netpollcheckerr</span>(<span style="color:#a6e22e">pd</span>, int32(<span style="color:#a6e22e">mode</span>))
-		<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">errcode</span> <span style="color:#f92672">!=</span> <span style="color:#a6e22e">pollNoError</span> {
-			<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">errcode</span>
-		}
-		<span style="color:#75715e">// Can happen if timeout has fired and unblocked us,
-</span><span style="color:#75715e"></span>		<span style="color:#75715e">// but before we had a chance to run, timeout has been reset.
-</span><span style="color:#75715e"></span>		<span style="color:#75715e">// Pretend it has not happened and retry.
-</span><span style="color:#75715e"></span>	}
-	<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">pollNoError</span>
-}
-
-<span style="color:#66d9ef">func</span> <span style="color:#a6e22e">netpollblock</span>(<span style="color:#a6e22e">pd</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">pollDesc</span>, <span style="color:#a6e22e">mode</span> <span style="color:#66d9ef">int32</span>, <span style="color:#a6e22e">waitio</span> <span style="color:#66d9ef">bool</span>) <span style="color:#66d9ef">bool</span> {
-	<span style="color:#a6e22e">gpp</span> <span style="color:#f92672">:=</span> <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">pd</span>.<span style="color:#a6e22e">rg</span>
-	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">mode</span> <span style="color:#f92672">==</span> <span style="color:#e6db74">&#39;w&#39;</span> {
-		<span style="color:#a6e22e">gpp</span> = <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">pd</span>.<span style="color:#a6e22e">wg</span>
-	}
-
-	<span style="color:#75715e">// set the gpp semaphore to pdWait
-</span><span style="color:#75715e"></span>	<span style="color:#75715e">// 这个 for 循环是为了等待 io ready 或者将状态设置为io wait
-</span><span style="color:#75715e"></span>	<span style="color:#66d9ef">for</span> {
-		<span style="color:#a6e22e">old</span> <span style="color:#f92672">:=</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">gpp</span>
-		<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">old</span> <span style="color:#f92672">==</span> <span style="color:#a6e22e">pdReady</span> {
-			<span style="color:#f92672">*</span><span style="color:#a6e22e">gpp</span> = <span style="color:#ae81ff">0</span>
-			<span style="color:#66d9ef">return</span> <span style="color:#66d9ef">true</span>
-		}
-		<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">old</span> <span style="color:#f92672">!=</span> <span style="color:#ae81ff">0</span> {
-			<span style="color:#a6e22e">throw</span>(<span style="color:#e6db74">&#34;runtime: double wait&#34;</span>)
-		}
-		<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">atomic</span>.<span style="color:#a6e22e">Casuintptr</span>(<span style="color:#a6e22e">gpp</span>, <span style="color:#ae81ff">0</span>, <span style="color:#a6e22e">pdWait</span>) {
-			<span style="color:#66d9ef">break</span>
-		}
-	}
-
-	<span style="color:#75715e">// waitio此时为false，并且pollDesc一般都是正常的，所以会调用gopark将当前的goroutine
-</span><span style="color:#75715e"></span>	<span style="color:#75715e">// park住，直到对应的fd上发生可读/可写或者其其他i/o事件
-</span><span style="color:#75715e"></span>	<span style="color:#75715e">// 在gopark内部会将当前的gorutine指针赋值给gpp(pollDesc.rg/pollDesc.wg) 
-</span><span style="color:#75715e"></span>	<span style="color:#75715e">// 同时将gorutine状态置为waiting
-</span><span style="color:#75715e"></span>	<span style="color:#75715e">// 后需当io就绪后取出注册到epoll实例中的数据pollDesc，并将pollDesc中等待i/o的g
-</span><span style="color:#75715e"></span>	<span style="color:#75715e">// 放回调度链表重新调度
-</span><span style="color:#75715e"></span>	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">waitio</span> <span style="color:#f92672">||</span> <span style="color:#a6e22e">netpollcheckerr</span>(<span style="color:#a6e22e">pd</span>, <span style="color:#a6e22e">mode</span>) <span style="color:#f92672">==</span> <span style="color:#ae81ff">0</span> {
-		<span style="color:#a6e22e">gopark</span>(<span style="color:#a6e22e">netpollblockcommit</span>, <span style="color:#a6e22e">unsafe</span>.<span style="color:#a6e22e">Pointer</span>(<span style="color:#a6e22e">gpp</span>), <span style="color:#a6e22e">waitReasonIOWait</span>, <span style="color:#a6e22e">traceEvGoBlockNet</span>, <span style="color:#ae81ff">5</span>)
-	}
-	<span style="color:#75715e">// be careful to not lose concurrent pdReady notification
-</span><span style="color:#75715e"></span>	<span style="color:#a6e22e">old</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">atomic</span>.<span style="color:#a6e22e">Xchguintptr</span>(<span style="color:#a6e22e">gpp</span>, <span style="color:#ae81ff">0</span>)
-	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">old</span> &gt; <span style="color:#a6e22e">pdWait</span> {
-		<span style="color:#a6e22e">throw</span>(<span style="color:#e6db74">&#34;runtime: corrupted polldesc&#34;</span>)
-	}
-	<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">old</span> <span style="color:#f92672">==</span> <span style="color:#a6e22e">pdReady</span>
-}
-
-</code></pre></div><p><strong>小结</strong>：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">poll_runtime_pollWait</span>(<span style="color:#a6e22e">pd</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">pollDesc</span>, <span style="color:#a6e22e">mode</span> <span style="color:#66d9ef">int</span>) <span style="color:#66d9ef">int</span> {
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">errcode</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">netpollcheckerr</span>(<span style="color:#a6e22e">pd</span>, int32(<span style="color:#a6e22e">mode</span>))
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">errcode</span> <span style="color:#f92672">!=</span> <span style="color:#a6e22e">pollNoError</span> {
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">errcode</span>
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// As for now only Solaris, illumos, and AIX use level-triggered IO.
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">GOOS</span> <span style="color:#f92672">==</span> <span style="color:#e6db74">&#34;solaris&#34;</span> <span style="color:#f92672">||</span> <span style="color:#a6e22e">GOOS</span> <span style="color:#f92672">==</span> <span style="color:#e6db74">&#34;illumos&#34;</span> <span style="color:#f92672">||</span> <span style="color:#a6e22e">GOOS</span> <span style="color:#f92672">==</span> <span style="color:#e6db74">&#34;aix&#34;</span> {
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">netpollarm</span>(<span style="color:#a6e22e">pd</span>, <span style="color:#a6e22e">mode</span>)
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// 进入netpollblock并且判断是否有期待的 I/O 事件发生
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#75715e">// 此处for循环是为了一直等待io ready
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#66d9ef">for</span> !<span style="color:#a6e22e">netpollblock</span>(<span style="color:#a6e22e">pd</span>, int32(<span style="color:#a6e22e">mode</span>), <span style="color:#66d9ef">false</span>) {
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">errcode</span> = <span style="color:#a6e22e">netpollcheckerr</span>(<span style="color:#a6e22e">pd</span>, int32(<span style="color:#a6e22e">mode</span>))
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">errcode</span> <span style="color:#f92672">!=</span> <span style="color:#a6e22e">pollNoError</span> {
+</span></span><span style="display:flex;"><span>			<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">errcode</span>
+</span></span><span style="display:flex;"><span>		}
+</span></span><span style="display:flex;"><span>		<span style="color:#75715e">// Can happen if timeout has fired and unblocked us,
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>		<span style="color:#75715e">// but before we had a chance to run, timeout has been reset.
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>		<span style="color:#75715e">// Pretend it has not happened and retry.
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	}
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">pollNoError</span>
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">netpollblock</span>(<span style="color:#a6e22e">pd</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">pollDesc</span>, <span style="color:#a6e22e">mode</span> <span style="color:#66d9ef">int32</span>, <span style="color:#a6e22e">waitio</span> <span style="color:#66d9ef">bool</span>) <span style="color:#66d9ef">bool</span> {
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">gpp</span> <span style="color:#f92672">:=</span> <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">pd</span>.<span style="color:#a6e22e">rg</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">mode</span> <span style="color:#f92672">==</span> <span style="color:#e6db74">&#39;w&#39;</span> {
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">gpp</span> = <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">pd</span>.<span style="color:#a6e22e">wg</span>
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// set the gpp semaphore to pdWait
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#75715e">// 这个 for 循环是为了等待 io ready 或者将状态设置为io wait
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#66d9ef">for</span> {
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">old</span> <span style="color:#f92672">:=</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">gpp</span>
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">old</span> <span style="color:#f92672">==</span> <span style="color:#a6e22e">pdReady</span> {
+</span></span><span style="display:flex;"><span>			<span style="color:#f92672">*</span><span style="color:#a6e22e">gpp</span> = <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>			<span style="color:#66d9ef">return</span> <span style="color:#66d9ef">true</span>
+</span></span><span style="display:flex;"><span>		}
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">old</span> <span style="color:#f92672">!=</span> <span style="color:#ae81ff">0</span> {
+</span></span><span style="display:flex;"><span>			<span style="color:#a6e22e">throw</span>(<span style="color:#e6db74">&#34;runtime: double wait&#34;</span>)
+</span></span><span style="display:flex;"><span>		}
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">atomic</span>.<span style="color:#a6e22e">Casuintptr</span>(<span style="color:#a6e22e">gpp</span>, <span style="color:#ae81ff">0</span>, <span style="color:#a6e22e">pdWait</span>) {
+</span></span><span style="display:flex;"><span>			<span style="color:#66d9ef">break</span>
+</span></span><span style="display:flex;"><span>		}
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// waitio此时为false，并且pollDesc一般都是正常的，所以会调用gopark将当前的goroutine
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#75715e">// park住，直到对应的fd上发生可读/可写或者其其他i/o事件
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#75715e">// 在gopark内部会将当前的gorutine指针赋值给gpp(pollDesc.rg/pollDesc.wg) 
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#75715e">// 同时将gorutine状态置为waiting
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#75715e">// 后需当io就绪后取出注册到epoll实例中的数据pollDesc，并将pollDesc中等待i/o的g
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#75715e">// 放回调度链表重新调度
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">waitio</span> <span style="color:#f92672">||</span> <span style="color:#a6e22e">netpollcheckerr</span>(<span style="color:#a6e22e">pd</span>, <span style="color:#a6e22e">mode</span>) <span style="color:#f92672">==</span> <span style="color:#ae81ff">0</span> {
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">gopark</span>(<span style="color:#a6e22e">netpollblockcommit</span>, <span style="color:#a6e22e">unsafe</span>.<span style="color:#a6e22e">Pointer</span>(<span style="color:#a6e22e">gpp</span>), <span style="color:#a6e22e">waitReasonIOWait</span>, <span style="color:#a6e22e">traceEvGoBlockNet</span>, <span style="color:#ae81ff">5</span>)
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// be careful to not lose concurrent pdReady notification
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#a6e22e">old</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">atomic</span>.<span style="color:#a6e22e">Xchguintptr</span>(<span style="color:#a6e22e">gpp</span>, <span style="color:#ae81ff">0</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">old</span> &gt; <span style="color:#a6e22e">pdWait</span> {
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">throw</span>(<span style="color:#e6db74">&#34;runtime: corrupted polldesc&#34;</span>)
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">old</span> <span style="color:#f92672">==</span> <span style="color:#a6e22e">pdReady</span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p><strong>小结</strong>：</p>
 <ol>
 <li>获取到文件描符述时，会通过系统调用<code>epoll_ctl</code>将文件描述符注册到epoll实例中</li>
 <li>如果没有i/o事件时，会调用gopark将gorutine指针保存，并将gorutine状态置为waiting。</li>
@@ -1014,45 +1001,45 @@ go build -race main.go
 <h2 id="runtime的完美配合">runtime的完美配合</h2>
 <p>到这里，前文的echo服务核心代码基本分析完毕。gorutine如何阻塞我们也已经明白，但何时恢复执行却还是一头雾水，而这就是本小节的重点。</p>
 <p>前文中只出现了<code>epoll_create</code>和<code>epoll_ctl</code>，还缺少<code>epoll_wait</code>的系统调用。以linux为例，调用<code>runtime/netpoll_epoll.go:netpoll</code>函数时会调用<code>epollwait</code>。</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">netpoll</span>(<span style="color:#a6e22e">delay</span> <span style="color:#66d9ef">int64</span>) <span style="color:#a6e22e">gList</span> {
-    <span style="color:#75715e">// 省略代码
-</span><span style="color:#75715e"></span>	<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">events</span> [<span style="color:#ae81ff">128</span>]<span style="color:#a6e22e">epollevent</span>
-<span style="color:#a6e22e">retry</span>:
-    <span style="color:#75715e">// 无阻塞查看epoll实例上是否i/o就绪的fd
-</span><span style="color:#75715e"></span>	<span style="color:#a6e22e">n</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">epollwait</span>(<span style="color:#a6e22e">epfd</span>, <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">events</span>[<span style="color:#ae81ff">0</span>], int32(len(<span style="color:#a6e22e">events</span>)), <span style="color:#a6e22e">waitms</span>)
-	<span style="color:#75715e">// 省略代码
-</span><span style="color:#75715e"></span>	<span style="color:#75715e">// 存储要恢复的 goroutines，最后返回给调用方
-</span><span style="color:#75715e"></span>	<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">toRun</span> <span style="color:#a6e22e">gList</span>
-	<span style="color:#66d9ef">for</span> <span style="color:#a6e22e">i</span> <span style="color:#f92672">:=</span> int32(<span style="color:#ae81ff">0</span>); <span style="color:#a6e22e">i</span> &lt; <span style="color:#a6e22e">n</span>; <span style="color:#a6e22e">i</span><span style="color:#f92672">++</span> {
-		<span style="color:#a6e22e">ev</span> <span style="color:#f92672">:=</span> <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">events</span>[<span style="color:#a6e22e">i</span>]
-		<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">ev</span>.<span style="color:#a6e22e">events</span> <span style="color:#f92672">==</span> <span style="color:#ae81ff">0</span> {
-			<span style="color:#66d9ef">continue</span>
-		}
-		<span style="color:#75715e">// 省略代码
-</span><span style="color:#75715e"></span>		<span style="color:#75715e">// 判断发生的事件类型，读类型或者写类型等，然后给 mode 复制相应的值，
-</span><span style="color:#75715e"></span>        <span style="color:#75715e">// mode 用来决定从 pollDesc 里的 rg 还是 wg 里取出 goroutine
-</span><span style="color:#75715e"></span>		<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">mode</span> <span style="color:#66d9ef">int32</span>
-		<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">ev</span>.<span style="color:#a6e22e">events</span><span style="color:#f92672">&amp;</span>(<span style="color:#a6e22e">_EPOLLIN</span>|<span style="color:#a6e22e">_EPOLLRDHUP</span>|<span style="color:#a6e22e">_EPOLLHUP</span>|<span style="color:#a6e22e">_EPOLLERR</span>) <span style="color:#f92672">!=</span> <span style="color:#ae81ff">0</span> {
-			<span style="color:#a6e22e">mode</span> <span style="color:#f92672">+=</span> <span style="color:#e6db74">&#39;r&#39;</span>
-		}
-		<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">ev</span>.<span style="color:#a6e22e">events</span><span style="color:#f92672">&amp;</span>(<span style="color:#a6e22e">_EPOLLOUT</span>|<span style="color:#a6e22e">_EPOLLHUP</span>|<span style="color:#a6e22e">_EPOLLERR</span>) <span style="color:#f92672">!=</span> <span style="color:#ae81ff">0</span> {
-			<span style="color:#a6e22e">mode</span> <span style="color:#f92672">+=</span> <span style="color:#e6db74">&#39;w&#39;</span>
-		}
-		<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">mode</span> <span style="color:#f92672">!=</span> <span style="color:#ae81ff">0</span> {
-		    <span style="color:#75715e">// 取出保存在 epollevent 里的 pollDesc
-</span><span style="color:#75715e"></span>			<span style="color:#a6e22e">pd</span> <span style="color:#f92672">:=</span> <span style="color:#f92672">*</span>(<span style="color:#f92672">**</span><span style="color:#a6e22e">pollDesc</span>)(<span style="color:#a6e22e">unsafe</span>.<span style="color:#a6e22e">Pointer</span>(<span style="color:#f92672">&amp;</span><span style="color:#a6e22e">ev</span>.<span style="color:#a6e22e">data</span>))
-			<span style="color:#a6e22e">pd</span>.<span style="color:#a6e22e">everr</span> = <span style="color:#66d9ef">false</span>
-			<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">ev</span>.<span style="color:#a6e22e">events</span> <span style="color:#f92672">==</span> <span style="color:#a6e22e">_EPOLLERR</span> {
-				<span style="color:#a6e22e">pd</span>.<span style="color:#a6e22e">everr</span> = <span style="color:#66d9ef">true</span>
-			}
-			<span style="color:#75715e">// 调用 netpollready，传入就绪 fd 的 pollDesc，
-</span><span style="color:#75715e"></span>            <span style="color:#75715e">// 把 fd 对应的 goroutine 添加到链表 toRun 中
-</span><span style="color:#75715e"></span>			<span style="color:#a6e22e">netpollready</span>(<span style="color:#f92672">&amp;</span><span style="color:#a6e22e">toRun</span>, <span style="color:#a6e22e">pd</span>, <span style="color:#a6e22e">mode</span>)
-		}
-	}
-	<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">toRun</span>
-}
-</code></pre></div><p><code>netpoll</code>在以下两个场景会被调用。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">netpoll</span>(<span style="color:#a6e22e">delay</span> <span style="color:#66d9ef">int64</span>) <span style="color:#a6e22e">gList</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// 省略代码
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">events</span> [<span style="color:#ae81ff">128</span>]<span style="color:#a6e22e">epollevent</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">retry</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// 无阻塞查看epoll实例上是否i/o就绪的fd
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#a6e22e">n</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">epollwait</span>(<span style="color:#a6e22e">epfd</span>, <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">events</span>[<span style="color:#ae81ff">0</span>], int32(len(<span style="color:#a6e22e">events</span>)), <span style="color:#a6e22e">waitms</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// 省略代码
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#75715e">// 存储要恢复的 goroutines，最后返回给调用方
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">toRun</span> <span style="color:#a6e22e">gList</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">for</span> <span style="color:#a6e22e">i</span> <span style="color:#f92672">:=</span> int32(<span style="color:#ae81ff">0</span>); <span style="color:#a6e22e">i</span> &lt; <span style="color:#a6e22e">n</span>; <span style="color:#a6e22e">i</span><span style="color:#f92672">++</span> {
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">ev</span> <span style="color:#f92672">:=</span> <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">events</span>[<span style="color:#a6e22e">i</span>]
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">ev</span>.<span style="color:#a6e22e">events</span> <span style="color:#f92672">==</span> <span style="color:#ae81ff">0</span> {
+</span></span><span style="display:flex;"><span>			<span style="color:#66d9ef">continue</span>
+</span></span><span style="display:flex;"><span>		}
+</span></span><span style="display:flex;"><span>		<span style="color:#75715e">// 省略代码
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>		<span style="color:#75715e">// 判断发生的事件类型，读类型或者写类型等，然后给 mode 复制相应的值，
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>        <span style="color:#75715e">// mode 用来决定从 pollDesc 里的 rg 还是 wg 里取出 goroutine
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>		<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">mode</span> <span style="color:#66d9ef">int32</span>
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">ev</span>.<span style="color:#a6e22e">events</span><span style="color:#f92672">&amp;</span>(<span style="color:#a6e22e">_EPOLLIN</span>|<span style="color:#a6e22e">_EPOLLRDHUP</span>|<span style="color:#a6e22e">_EPOLLHUP</span>|<span style="color:#a6e22e">_EPOLLERR</span>) <span style="color:#f92672">!=</span> <span style="color:#ae81ff">0</span> {
+</span></span><span style="display:flex;"><span>			<span style="color:#a6e22e">mode</span> <span style="color:#f92672">+=</span> <span style="color:#e6db74">&#39;r&#39;</span>
+</span></span><span style="display:flex;"><span>		}
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">ev</span>.<span style="color:#a6e22e">events</span><span style="color:#f92672">&amp;</span>(<span style="color:#a6e22e">_EPOLLOUT</span>|<span style="color:#a6e22e">_EPOLLHUP</span>|<span style="color:#a6e22e">_EPOLLERR</span>) <span style="color:#f92672">!=</span> <span style="color:#ae81ff">0</span> {
+</span></span><span style="display:flex;"><span>			<span style="color:#a6e22e">mode</span> <span style="color:#f92672">+=</span> <span style="color:#e6db74">&#39;w&#39;</span>
+</span></span><span style="display:flex;"><span>		}
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">mode</span> <span style="color:#f92672">!=</span> <span style="color:#ae81ff">0</span> {
+</span></span><span style="display:flex;"><span>		    <span style="color:#75715e">// 取出保存在 epollevent 里的 pollDesc
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>			<span style="color:#a6e22e">pd</span> <span style="color:#f92672">:=</span> <span style="color:#f92672">*</span>(<span style="color:#f92672">**</span><span style="color:#a6e22e">pollDesc</span>)(<span style="color:#a6e22e">unsafe</span>.<span style="color:#a6e22e">Pointer</span>(<span style="color:#f92672">&amp;</span><span style="color:#a6e22e">ev</span>.<span style="color:#a6e22e">data</span>))
+</span></span><span style="display:flex;"><span>			<span style="color:#a6e22e">pd</span>.<span style="color:#a6e22e">everr</span> = <span style="color:#66d9ef">false</span>
+</span></span><span style="display:flex;"><span>			<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">ev</span>.<span style="color:#a6e22e">events</span> <span style="color:#f92672">==</span> <span style="color:#a6e22e">_EPOLLERR</span> {
+</span></span><span style="display:flex;"><span>				<span style="color:#a6e22e">pd</span>.<span style="color:#a6e22e">everr</span> = <span style="color:#66d9ef">true</span>
+</span></span><span style="display:flex;"><span>			}
+</span></span><span style="display:flex;"><span>			<span style="color:#75715e">// 调用 netpollready，传入就绪 fd 的 pollDesc，
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>            <span style="color:#75715e">// 把 fd 对应的 goroutine 添加到链表 toRun 中
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>			<span style="color:#a6e22e">netpollready</span>(<span style="color:#f92672">&amp;</span><span style="color:#a6e22e">toRun</span>, <span style="color:#a6e22e">pd</span>, <span style="color:#a6e22e">mode</span>)
+</span></span><span style="display:flex;"><span>		}
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">toRun</span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p><code>netpoll</code>在以下两个场景会被调用。</p>
 <p>首先，runtime在做gorutine调度时会检查已经就绪的文件描述符并恢复相应的gorutine为可执行状态从而参与调度执行。</p>
 <p>具体调用链路为<code>runtime.schedule()-&gt;runtime.findrunable()-&gt;runtime.netpoll()</code>。</p>
 <p>其次，<code>sysmon</code>监控线程会在循环过程中检查距离上一次<code>runtime.netpoll</code>被调用是否超过了10ms。如果超过10ms，则调用它拿到可运行的gorutine列表并通过<code>injectglist</code>把g列表放入全局队列或者当前P本地队列等待被执行。</p>
@@ -1105,7 +1092,7 @@ go build -race main.go
           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-tag meta-icon">
             <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path>
             <line x1="7" y1="7" x2="7" y2="7"></line>
-          </svg><span class="tag"><a href="https://isites.github.io/tags/go/">Go</a></span>
+          </svg><span class="tag"><a href="https://isites.gitlab.io/gopher/tags/go/">Go</a></span>
         </p>
 
       <p>
@@ -1141,7 +1128,7 @@ go build -race main.go
         <div class="pagination__buttons">
           
             <span class="button previous">
-              <a href="https://isites.github.io/timeline/net-bandwidth/">
+              <a href="https://isites.gitlab.io/gopher/timeline/net-bandwidth/">
                 <span class="button__icon">←</span>
                 <span class="button__text">一次带宽拉满引发的百分百超时血案！</span>
               </a>
@@ -1150,7 +1137,7 @@ go build -race main.go
 
           
             <span class="button next">
-              <a href="https://isites.github.io/timeline/fns/">
+              <a href="https://isites.gitlab.io/gopher/timeline/fns/">
                 <span class="button__text">惊！Go里面居然有这样精妙的小函数！</span>
                 <span class="button__icon">→</span>
               </a>
@@ -1239,7 +1226,7 @@ go build -race main.go
 
 
 
-<script type="text/javascript" src="/bundle.min.dc716e9092c9820b77f96da294d0120aeeb189b5bcea9752309ebea27fd53bbe6b13cffb2aca8ecf32525647ceb7001f76091de4199ac5a3caa432c070247f5b.js" integrity="sha512-3HFukJLJggt3&#43;W2ilNASCu6xibW86pdSMJ6&#43;on/VO75rE8/7KsqOzzJSVkfOtwAfdgkd5BmaxaPKpDLAcCR/Ww=="></script>
+<script type="text/javascript" src="/gopher/bundle.min.e2a9675ced043d06ad6d3f13fafb0203d96c89eb2484878d5eb89d6da19559cbed55fb05ca9eae7be1e975cab83e3b2a1193afc357019620a509327c5a6a9c0f.js" integrity="sha512-4qlnXO0EPQatbT8T&#43;vsCA9lsieskhIeNXridbaGVWcvtVfsFyp6ue&#43;Hpdcq4PjsqEZOvw1cBliClCTJ8WmqcDw=="></script>
 
 
     

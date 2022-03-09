@@ -9,11 +9,11 @@
 正式开干之前有点手生，太久没有写技术类的文章，总有点怠惰，不得不说坚持确实是一件很难的事情。如果不是因为愧疚和写点东西能让自己稍微平静下来一些，我可能还将继续怠惰下去。
 另外还有一件很有意思的事情分享一下。前一篇在公众号上的文章仅思考就花了近一个月，写只花了一天，而技术文章我一般边思考边写平均耗时一周。结果是不会骗人的，前一篇文章阅读量首次突破一千，果然这届读者的思想深度至少也有一个月那么多，老许佩服佩服。
 切片底层结构 切片和结构体的互转 其他不扯多了，我们还是回归本篇主题。 在正式了解切片底层结构之前， 我们先看几行代码。
-type mySlice struct { data uintptr len int cap int } s := mySlice{} fmt.Println(fmt.Sprintf(&amp;#34;%&#43;v&amp;#34;, s)) // {data:0 len:0 cap:0} s1 := make([]int, 10) s1[2] = 2 fmt.Println(fmt.Sprintf(&amp;#34;%&#43;v, len(%d), cap(%d)&amp;#34;, s1, len(s1), cap(s1))) // [0 0 2 0 0 0 0 0 0 0], len(10), cap(10) s = *(*mySlice)(unsafe.Pointer(&amp;amp;s1)) fmt.Println(fmt.Sprintf(&amp;#34;%&#43;v&amp;#34;, s)) // {data:824634515456 len:10 cap:10} fmt.Printf(&amp;#34;%p, %v\n&amp;#34;, s1, unsafe.Pointer(s.data)) // 0xc0000c2000, 0xc0000c2000  在上述代码中，通过获取切片的地址，并将其转为*mySlice, 成功获得了切片的长度和容量。以及一个类似于指针一样的东西。而这个指针就是指向存储真实数据的数组，下面我们来进行验证。" />
+type mySlice struct { 	data uintptr 	len int 	cap int }  s := mySlice{} fmt.Println(fmt.Sprintf(&amp;#34;%&#43;v&amp;#34;, s)) // {data:0 len:0 cap:0} s1 := make([]int, 10) s1[2] = 2 fmt.Println(fmt.Sprintf(&amp;#34;%&#43;v, len(%d), cap(%d)&amp;#34;, s1, len(s1), cap(s1))) // [0 0 2 0 0 0 0 0 0 0], len(10), cap(10) s = *(*mySlice)(unsafe.Pointer(&amp;amp;s1)) fmt.Println(fmt.Sprintf(&amp;#34;%&#43;v&amp;#34;, s)) // {data:824634515456 len:10 cap:10} fmt.Printf(&amp;#34;%p, %v\n&amp;#34;, s1, unsafe." />
 <meta name="keywords" content=", Go" />
 <meta name="robots" content="noodp" />
 <meta name="theme-color" content="" />
-<link rel="canonical" href="https://isites.github.io/timeline/slice/" />
+<link rel="canonical" href="https://isites.gitlab.io/gopher/timeline/slice/" />
 
 
     <title>
@@ -30,7 +30,7 @@ type mySlice struct { data uintptr len int cap int } s := mySlice{} fmt.Println(
 
 
 
-<link rel="stylesheet" href="/main.805b1025016494ee5fd67b55b8ecd5e2b7c4a9f0bdda42e300c62b85ddfef68f.css">
+<link rel="stylesheet" href="/gopher/main.805b1025016494ee5fd67b55b8ecd5e2b7c4a9f0bdda42e300c62b85ddfef68f.css">
 
 
   
@@ -51,22 +51,17 @@ type mySlice struct { data uintptr len int cap int } s := mySlice{} fmt.Println(
 正式开干之前有点手生，太久没有写技术类的文章，总有点怠惰，不得不说坚持确实是一件很难的事情。如果不是因为愧疚和写点东西能让自己稍微平静下来一些，我可能还将继续怠惰下去。
 另外还有一件很有意思的事情分享一下。前一篇在公众号上的文章仅思考就花了近一个月，写只花了一天，而技术文章我一般边思考边写平均耗时一周。结果是不会骗人的，前一篇文章阅读量首次突破一千，果然这届读者的思想深度至少也有一个月那么多，老许佩服佩服。
 切片底层结构 切片和结构体的互转 其他不扯多了，我们还是回归本篇主题。 在正式了解切片底层结构之前， 我们先看几行代码。
-type mySlice struct { data uintptr len int cap int } s := mySlice{} fmt.Println(fmt.Sprintf(&#34;%&#43;v&#34;, s)) // {data:0 len:0 cap:0} s1 := make([]int, 10) s1[2] = 2 fmt.Println(fmt.Sprintf(&#34;%&#43;v, len(%d), cap(%d)&#34;, s1, len(s1), cap(s1))) // [0 0 2 0 0 0 0 0 0 0], len(10), cap(10) s = *(*mySlice)(unsafe.Pointer(&amp;s1)) fmt.Println(fmt.Sprintf(&#34;%&#43;v&#34;, s)) // {data:824634515456 len:10 cap:10} fmt.Printf(&#34;%p, %v\n&#34;, s1, unsafe.Pointer(s.data)) // 0xc0000c2000, 0xc0000c2000  在上述代码中，通过获取切片的地址，并将其转为*mySlice, 成功获得了切片的长度和容量。以及一个类似于指针一样的东西。而这个指针就是指向存储真实数据的数组，下面我们来进行验证。">
-<meta itemprop="datePublished" content="2021-07-26T22:09:00+08:00" />
+type mySlice struct { 	data uintptr 	len int 	cap int }  s := mySlice{} fmt.Println(fmt.Sprintf(&#34;%&#43;v&#34;, s)) // {data:0 len:0 cap:0} s1 := make([]int, 10) s1[2] = 2 fmt.Println(fmt.Sprintf(&#34;%&#43;v, len(%d), cap(%d)&#34;, s1, len(s1), cap(s1))) // [0 0 2 0 0 0 0 0 0 0], len(10), cap(10) s = *(*mySlice)(unsafe.Pointer(&amp;s1)) fmt.Println(fmt.Sprintf(&#34;%&#43;v&#34;, s)) // {data:824634515456 len:10 cap:10} fmt.Printf(&#34;%p, %v\n&#34;, s1, unsafe."><meta itemprop="datePublished" content="2021-07-26T22:09:00+08:00" />
 <meta itemprop="dateModified" content="2021-07-26T22:09:00+08:00" />
 <meta itemprop="wordCount" content="570">
-
-
-
 <meta itemprop="keywords" content="Go," />
-
 <meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="讲的是切片，但好像又不只是切片？"/>
 <meta name="twitter:description" content="我内心一直有一个欲望，想要高声呼喊“我胡汉三又回来了”，而现在就是合适的时机。
 正式开干之前有点手生，太久没有写技术类的文章，总有点怠惰，不得不说坚持确实是一件很难的事情。如果不是因为愧疚和写点东西能让自己稍微平静下来一些，我可能还将继续怠惰下去。
 另外还有一件很有意思的事情分享一下。前一篇在公众号上的文章仅思考就花了近一个月，写只花了一天，而技术文章我一般边思考边写平均耗时一周。结果是不会骗人的，前一篇文章阅读量首次突破一千，果然这届读者的思想深度至少也有一个月那么多，老许佩服佩服。
 切片底层结构 切片和结构体的互转 其他不扯多了，我们还是回归本篇主题。 在正式了解切片底层结构之前， 我们先看几行代码。
-type mySlice struct { data uintptr len int cap int } s := mySlice{} fmt.Println(fmt.Sprintf(&#34;%&#43;v&#34;, s)) // {data:0 len:0 cap:0} s1 := make([]int, 10) s1[2] = 2 fmt.Println(fmt.Sprintf(&#34;%&#43;v, len(%d), cap(%d)&#34;, s1, len(s1), cap(s1))) // [0 0 2 0 0 0 0 0 0 0], len(10), cap(10) s = *(*mySlice)(unsafe.Pointer(&amp;s1)) fmt.Println(fmt.Sprintf(&#34;%&#43;v&#34;, s)) // {data:824634515456 len:10 cap:10} fmt.Printf(&#34;%p, %v\n&#34;, s1, unsafe.Pointer(s.data)) // 0xc0000c2000, 0xc0000c2000  在上述代码中，通过获取切片的地址，并将其转为*mySlice, 成功获得了切片的长度和容量。以及一个类似于指针一样的东西。而这个指针就是指向存储真实数据的数组，下面我们来进行验证。"/>
+type mySlice struct { 	data uintptr 	len int 	cap int }  s := mySlice{} fmt.Println(fmt.Sprintf(&#34;%&#43;v&#34;, s)) // {data:0 len:0 cap:0} s1 := make([]int, 10) s1[2] = 2 fmt.Println(fmt.Sprintf(&#34;%&#43;v, len(%d), cap(%d)&#34;, s1, len(s1), cap(s1))) // [0 0 2 0 0 0 0 0 0 0], len(10), cap(10) s = *(*mySlice)(unsafe.Pointer(&amp;s1)) fmt.Println(fmt.Sprintf(&#34;%&#43;v&#34;, s)) // {data:824634515456 len:10 cap:10} fmt.Printf(&#34;%p, %v\n&#34;, s1, unsafe."/>
 
 
 
@@ -89,7 +84,7 @@ type mySlice struct { data uintptr len int cap int } s := mySlice{} fmt.Println(
         <div class="container">
             <header class="header">
     <span class="header__inner">
-        <a href="https://isites.github.io/" style="text-decoration: none;">
+        <a href="https://isites.gitlab.io/gopher/" style="text-decoration: none;">
     <div class="logo">
         
             <span class="logo__mark">Gopher指北</span>
@@ -135,7 +130,7 @@ type mySlice struct { data uintptr len int cap int } s := mySlice{} fmt.Println(
 
     <article>
       <h1 class="post-title">
-        <a href="https://isites.github.io/timeline/slice/">讲的是切片，但好像又不只是切片？</a>
+        <a href="https://isites.gitlab.io/gopher/timeline/slice/">讲的是切片，但好像又不只是切片？</a>
       </h1>
         <hr />
         <aside id="toc">
@@ -169,50 +164,49 @@ type mySlice struct { data uintptr len int cap int } s := mySlice{} fmt.Println(
 <h1 id="切片底层结构">切片底层结构</h1>
 <h2 id="切片和结构体的互转">切片和结构体的互转</h2>
 <p>其他不扯多了，我们还是回归本篇主题。 在正式了解切片底层结构之前， 我们先看几行代码。</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">mySlice</span> <span style="color:#66d9ef">struct</span> {
-	<span style="color:#a6e22e">data</span> <span style="color:#66d9ef">uintptr</span>
-	<span style="color:#a6e22e">len</span>  <span style="color:#66d9ef">int</span>
-	<span style="color:#a6e22e">cap</span>  <span style="color:#66d9ef">int</span>
-}
-
-<span style="color:#a6e22e">s</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">mySlice</span>{}
-<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Sprintf</span>(<span style="color:#e6db74">&#34;%+v&#34;</span>, <span style="color:#a6e22e">s</span>))
-<span style="color:#75715e">// {data:0 len:0 cap:0}
-</span><span style="color:#75715e"></span><span style="color:#a6e22e">s1</span> <span style="color:#f92672">:=</span> make([]<span style="color:#66d9ef">int</span>, <span style="color:#ae81ff">10</span>)
-<span style="color:#a6e22e">s1</span>[<span style="color:#ae81ff">2</span>] = <span style="color:#ae81ff">2</span>
-<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Sprintf</span>(<span style="color:#e6db74">&#34;%+v, len(%d), cap(%d)&#34;</span>, <span style="color:#a6e22e">s1</span>, len(<span style="color:#a6e22e">s1</span>), cap(<span style="color:#a6e22e">s1</span>))) <span style="color:#75715e">// [0 0 2 0 0 0 0 0 0 0], len(10), cap(10)
-</span><span style="color:#75715e"></span><span style="color:#a6e22e">s</span> = <span style="color:#f92672">*</span>(<span style="color:#f92672">*</span><span style="color:#a6e22e">mySlice</span>)(<span style="color:#a6e22e">unsafe</span>.<span style="color:#a6e22e">Pointer</span>(<span style="color:#f92672">&amp;</span><span style="color:#a6e22e">s1</span>))
-<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Sprintf</span>(<span style="color:#e6db74">&#34;%+v&#34;</span>, <span style="color:#a6e22e">s</span>)) <span style="color:#75715e">// {data:824634515456 len:10 cap:10}
-</span><span style="color:#75715e"></span><span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Printf</span>(<span style="color:#e6db74">&#34;%p, %v\n&#34;</span>, <span style="color:#a6e22e">s1</span>, <span style="color:#a6e22e">unsafe</span>.<span style="color:#a6e22e">Pointer</span>(<span style="color:#a6e22e">s</span>.<span style="color:#a6e22e">data</span>)) <span style="color:#75715e">// 0xc0000c2000, 0xc0000c2000
-</span><span style="color:#75715e"></span>
-</code></pre></div><p>在上述代码中，通过获取切片的地址，并将其转为<code>*mySlice</code>, 成功获得了切片的长度和容量。以及一个类似于指针一样的东西。而这个指针就是指向存储真实数据的数组，下面我们来进行验证。</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#75715e">//Data强转为一个数组
-</span><span style="color:#75715e"></span><span style="color:#a6e22e">s2</span> <span style="color:#f92672">:=</span> (<span style="color:#f92672">*</span>[<span style="color:#ae81ff">5</span>]<span style="color:#66d9ef">int</span>)(<span style="color:#a6e22e">unsafe</span>.<span style="color:#a6e22e">Pointer</span>(<span style="color:#a6e22e">s</span>.<span style="color:#a6e22e">data</span>))
-<span style="color:#a6e22e">s3</span> <span style="color:#f92672">:=</span> (<span style="color:#f92672">*</span>[<span style="color:#ae81ff">10</span>]<span style="color:#66d9ef">int</span>)(<span style="color:#a6e22e">unsafe</span>.<span style="color:#a6e22e">Pointer</span>(<span style="color:#a6e22e">s</span>.<span style="color:#a6e22e">data</span>))
-<span style="color:#75715e">// 修改数组中的数据后切片中对应位置的值也发生了变化
-</span><span style="color:#75715e"></span><span style="color:#a6e22e">s2</span>[<span style="color:#ae81ff">4</span>] = <span style="color:#ae81ff">4</span>
-<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">s1</span>)  <span style="color:#75715e">// [0 0 2 0 4 0 0 0 0 0]
-</span><span style="color:#75715e"></span><span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#f92672">*</span><span style="color:#a6e22e">s2</span>) <span style="color:#75715e">// [0 0 2 0 4]
-</span><span style="color:#75715e"></span><span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#f92672">*</span><span style="color:#a6e22e">s3</span>) <span style="color:#75715e">// [0 0 2 0 4 0 0 0 0 0]
-</span></code></pre></div><p>到这里，切片的底层结构已经呼之欲出了，不过为了做更进一步的验证，我们继续测试结构体转为切片的过程。</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">var</span> (
-	<span style="color:#75715e">// 一个长度为5的数组
-</span><span style="color:#75715e"></span>	<span style="color:#a6e22e">dt</span> [<span style="color:#ae81ff">5</span>]<span style="color:#66d9ef">int</span>
-	<span style="color:#a6e22e">s4</span> []<span style="color:#66d9ef">int</span>
-)
-<span style="color:#a6e22e">s5</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">mySlice</span>{
-	<span style="color:#75715e">// 将数组地址赋值给data
-</span><span style="color:#75715e"></span>	<span style="color:#a6e22e">data</span>: uintptr(<span style="color:#a6e22e">unsafe</span>.<span style="color:#a6e22e">Pointer</span>(<span style="color:#f92672">&amp;</span><span style="color:#a6e22e">dt</span>)),
-	<span style="color:#a6e22e">len</span>:  <span style="color:#ae81ff">2</span>,
-	<span style="color:#a6e22e">cap</span>:  <span style="color:#ae81ff">5</span>,
-}
-<span style="color:#75715e">// 结构体强转为切片
-</span><span style="color:#75715e"></span><span style="color:#a6e22e">s4</span> = <span style="color:#f92672">*</span>((<span style="color:#f92672">*</span>[]<span style="color:#66d9ef">int</span>)(<span style="color:#a6e22e">unsafe</span>.<span style="color:#a6e22e">Pointer</span>(<span style="color:#f92672">&amp;</span><span style="color:#a6e22e">s5</span>)))
-<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">s4</span>, len(<span style="color:#a6e22e">s4</span>), cap(<span style="color:#a6e22e">s4</span>)) <span style="color:#75715e">// [0 0] 2 5
-</span><span style="color:#75715e">// 修改数组中的值， 切片内容也会发生变化
-</span><span style="color:#75715e"></span><span style="color:#a6e22e">dt</span>[<span style="color:#ae81ff">1</span>] = <span style="color:#ae81ff">3</span>
-<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">dt</span>, <span style="color:#a6e22e">s4</span>) <span style="color:#75715e">// [0 3 0 0 0] [0 3]
-</span></code></pre></div><p>通过上述三段代码，我们将切片的底层结构以结构体的形式更加清晰的表达出来。如下图所示，其中第一部分（Data）为指向数组的地址，第二部分（Len）为切片的长度即数组已使用的长度， 第三部分（Cap）为数组的长度。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">mySlice</span> <span style="color:#66d9ef">struct</span> {
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">data</span> <span style="color:#66d9ef">uintptr</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">len</span>  <span style="color:#66d9ef">int</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">cap</span>  <span style="color:#66d9ef">int</span>
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">s</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">mySlice</span>{}
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Sprintf</span>(<span style="color:#e6db74">&#34;%+v&#34;</span>, <span style="color:#a6e22e">s</span>))
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// {data:0 len:0 cap:0}
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#a6e22e">s1</span> <span style="color:#f92672">:=</span> make([]<span style="color:#66d9ef">int</span>, <span style="color:#ae81ff">10</span>)
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">s1</span>[<span style="color:#ae81ff">2</span>] = <span style="color:#ae81ff">2</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Sprintf</span>(<span style="color:#e6db74">&#34;%+v, len(%d), cap(%d)&#34;</span>, <span style="color:#a6e22e">s1</span>, len(<span style="color:#a6e22e">s1</span>), cap(<span style="color:#a6e22e">s1</span>))) <span style="color:#75715e">// [0 0 2 0 0 0 0 0 0 0], len(10), cap(10)
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#a6e22e">s</span> = <span style="color:#f92672">*</span>(<span style="color:#f92672">*</span><span style="color:#a6e22e">mySlice</span>)(<span style="color:#a6e22e">unsafe</span>.<span style="color:#a6e22e">Pointer</span>(<span style="color:#f92672">&amp;</span><span style="color:#a6e22e">s1</span>))
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Sprintf</span>(<span style="color:#e6db74">&#34;%+v&#34;</span>, <span style="color:#a6e22e">s</span>)) <span style="color:#75715e">// {data:824634515456 len:10 cap:10}
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Printf</span>(<span style="color:#e6db74">&#34;%p, %v\n&#34;</span>, <span style="color:#a6e22e">s1</span>, <span style="color:#a6e22e">unsafe</span>.<span style="color:#a6e22e">Pointer</span>(<span style="color:#a6e22e">s</span>.<span style="color:#a6e22e">data</span>)) <span style="color:#75715e">// 0xc0000c2000, 0xc0000c2000
+</span></span></span></code></pre></div><p>在上述代码中，通过获取切片的地址，并将其转为<code>*mySlice</code>, 成功获得了切片的长度和容量。以及一个类似于指针一样的东西。而这个指针就是指向存储真实数据的数组，下面我们来进行验证。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#75715e">//Data强转为一个数组
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#a6e22e">s2</span> <span style="color:#f92672">:=</span> (<span style="color:#f92672">*</span>[<span style="color:#ae81ff">5</span>]<span style="color:#66d9ef">int</span>)(<span style="color:#a6e22e">unsafe</span>.<span style="color:#a6e22e">Pointer</span>(<span style="color:#a6e22e">s</span>.<span style="color:#a6e22e">data</span>))
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">s3</span> <span style="color:#f92672">:=</span> (<span style="color:#f92672">*</span>[<span style="color:#ae81ff">10</span>]<span style="color:#66d9ef">int</span>)(<span style="color:#a6e22e">unsafe</span>.<span style="color:#a6e22e">Pointer</span>(<span style="color:#a6e22e">s</span>.<span style="color:#a6e22e">data</span>))
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// 修改数组中的数据后切片中对应位置的值也发生了变化
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#a6e22e">s2</span>[<span style="color:#ae81ff">4</span>] = <span style="color:#ae81ff">4</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">s1</span>)  <span style="color:#75715e">// [0 0 2 0 4 0 0 0 0 0]
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#f92672">*</span><span style="color:#a6e22e">s2</span>) <span style="color:#75715e">// [0 0 2 0 4]
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#f92672">*</span><span style="color:#a6e22e">s3</span>) <span style="color:#75715e">// [0 0 2 0 4 0 0 0 0 0]
+</span></span></span></code></pre></div><p>到这里，切片的底层结构已经呼之欲出了，不过为了做更进一步的验证，我们继续测试结构体转为切片的过程。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">var</span> (
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// 一个长度为5的数组
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#a6e22e">dt</span> [<span style="color:#ae81ff">5</span>]<span style="color:#66d9ef">int</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">s4</span> []<span style="color:#66d9ef">int</span>
+</span></span><span style="display:flex;"><span>)
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">s5</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">mySlice</span>{
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// 将数组地址赋值给data
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#a6e22e">data</span>: uintptr(<span style="color:#a6e22e">unsafe</span>.<span style="color:#a6e22e">Pointer</span>(<span style="color:#f92672">&amp;</span><span style="color:#a6e22e">dt</span>)),
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">len</span>:  <span style="color:#ae81ff">2</span>,
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">cap</span>:  <span style="color:#ae81ff">5</span>,
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// 结构体强转为切片
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#a6e22e">s4</span> = <span style="color:#f92672">*</span>((<span style="color:#f92672">*</span>[]<span style="color:#66d9ef">int</span>)(<span style="color:#a6e22e">unsafe</span>.<span style="color:#a6e22e">Pointer</span>(<span style="color:#f92672">&amp;</span><span style="color:#a6e22e">s5</span>)))
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">s4</span>, len(<span style="color:#a6e22e">s4</span>), cap(<span style="color:#a6e22e">s4</span>)) <span style="color:#75715e">// [0 0] 2 5
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// 修改数组中的值， 切片内容也会发生变化
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#a6e22e">dt</span>[<span style="color:#ae81ff">1</span>] = <span style="color:#ae81ff">3</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">dt</span>, <span style="color:#a6e22e">s4</span>) <span style="color:#75715e">// [0 3 0 0 0] [0 3]
+</span></span></span></code></pre></div><p>通过上述三段代码，我们将切片的底层结构以结构体的形式更加清晰的表达出来。如下图所示，其中第一部分（Data）为指向数组的地址，第二部分（Len）为切片的长度即数组已使用的长度， 第三部分（Cap）为数组的长度。</p>
 <p><img src="https://note.youdao.com/yws/api/personal/file/WEB70ff878bc93b11ab7d9d75748459095c?method=download&amp;shareKey=6dee0526707b15611b604dc99fbd8b72" alt=""></p>
 <p><strong>小结</strong>：切片是对数组的包装，底层仍使用数组存储数据。</p>
 <blockquote>
@@ -222,19 +216,19 @@ type mySlice struct { data uintptr len int cap int } s := mySlice{} fmt.Println(
 </blockquote>
 <h2 id="unsafe题外话">unsafe题外话</h2>
 <p>在前一部分的Demo中几乎离不开<code>unsafe</code>包的使用。当然本篇并不是介绍此包的用法，只是作为一个题外话简单看一下它为什么不安全。</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">otherOP</span>(<span style="color:#a6e22e">a</span>, <span style="color:#a6e22e">b</span> <span style="color:#f92672">*</span><span style="color:#66d9ef">int</span>) {
-	<span style="color:#a6e22e">reflect</span>.<span style="color:#a6e22e">ValueOf</span>(<span style="color:#a6e22e">a</span>)
-	<span style="color:#a6e22e">reflect</span>.<span style="color:#a6e22e">ValueOf</span>(<span style="color:#a6e22e">b</span>)
-}
-
-<span style="color:#66d9ef">var</span> (
-	<span style="color:#a6e22e">a</span> = new(<span style="color:#66d9ef">int</span>)
-	<span style="color:#a6e22e">b</span> = new(<span style="color:#66d9ef">int</span>)
-)
-<span style="color:#a6e22e">otherOP</span>(<span style="color:#a6e22e">a</span>, <span style="color:#a6e22e">b</span>) <span style="color:#75715e">// 如果注释此函数调用，最终输出结果会发生变化
-</span><span style="color:#75715e"></span><span style="color:#f92672">*</span>(<span style="color:#f92672">*</span><span style="color:#66d9ef">int</span>)(<span style="color:#a6e22e">unsafe</span>.<span style="color:#a6e22e">Pointer</span>(uintptr(<span style="color:#a6e22e">unsafe</span>.<span style="color:#a6e22e">Pointer</span>(<span style="color:#a6e22e">a</span>)) <span style="color:#f92672">+</span> <span style="color:#a6e22e">unsafe</span>.<span style="color:#a6e22e">Sizeof</span>(int(<span style="color:#f92672">*</span><span style="color:#a6e22e">a</span>)))) = <span style="color:#ae81ff">1</span>
-<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#f92672">*</span><span style="color:#a6e22e">a</span>, <span style="color:#f92672">*</span><span style="color:#a6e22e">b</span>)
-</code></pre></div><p>上述代在是否注释<code>otherOP</code>时，其输出结果是不一致的。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">otherOP</span>(<span style="color:#a6e22e">a</span>, <span style="color:#a6e22e">b</span> <span style="color:#f92672">*</span><span style="color:#66d9ef">int</span>) {
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">reflect</span>.<span style="color:#a6e22e">ValueOf</span>(<span style="color:#a6e22e">a</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">reflect</span>.<span style="color:#a6e22e">ValueOf</span>(<span style="color:#a6e22e">b</span>)
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">var</span> (
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">a</span> = new(<span style="color:#66d9ef">int</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">b</span> = new(<span style="color:#66d9ef">int</span>)
+</span></span><span style="display:flex;"><span>)
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">otherOP</span>(<span style="color:#a6e22e">a</span>, <span style="color:#a6e22e">b</span>) <span style="color:#75715e">// 如果注释此函数调用，最终输出结果会发生变化
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#f92672">*</span>(<span style="color:#f92672">*</span><span style="color:#66d9ef">int</span>)(<span style="color:#a6e22e">unsafe</span>.<span style="color:#a6e22e">Pointer</span>(uintptr(<span style="color:#a6e22e">unsafe</span>.<span style="color:#a6e22e">Pointer</span>(<span style="color:#a6e22e">a</span>)) <span style="color:#f92672">+</span> <span style="color:#a6e22e">unsafe</span>.<span style="color:#a6e22e">Sizeof</span>(int(<span style="color:#f92672">*</span><span style="color:#a6e22e">a</span>)))) = <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#f92672">*</span><span style="color:#a6e22e">a</span>, <span style="color:#f92672">*</span><span style="color:#a6e22e">b</span>)
+</span></span></code></pre></div><p>上述代在是否注释<code>otherOP</code>时，其输出结果是不一致的。</p>
 <p><img src="https://note.youdao.com/yws/api/personal/file/WEBfddf1fcfc2050d9232fd69336a2f5a75?method=download&amp;shareKey=a0f94f779e70eca0d74cc95c2276aa34" alt=""></p>
 <p>当变量逃逸至堆上时变量<code>a</code>和变量<code>b</code>内存地址相邻，故能够通过<code>a</code>变量地址去设置<code>b</code>变量的值。当未逃逸到堆上时，设置变量<code>b</code>的值并未生效，如此我们根本无法得知修改了哪一块儿内存的值，这种不确定性在老许看来即是我们需要慎重使用此包的原因。</p>
 <blockquote>
@@ -246,40 +240,40 @@ type mySlice struct { data uintptr len int cap int } s := mySlice{} fmt.Println(
 </blockquote>
 <h1 id="创建切片">创建切片</h1>
 <p>创建切片方式有四种。第一种直接通过<code>var</code>进行变量声明，第二种通过类型推导，第三种通过<code>make</code>方式去创建，第四种通过切片表达式创建。</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#75715e">// 通过变量声明的方式创建
-</span><span style="color:#75715e"></span><span style="color:#66d9ef">var</span> <span style="color:#a6e22e">a</span> []<span style="color:#66d9ef">int</span>
-<span style="color:#75715e">// 类型推导
-</span><span style="color:#75715e"></span><span style="color:#a6e22e">b</span> <span style="color:#f92672">:=</span> []<span style="color:#66d9ef">int</span>{<span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">2</span>, <span style="color:#ae81ff">3</span>}
-<span style="color:#75715e">// make创建
-</span><span style="color:#75715e"></span><span style="color:#a6e22e">c</span> <span style="color:#f92672">:=</span> make([]<span style="color:#66d9ef">int</span>, <span style="color:#ae81ff">2</span>) <span style="color:#75715e">// c := make([]int, 0, 5)
-</span><span style="color:#75715e">// 切片表达式
-</span><span style="color:#75715e"></span><span style="color:#a6e22e">d</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">c</span>[:<span style="color:#ae81ff">3</span>]
-</code></pre></div><p>上述例子中，前三种没什么特别好说的，老许主要介绍一下第四种,以及它的相关限制和注意事项。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#75715e">// 通过变量声明的方式创建
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">var</span> <span style="color:#a6e22e">a</span> []<span style="color:#66d9ef">int</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// 类型推导
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#a6e22e">b</span> <span style="color:#f92672">:=</span> []<span style="color:#66d9ef">int</span>{<span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">2</span>, <span style="color:#ae81ff">3</span>}
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// make创建
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#a6e22e">c</span> <span style="color:#f92672">:=</span> make([]<span style="color:#66d9ef">int</span>, <span style="color:#ae81ff">2</span>) <span style="color:#75715e">// c := make([]int, 0, 5)
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// 切片表达式
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#a6e22e">d</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">c</span>[:<span style="color:#ae81ff">3</span>]
+</span></span></code></pre></div><p>上述例子中，前三种没什么特别好说的，老许主要介绍一下第四种,以及它的相关限制和注意事项。</p>
 <h2 id="简单的切片表达式">简单的切片表达式</h2>
 <p>对于字符串、数组、数组指针和切片（切片指针不能使用下面的表达式）均可使用下面的表达式：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#a6e22e">s</span>[<span style="color:#a6e22e">low</span>:<span style="color:#a6e22e">high</span>] <span style="color:#75715e">// 生成的切片长度为high-low
-</span></code></pre></div><p>通过上述表达式可创建新的子串或者切片。特别注意的是，对字符串使用此表达式时既不是生成字符串切片也不是生成字节切片而是生成<code>子字符串</code>。另外，老许在<a href="https://mp.weixin.qq.com/s/MHMg0oxZrUfhuuCZlod5cA">go中字符串的编码问题</a>中提到Go中的字符串存储的就是utf8字节切片，所以我们在使用此方法获取包含中文等特殊字符时有可能会出现意想不到的结果。正确得到子串的方式应该是先转为rune切片再截取。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#a6e22e">s</span>[<span style="color:#a6e22e">low</span>:<span style="color:#a6e22e">high</span>] <span style="color:#75715e">// 生成的切片长度为high-low
+</span></span></span></code></pre></div><p>通过上述表达式可创建新的子串或者切片。特别注意的是，对字符串使用此表达式时既不是生成字符串切片也不是生成字节切片而是生成<code>子字符串</code>。另外，老许在<a href="https://mp.weixin.qq.com/s/MHMg0oxZrUfhuuCZlod5cA">go中字符串的编码问题</a>中提到Go中的字符串存储的就是utf8字节切片，所以我们在使用此方法获取包含中文等特殊字符时有可能会出现意想不到的结果。正确得到子串的方式应该是先转为rune切片再截取。</p>
 <p>上述表达式已经可以十分方便地创建新的切片，然而更加方便地是<code>low</code>和<code>high</code>还可以省略。</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#a6e22e">s</span>[<span style="color:#ae81ff">2</span>:]  <span style="color:#75715e">// same as s[2 : len(a)]
-</span><span style="color:#75715e"></span><span style="color:#a6e22e">s</span>[:<span style="color:#ae81ff">3</span>]  <span style="color:#75715e">// same as s[0 : 3]
-</span><span style="color:#75715e"></span><span style="color:#a6e22e">s</span>[:]   <span style="color:#75715e">// same as s[0 : len(a)]
-</span></code></pre></div><p><strong>下标限制</strong></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#a6e22e">s</span>[<span style="color:#ae81ff">2</span>:]  <span style="color:#75715e">// same as s[2 : len(a)]
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#a6e22e">s</span>[:<span style="color:#ae81ff">3</span>]  <span style="color:#75715e">// same as s[0 : 3]
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#a6e22e">s</span>[:]   <span style="color:#75715e">// same as s[0 : len(a)]
+</span></span></span></code></pre></div><p><strong>下标限制</strong></p>
 <p>对不同的类型使用切片表达式，<code>low</code>和<code>high</code>的取值范围不同。对于字符串和数组/数组指针而言，<code>low</code>和<code>high</code>的取值范围为<code>0 &lt;= low &lt;= len(s)</code>。对于切片而言，<code>low</code>和<code>high</code>的取值范围为<code>0 &lt;= low &lt;= cap(s)</code>。在<a href="https://mp.weixin.qq.com/s/G8MrTgwH88ABB-OOYreXIA">切片面试题系列一</a>中正是对此知识点的考察。</p>
 <p><strong>切片容量</strong></p>
 <p>通过切片表达式生成的切片，其底层数组共享，因此切片的容量为底层数组的长度减去<code>low</code>。由此可以推断下述代码输出结果为<code>3 8</code>和<code>3 13</code>。</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">var</span> (
-	<span style="color:#a6e22e">s1</span> [<span style="color:#ae81ff">10</span>]<span style="color:#66d9ef">int</span>
-	<span style="color:#a6e22e">s2</span> []<span style="color:#66d9ef">int</span> = make([]<span style="color:#66d9ef">int</span>, <span style="color:#ae81ff">10</span>, <span style="color:#ae81ff">15</span>)
-)
-<span style="color:#a6e22e">s</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">s1</span>[<span style="color:#ae81ff">2</span>:<span style="color:#ae81ff">5</span>]
-<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(len(<span style="color:#a6e22e">s</span>), cap(<span style="color:#a6e22e">s</span>))
-<span style="color:#a6e22e">s</span> = <span style="color:#a6e22e">s2</span>[<span style="color:#ae81ff">2</span>:<span style="color:#ae81ff">5</span>]
-<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(len(<span style="color:#a6e22e">s</span>), cap(<span style="color:#a6e22e">s</span>))
-<span style="color:#66d9ef">return</span>
-</code></pre></div><h2 id="完整的切片表达式">完整的切片表达式</h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">var</span> (
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">s1</span> [<span style="color:#ae81ff">10</span>]<span style="color:#66d9ef">int</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">s2</span> []<span style="color:#66d9ef">int</span> = make([]<span style="color:#66d9ef">int</span>, <span style="color:#ae81ff">10</span>, <span style="color:#ae81ff">15</span>)
+</span></span><span style="display:flex;"><span>)
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">s</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">s1</span>[<span style="color:#ae81ff">2</span>:<span style="color:#ae81ff">5</span>]
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(len(<span style="color:#a6e22e">s</span>), cap(<span style="color:#a6e22e">s</span>))
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">s</span> = <span style="color:#a6e22e">s2</span>[<span style="color:#ae81ff">2</span>:<span style="color:#ae81ff">5</span>]
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(len(<span style="color:#a6e22e">s</span>), cap(<span style="color:#a6e22e">s</span>))
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">return</span>
+</span></span></code></pre></div><h2 id="完整的切片表达式">完整的切片表达式</h2>
 <p>说实话这种方式真的不常用，虽然它可以控制切片的容量，但老许在实际开发中并未使用过。其完整表达式如下：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#a6e22e">s</span>[<span style="color:#a6e22e">low</span> : <span style="color:#a6e22e">high</span> : <span style="color:#a6e22e">max</span>]
-</code></pre></div><p>这种表达式有几个需要注意的点分别是：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#a6e22e">s</span>[<span style="color:#a6e22e">low</span> : <span style="color:#a6e22e">high</span> : <span style="color:#a6e22e">max</span>]
+</span></span></code></pre></div><p>这种表达式有几个需要注意的点分别是：</p>
 <ul>
 <li>只适用于数组、数组指针和切片不适用于字符串。</li>
 <li>和简单切片表达式不同的是，它只能忽略<code>low</code>这个下标且忽略后该下标默认值为0。</li>
@@ -291,21 +285,21 @@ type mySlice struct { data uintptr len int cap int } s := mySlice{} fmt.Println(
 <p>前面提到此切片表达式可以控制切片的容量。在<code>low</code>一定的情况下，通过改变<code>max</code>在允许范围内的值即可改变切片的容量，其容量计算方式为<code>max - low</code>。</p>
 <h1 id="切片扩容">切片扩容</h1>
 <p><code>runtime/slice.go</code>文件的<code>growslice</code>函数实现了切片的扩容逻辑,在正式分析内部逻辑之前我们先看看<code>growslice</code>的函数签名：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">slice</span> <span style="color:#66d9ef">struct</span> {
-	<span style="color:#a6e22e">array</span> <span style="color:#a6e22e">unsafe</span>.<span style="color:#a6e22e">Pointer</span>
-	<span style="color:#a6e22e">len</span>   <span style="color:#66d9ef">int</span>
-	<span style="color:#a6e22e">cap</span>   <span style="color:#66d9ef">int</span>
-}
-
-<span style="color:#66d9ef">func</span> <span style="color:#a6e22e">growslice</span>(<span style="color:#a6e22e">et</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">_type</span>, <span style="color:#a6e22e">old</span> <span style="color:#a6e22e">slice</span>, <span style="color:#a6e22e">cap</span> <span style="color:#66d9ef">int</span>) <span style="color:#a6e22e">slice</span>
-</code></pre></div><p>第一个参数<code>_type</code>是Go语言类型的运行时表示，其中包含了很多元信息，例如：类型大小、对齐以及种类等。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">slice</span> <span style="color:#66d9ef">struct</span> {
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">array</span> <span style="color:#a6e22e">unsafe</span>.<span style="color:#a6e22e">Pointer</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">len</span>   <span style="color:#66d9ef">int</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">cap</span>   <span style="color:#66d9ef">int</span>
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">growslice</span>(<span style="color:#a6e22e">et</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">_type</span>, <span style="color:#a6e22e">old</span> <span style="color:#a6e22e">slice</span>, <span style="color:#a6e22e">cap</span> <span style="color:#66d9ef">int</span>) <span style="color:#a6e22e">slice</span>
+</span></span></code></pre></div><p>第一个参数<code>_type</code>是Go语言类型的运行时表示，其中包含了很多元信息，例如：类型大小、对齐以及种类等。</p>
 <p>第二个参数为待扩容切片的信息。</p>
 <p>第三个参数为真实需要的容量，即原容量和新增元素数量之和，老许对其简称为所需容量。为了更加容易理解所需容量的含义，我们先看一段代码：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#a6e22e">s</span> <span style="color:#f92672">:=</span> []<span style="color:#66d9ef">int</span>{<span style="color:#ae81ff">1</span>,<span style="color:#ae81ff">2</span>,<span style="color:#ae81ff">3</span>} <span style="color:#75715e">// 此时切片长度和容量均为3
-</span><span style="color:#75715e"></span><span style="color:#a6e22e">s</span> = append(<span style="color:#a6e22e">s</span>, <span style="color:#ae81ff">4</span>) <span style="color:#75715e">// 此时所需容量为3 + 1
-</span><span style="color:#75715e"></span><span style="color:#a6e22e">s1</span> <span style="color:#f92672">:=</span> []<span style="color:#66d9ef">int</span>{<span style="color:#ae81ff">1</span>,<span style="color:#ae81ff">2</span>,<span style="color:#ae81ff">3</span>} <span style="color:#75715e">// 此时切片长度和容量均为3
-</span><span style="color:#75715e"></span><span style="color:#a6e22e">s1</span> = append(<span style="color:#a6e22e">s1</span>, <span style="color:#ae81ff">4</span>, <span style="color:#ae81ff">5</span>, <span style="color:#ae81ff">6</span>) <span style="color:#75715e">// 此时所需容量为3 + 3
-</span></code></pre></div><h2 id="扩容逻辑">扩容逻辑</h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#a6e22e">s</span> <span style="color:#f92672">:=</span> []<span style="color:#66d9ef">int</span>{<span style="color:#ae81ff">1</span>,<span style="color:#ae81ff">2</span>,<span style="color:#ae81ff">3</span>} <span style="color:#75715e">// 此时切片长度和容量均为3
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#a6e22e">s</span> = append(<span style="color:#a6e22e">s</span>, <span style="color:#ae81ff">4</span>) <span style="color:#75715e">// 此时所需容量为3 + 1
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#a6e22e">s1</span> <span style="color:#f92672">:=</span> []<span style="color:#66d9ef">int</span>{<span style="color:#ae81ff">1</span>,<span style="color:#ae81ff">2</span>,<span style="color:#ae81ff">3</span>} <span style="color:#75715e">// 此时切片长度和容量均为3
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#a6e22e">s1</span> = append(<span style="color:#a6e22e">s1</span>, <span style="color:#ae81ff">4</span>, <span style="color:#ae81ff">5</span>, <span style="color:#ae81ff">6</span>) <span style="color:#75715e">// 此时所需容量为3 + 3
+</span></span></span></code></pre></div><h2 id="扩容逻辑">扩容逻辑</h2>
 <p>有了上面的概念之后，下面我们看看切片扩容算法：</p>
 <p><img src="https://note.youdao.com/yws/api/personal/file/WEB1327300fe17b24f8445d1060e1c7ce3d?method=download&amp;shareKey=427d873743a6bc9219f1259075c3af99" alt=""></p>
 <p>上图逻辑总结如下：</p>
@@ -318,39 +312,39 @@ type mySlice struct { data uintptr len int cap int } s := mySlice{} fmt.Println(
 <h2 id="计算内存容量">计算内存容量</h2>
 <p>前文中的扩容逻辑是理想的内存分配容量，而真实的内存分配十分复杂。在Go1.6中切片扩容分配内存时分为四种情况，分别是类型大小为1字节、类型大小为指针大小、类型大小为2的n次幂和其他。而切片扩容分配内存时在不同的Go版本中又略有不同，这里只介绍1.16中类型大小为2的n次幂时内存分配。</p>
 <p>下面直接上代码：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">var</span> <span style="color:#a6e22e">shift</span> <span style="color:#66d9ef">uintptr</span>
-<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">sys</span>.<span style="color:#a6e22e">PtrSize</span> <span style="color:#f92672">==</span> <span style="color:#ae81ff">8</span> {
-	<span style="color:#75715e">// Mask shift for better code generation.
-</span><span style="color:#75715e"></span>	<span style="color:#75715e">// et.size = 1 &lt;&lt; n
-</span><span style="color:#75715e"></span>	<span style="color:#75715e">// shift = n
-</span><span style="color:#75715e"></span>	<span style="color:#75715e">// &amp;63是因为uint64中1最大左移63，再大就溢出了
-</span><span style="color:#75715e"></span>	<span style="color:#a6e22e">shift</span> = uintptr(<span style="color:#a6e22e">sys</span>.<span style="color:#a6e22e">Ctz64</span>(uint64(<span style="color:#a6e22e">et</span>.<span style="color:#a6e22e">size</span>))) <span style="color:#f92672">&amp;</span> <span style="color:#ae81ff">63</span>
-} <span style="color:#66d9ef">else</span> {
-	<span style="color:#a6e22e">shift</span> = uintptr(<span style="color:#a6e22e">sys</span>.<span style="color:#a6e22e">Ctz32</span>(uint32(<span style="color:#a6e22e">et</span>.<span style="color:#a6e22e">size</span>))) <span style="color:#f92672">&amp;</span> <span style="color:#ae81ff">31</span>
-}
-</code></pre></div><p>上述代码中，通过对指针大小判断以区分当前运行的是32位还是64位平台。<code>Ctz64</code>和<code>Ctz32</code>函数是针对不同类型计算最低位<code>0</code>的个数。又因为类型大小是2的n次幂，则0的个数即为n。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">var</span> <span style="color:#a6e22e">shift</span> <span style="color:#66d9ef">uintptr</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">if</span> <span style="color:#a6e22e">sys</span>.<span style="color:#a6e22e">PtrSize</span> <span style="color:#f92672">==</span> <span style="color:#ae81ff">8</span> {
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// Mask shift for better code generation.
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#75715e">// et.size = 1 &lt;&lt; n
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#75715e">// shift = n
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#75715e">// &amp;63是因为uint64中1最大左移63，再大就溢出了
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#a6e22e">shift</span> = uintptr(<span style="color:#a6e22e">sys</span>.<span style="color:#a6e22e">Ctz64</span>(uint64(<span style="color:#a6e22e">et</span>.<span style="color:#a6e22e">size</span>))) <span style="color:#f92672">&amp;</span> <span style="color:#ae81ff">63</span>
+</span></span><span style="display:flex;"><span>} <span style="color:#66d9ef">else</span> {
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">shift</span> = uintptr(<span style="color:#a6e22e">sys</span>.<span style="color:#a6e22e">Ctz32</span>(uint32(<span style="color:#a6e22e">et</span>.<span style="color:#a6e22e">size</span>))) <span style="color:#f92672">&amp;</span> <span style="color:#ae81ff">31</span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>上述代码中，通过对指针大小判断以区分当前运行的是32位还是64位平台。<code>Ctz64</code>和<code>Ctz32</code>函数是针对不同类型计算最低位<code>0</code>的个数。又因为类型大小是2的n次幂，则0的个数即为n。</p>
 <blockquote>
 <p>类型大小为2的n次幂，则类型大小一定为 1 &laquo; n，因此计算最低位0的个数即可得到左移的位数。</p>
 <p>源码中通过<code>x&amp;(x-1) == 0</code>表达式判断一个无符号整数是否为2的n次幂。我们平时开发中如果有类似的逻辑，请参考切片扩容源码开始装逼之旅。</p>
 </blockquote>
 <p>接下来是计算内存容量的逻辑：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#a6e22e">capmem</span> = <span style="color:#a6e22e">roundupsize</span>(uintptr(<span style="color:#a6e22e">newcap</span>) <span style="color:#f92672">&lt;&lt;</span> <span style="color:#a6e22e">shift</span>)
-<span style="color:#a6e22e">newcap</span> = int(<span style="color:#a6e22e">capmem</span> <span style="color:#f92672">&gt;&gt;</span> <span style="color:#a6e22e">shift</span>)
-</code></pre></div><p>结合前文易知，<code>uintptr(newcap) &lt;&lt; shift</code>实际上可以理解为<code>uintptr(newcap) * et.size</code>，<code>capmem &gt;&gt; shift</code>可理解为<code>capmem / et.size</code>。<code>uintptr(newcap) &lt;&lt; shift</code>是最理想的所需内存大小，而实际分配内存时因为内存对齐等问题无法达到理想状况，所以通过<code>roundupsize</code>计算出实际需要的内存大小,最后再计算出真实容量。有了这个理解之后我们接下来着重分析<code>roundupsize</code>函数。</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">roundupsize</span>(<span style="color:#a6e22e">size</span> <span style="color:#66d9ef">uintptr</span>) <span style="color:#66d9ef">uintptr</span> {
-	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">size</span> &lt; <span style="color:#a6e22e">_MaxSmallSize</span> {
-		<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">size</span> <span style="color:#f92672">&lt;=</span> <span style="color:#a6e22e">smallSizeMax</span><span style="color:#f92672">-</span><span style="color:#ae81ff">8</span> {
-			<span style="color:#66d9ef">return</span> uintptr(<span style="color:#a6e22e">class_to_size</span>[<span style="color:#a6e22e">size_to_class8</span>[<span style="color:#a6e22e">divRoundUp</span>(<span style="color:#a6e22e">size</span>, <span style="color:#a6e22e">smallSizeDiv</span>)]])
-		} <span style="color:#66d9ef">else</span> {
-			<span style="color:#66d9ef">return</span> uintptr(<span style="color:#a6e22e">class_to_size</span>[<span style="color:#a6e22e">size_to_class128</span>[<span style="color:#a6e22e">divRoundUp</span>(<span style="color:#a6e22e">size</span><span style="color:#f92672">-</span><span style="color:#a6e22e">smallSizeMax</span>, <span style="color:#a6e22e">largeSizeDiv</span>)]])
-		}
-	}
-	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">size</span><span style="color:#f92672">+</span><span style="color:#a6e22e">_PageSize</span> &lt; <span style="color:#a6e22e">size</span> {
-		<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">size</span>
-	}
-	<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">alignUp</span>(<span style="color:#a6e22e">size</span>, <span style="color:#a6e22e">_PageSize</span>)
-}
-</code></pre></div><p>上面函数有很多含义不清楚的变量，老许接下来会对其一一解释。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#a6e22e">capmem</span> = <span style="color:#a6e22e">roundupsize</span>(uintptr(<span style="color:#a6e22e">newcap</span>) <span style="color:#f92672">&lt;&lt;</span> <span style="color:#a6e22e">shift</span>)
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">newcap</span> = int(<span style="color:#a6e22e">capmem</span> <span style="color:#f92672">&gt;&gt;</span> <span style="color:#a6e22e">shift</span>)
+</span></span></code></pre></div><p>结合前文易知，<code>uintptr(newcap) &lt;&lt; shift</code>实际上可以理解为<code>uintptr(newcap) * et.size</code>，<code>capmem &gt;&gt; shift</code>可理解为<code>capmem / et.size</code>。<code>uintptr(newcap) &lt;&lt; shift</code>是最理想的所需内存大小，而实际分配内存时因为内存对齐等问题无法达到理想状况，所以通过<code>roundupsize</code>计算出实际需要的内存大小,最后再计算出真实容量。有了这个理解之后我们接下来着重分析<code>roundupsize</code>函数。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">roundupsize</span>(<span style="color:#a6e22e">size</span> <span style="color:#66d9ef">uintptr</span>) <span style="color:#66d9ef">uintptr</span> {
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">size</span> &lt; <span style="color:#a6e22e">_MaxSmallSize</span> {
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">size</span> <span style="color:#f92672">&lt;=</span> <span style="color:#a6e22e">smallSizeMax</span><span style="color:#f92672">-</span><span style="color:#ae81ff">8</span> {
+</span></span><span style="display:flex;"><span>			<span style="color:#66d9ef">return</span> uintptr(<span style="color:#a6e22e">class_to_size</span>[<span style="color:#a6e22e">size_to_class8</span>[<span style="color:#a6e22e">divRoundUp</span>(<span style="color:#a6e22e">size</span>, <span style="color:#a6e22e">smallSizeDiv</span>)]])
+</span></span><span style="display:flex;"><span>		} <span style="color:#66d9ef">else</span> {
+</span></span><span style="display:flex;"><span>			<span style="color:#66d9ef">return</span> uintptr(<span style="color:#a6e22e">class_to_size</span>[<span style="color:#a6e22e">size_to_class128</span>[<span style="color:#a6e22e">divRoundUp</span>(<span style="color:#a6e22e">size</span><span style="color:#f92672">-</span><span style="color:#a6e22e">smallSizeMax</span>, <span style="color:#a6e22e">largeSizeDiv</span>)]])
+</span></span><span style="display:flex;"><span>		}
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">size</span><span style="color:#f92672">+</span><span style="color:#a6e22e">_PageSize</span> &lt; <span style="color:#a6e22e">size</span> {
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">size</span>
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">alignUp</span>(<span style="color:#a6e22e">size</span>, <span style="color:#a6e22e">_PageSize</span>)
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>上面函数有很多含义不清楚的变量，老许接下来会对其一一解释。</p>
 <p><code>_MaxSmallSize</code>: 其值为<code>32768</code>，即32kb大小。在Go中，当对象大小超过32kb时，内存分配策略和小于等于32kB时是有区别的。</p>
 <p><code>smallSizeMax</code>: 其值为1024字节。</p>
 <p><code>smallSizeDiv</code>: 其值为8字节。</p>
@@ -365,10 +359,10 @@ type mySlice struct { data uintptr len int cap int } s := mySlice{} fmt.Println(
 <p><img src="https://note.youdao.com/yws/api/personal/file/WEB24cf5d5ab57e3dc5f6ae8b7bee3291b3?method=download&amp;shareKey=cc439fd08c9f8f324f655c514e00f45f" alt=""></p>
 <p>到这里，切片扩容的核心逻辑就已经分析完毕。本篇不对类型大小为1字节、类型大小为指针大小以及其他大小进行扩容逻辑分析的原因是整体逻辑差别不大。在老许看来源码中对类型大小区分的主要目的是为了尽可能减少除法和乘法运算。每每阅读这些优秀的源码都令老许直呼细节怪物。</p>
 <p>为了加深印象我们以<a href="https://mp.weixin.qq.com/s/qdABTKsNjeG7KpKFRaKMww">切片面试题系列三</a>中的一个例子进行一次演算。</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#a6e22e">s3</span> <span style="color:#f92672">:=</span> []<span style="color:#66d9ef">int</span>{<span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">2</span>}
-<span style="color:#a6e22e">s3</span> = append(<span style="color:#a6e22e">s3</span>, <span style="color:#ae81ff">3</span>, <span style="color:#ae81ff">4</span>, <span style="color:#ae81ff">5</span>)
-<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(cap(<span style="color:#a6e22e">s3</span>))
-</code></pre></div><p>根据前文知，所需容量为5，又因所需容量大于2倍当前容量，故新容量也为5。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#a6e22e">s3</span> <span style="color:#f92672">:=</span> []<span style="color:#66d9ef">int</span>{<span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">2</span>}
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">s3</span> = append(<span style="color:#a6e22e">s3</span>, <span style="color:#ae81ff">3</span>, <span style="color:#ae81ff">4</span>, <span style="color:#ae81ff">5</span>)
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(cap(<span style="color:#a6e22e">s3</span>))
+</span></span></code></pre></div><p>根据前文知，所需容量为5，又因所需容量大于2倍当前容量，故新容量也为5。</p>
 <p>又因为int类型大小为8（等于64位平台上的指针大小），所以实际需要的内存大小为<code>5 * 8 = 40</code>字节。而67个跨度中最接近40字节的跨度为48字节，所以实际分配的内存容量为48字节。</p>
 <p>最终计算真实的容量为<code>48 / 8 = 6</code>，和老许实际运行输出一致。</p>
 <p>最后，衷心希望本文能够对各位读者有一定的帮助。</p>
@@ -392,7 +386,7 @@ type mySlice struct { data uintptr len int cap int } s := mySlice{} fmt.Println(
           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-tag meta-icon">
             <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path>
             <line x1="7" y1="7" x2="7" y2="7"></line>
-          </svg><span class="tag"><a href="https://isites.github.io/tags/go/">Go</a></span>
+          </svg><span class="tag"><a href="https://isites.gitlab.io/gopher/tags/go/">Go</a></span>
         </p>
 
       <p>
@@ -428,7 +422,7 @@ type mySlice struct { data uintptr len int cap int } s := mySlice{} fmt.Println(
         <div class="pagination__buttons">
           
             <span class="button previous">
-              <a href="https://isites.github.io/timeline/fns/">
+              <a href="https://isites.gitlab.io/gopher/timeline/fns/">
                 <span class="button__icon">←</span>
                 <span class="button__text">惊！Go里面居然有这样精妙的小函数！</span>
               </a>
@@ -437,7 +431,7 @@ type mySlice struct { data uintptr len int cap int } s := mySlice{} fmt.Println(
 
           
             <span class="button next">
-              <a href="https://isites.github.io/timeline/leave-sh/">
+              <a href="https://isites.gitlab.io/gopher/timeline/leave-sh/">
                 <span class="button__text">天涯未远，上海再见，百度再见</span>
                 <span class="button__icon">→</span>
               </a>
@@ -526,7 +520,7 @@ type mySlice struct { data uintptr len int cap int } s := mySlice{} fmt.Println(
 
 
 
-<script type="text/javascript" src="/bundle.min.dc716e9092c9820b77f96da294d0120aeeb189b5bcea9752309ebea27fd53bbe6b13cffb2aca8ecf32525647ceb7001f76091de4199ac5a3caa432c070247f5b.js" integrity="sha512-3HFukJLJggt3&#43;W2ilNASCu6xibW86pdSMJ6&#43;on/VO75rE8/7KsqOzzJSVkfOtwAfdgkd5BmaxaPKpDLAcCR/Ww=="></script>
+<script type="text/javascript" src="/gopher/bundle.min.e2a9675ced043d06ad6d3f13fafb0203d96c89eb2484878d5eb89d6da19559cbed55fb05ca9eae7be1e975cab83e3b2a1193afc357019620a509327c5a6a9c0f.js" integrity="sha512-4qlnXO0EPQatbT8T&#43;vsCA9lsieskhIeNXridbaGVWcvtVfsFyp6ue&#43;Hpdcq4PjsqEZOvw1cBliClCTJ8WmqcDw=="></script>
 
 
     

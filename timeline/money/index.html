@@ -22,11 +22,11 @@ https://www.h-schmidt.net/FloatConverter/IEEE754.html
 此时的结果符合预期。这也是为什么很多时候判断两个浮点数是否相等往往采用a - b &amp;lt;= 0.00001的形式，说白了这就是小数部分保留5位精度的另一种表现形式。
 用整型计算 前面提到只有少量的浮点数可以用IEEE754标准表示，而整型可精确表示所有有效范围内的数。因此很容易想到，使用整型表示浮点数。
 例如，事先定好小数保留8位精度，则0.1和0.2分别表示成整数为10000000和20000000, 浮点数的运算也就转换为整型的运算。还是以0.1 &#43; 0.2为例。
-// 表示小数位保留8位精度 const prec = 100000000 func float2Int(f float64) int64 { return int64(f * prec) } func int2float(i int64) float64 { return float64(i) / prec } func main() { var a, b float64 = 0." />
+// 表示小数位保留8位精度 const prec = 100000000  func float2Int(f float64) int64 { 	return int64(f * prec) }  func int2float(i int64) float64 { 	return float64(i) / prec } func main() { 	var a, b float64 = 0." />
 <meta name="keywords" content=", Go" />
 <meta name="robots" content="noodp" />
 <meta name="theme-color" content="" />
-<link rel="canonical" href="https://isites.github.io/timeline/money/" />
+<link rel="canonical" href="https://isites.gitlab.io/gopher/timeline/money/" />
 
 
     <title>
@@ -43,7 +43,7 @@ https://www.h-schmidt.net/FloatConverter/IEEE754.html
 
 
 
-<link rel="stylesheet" href="/main.805b1025016494ee5fd67b55b8ecd5e2b7c4a9f0bdda42e300c62b85ddfef68f.css">
+<link rel="stylesheet" href="/gopher/main.805b1025016494ee5fd67b55b8ecd5e2b7c4a9f0bdda42e300c62b85ddfef68f.css">
 
 
   
@@ -77,15 +77,10 @@ https://www.h-schmidt.net/FloatConverter/IEEE754.html
 此时的结果符合预期。这也是为什么很多时候判断两个浮点数是否相等往往采用a - b &lt;= 0.00001的形式，说白了这就是小数部分保留5位精度的另一种表现形式。
 用整型计算 前面提到只有少量的浮点数可以用IEEE754标准表示，而整型可精确表示所有有效范围内的数。因此很容易想到，使用整型表示浮点数。
 例如，事先定好小数保留8位精度，则0.1和0.2分别表示成整数为10000000和20000000, 浮点数的运算也就转换为整型的运算。还是以0.1 &#43; 0.2为例。
-// 表示小数位保留8位精度 const prec = 100000000 func float2Int(f float64) int64 { return int64(f * prec) } func int2float(i int64) float64 { return float64(i) / prec } func main() { var a, b float64 = 0.">
-<meta itemprop="datePublished" content="2021-12-20T12:20:38+08:00" />
+// 表示小数位保留8位精度 const prec = 100000000  func float2Int(f float64) int64 { 	return int64(f * prec) }  func int2float(i int64) float64 { 	return float64(i) / prec } func main() { 	var a, b float64 = 0."><meta itemprop="datePublished" content="2021-12-20T12:20:38+08:00" />
 <meta itemprop="dateModified" content="2021-12-20T12:20:38+08:00" />
 <meta itemprop="wordCount" content="328">
-
-
-
 <meta itemprop="keywords" content="Go," />
-
 <meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="探讨系统中💰钱的精度问题"/>
 <meta name="twitter:description" content="钱,乃亘古之玄物,有则气粗神壮,缺则心卑力浅
@@ -105,7 +100,7 @@ https://www.h-schmidt.net/FloatConverter/IEEE754.html
 此时的结果符合预期。这也是为什么很多时候判断两个浮点数是否相等往往采用a - b &lt;= 0.00001的形式，说白了这就是小数部分保留5位精度的另一种表现形式。
 用整型计算 前面提到只有少量的浮点数可以用IEEE754标准表示，而整型可精确表示所有有效范围内的数。因此很容易想到，使用整型表示浮点数。
 例如，事先定好小数保留8位精度，则0.1和0.2分别表示成整数为10000000和20000000, 浮点数的运算也就转换为整型的运算。还是以0.1 &#43; 0.2为例。
-// 表示小数位保留8位精度 const prec = 100000000 func float2Int(f float64) int64 { return int64(f * prec) } func int2float(i int64) float64 { return float64(i) / prec } func main() { var a, b float64 = 0."/>
+// 表示小数位保留8位精度 const prec = 100000000  func float2Int(f float64) int64 { 	return int64(f * prec) }  func int2float(i int64) float64 { 	return float64(i) / prec } func main() { 	var a, b float64 = 0."/>
 
 
 
@@ -128,7 +123,7 @@ https://www.h-schmidt.net/FloatConverter/IEEE754.html
         <div class="container">
             <header class="header">
     <span class="header__inner">
-        <a href="https://isites.github.io/" style="text-decoration: none;">
+        <a href="https://isites.gitlab.io/gopher/" style="text-decoration: none;">
     <div class="logo">
         
             <span class="logo__mark">Gopher指北</span>
@@ -174,7 +169,7 @@ https://www.h-schmidt.net/FloatConverter/IEEE754.html
 
     <article>
       <h1 class="post-title">
-        <a href="https://isites.github.io/timeline/money/">探讨系统中💰钱的精度问题</a>
+        <a href="https://isites.gitlab.io/gopher/timeline/money/">探讨系统中💰钱的精度问题</a>
       </h1>
         <hr />
         <aside id="toc">
@@ -224,45 +219,45 @@ https://www.h-schmidt.net/FloatConverter/IEEE754.html
 <h2 id="用整型计算">用整型计算</h2>
 <p>前面提到只有少量的浮点数可以用IEEE754标准表示，而整型可精确表示所有有效范围内的数。因此很容易想到，使用整型表示浮点数。</p>
 <p>例如，事先定好小数保留8位精度，则<code>0.1</code>和<code>0.2</code>分别表示成整数为<code>10000000</code>和<code>20000000</code>,  浮点数的运算也就转换为整型的运算。还是以<code>0.1 + 0.2</code>为例。</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#75715e">// 表示小数位保留8位精度
-</span><span style="color:#75715e"></span><span style="color:#66d9ef">const</span> <span style="color:#a6e22e">prec</span> = <span style="color:#ae81ff">100000000</span>
-
-<span style="color:#66d9ef">func</span> <span style="color:#a6e22e">float2Int</span>(<span style="color:#a6e22e">f</span> <span style="color:#66d9ef">float64</span>) <span style="color:#66d9ef">int64</span> {
-	<span style="color:#66d9ef">return</span> int64(<span style="color:#a6e22e">f</span> <span style="color:#f92672">*</span> <span style="color:#a6e22e">prec</span>)
-}
-
-<span style="color:#66d9ef">func</span> <span style="color:#a6e22e">int2float</span>(<span style="color:#a6e22e">i</span> <span style="color:#66d9ef">int64</span>) <span style="color:#66d9ef">float64</span> {
-	<span style="color:#66d9ef">return</span> float64(<span style="color:#a6e22e">i</span>) <span style="color:#f92672">/</span> <span style="color:#a6e22e">prec</span>
-}
-<span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
-	<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">a</span>, <span style="color:#a6e22e">b</span> <span style="color:#66d9ef">float64</span> = <span style="color:#ae81ff">0.1</span>, <span style="color:#ae81ff">0.2</span>
-	<span style="color:#a6e22e">f</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">float2Int</span>(<span style="color:#a6e22e">a</span>) <span style="color:#f92672">+</span> <span style="color:#a6e22e">float2Int</span>(<span style="color:#a6e22e">b</span>)
-	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">a</span><span style="color:#f92672">+</span><span style="color:#a6e22e">b</span>, <span style="color:#a6e22e">f</span>, <span style="color:#a6e22e">int2float</span>(<span style="color:#a6e22e">f</span>))
-	<span style="color:#66d9ef">return</span>
-}
-</code></pre></div><p>上述代码输出结果如下：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#75715e">// 表示小数位保留8位精度
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">const</span> <span style="color:#a6e22e">prec</span> = <span style="color:#ae81ff">100000000</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">float2Int</span>(<span style="color:#a6e22e">f</span> <span style="color:#66d9ef">float64</span>) <span style="color:#66d9ef">int64</span> {
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">return</span> int64(<span style="color:#a6e22e">f</span> <span style="color:#f92672">*</span> <span style="color:#a6e22e">prec</span>)
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">int2float</span>(<span style="color:#a6e22e">i</span> <span style="color:#66d9ef">int64</span>) <span style="color:#66d9ef">float64</span> {
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">return</span> float64(<span style="color:#a6e22e">i</span>) <span style="color:#f92672">/</span> <span style="color:#a6e22e">prec</span>
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">a</span>, <span style="color:#a6e22e">b</span> <span style="color:#66d9ef">float64</span> = <span style="color:#ae81ff">0.1</span>, <span style="color:#ae81ff">0.2</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">f</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">float2Int</span>(<span style="color:#a6e22e">a</span>) <span style="color:#f92672">+</span> <span style="color:#a6e22e">float2Int</span>(<span style="color:#a6e22e">b</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">a</span><span style="color:#f92672">+</span><span style="color:#a6e22e">b</span>, <span style="color:#a6e22e">f</span>, <span style="color:#a6e22e">int2float</span>(<span style="color:#a6e22e">f</span>))
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">return</span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>上述代码输出结果如下：</p>
 <p><img src="https://note.youdao.com/yws/api/personal/file/WEB90f4a3faef6fab8ce5230655a4e4b695?method=download&amp;shareKey=7516cb7b6cbd33c1953bcff518cb93d8" alt=""></p>
 <p>上述输出结果完全符合预期，所以用整型来表示浮点数看起来是一个可行的方案。但，我们不能局限于个例，还需要更多的测试。</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">float2Int</span>(<span style="color:#ae81ff">2.3</span>))
-</code></pre></div><p>上述代码输出结果如下：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">float2Int</span>(<span style="color:#ae81ff">2.3</span>))
+</span></span></code></pre></div><p>上述代码输出结果如下：</p>
 <p><img src="https://note.youdao.com/yws/api/personal/file/WEBefdbec902ab6904b50790c6dd7c930f4?method=download&amp;shareKey=453064325c56910cf93cb28c166de7cd" alt=""></p>
 <p>这个结果是如此的出乎意料，却又是情理之中。</p>
 <p><img src="https://note.youdao.com/yws/api/personal/file/WEBe786aa264db530711fa0ab6330c2d52e?method=download&amp;shareKey=80360e18093eac4da4fa7da3629e7aaf" alt=""></p>
 <p>上图表示<code>2.3</code>在计算机中实际的存储值，因此使用<code>float2Int</code>函数进行转换时的结果是<code>229999999</code>而不是<code>230000000</code>。</p>
 <p>这个结果很明显不符合预期，在确定的精度范围内仍有精度损失，如果把这个代码发到线上，很大概率第二天就会光速离职。要解决这个问题也很简单，只需引入<code>github.com/shopspring/decimal</code>即可，看下面修正后的代码。</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#75715e">// 表示小数位保留8位精度
-</span><span style="color:#75715e"></span><span style="color:#66d9ef">const</span> <span style="color:#a6e22e">prec</span> = <span style="color:#ae81ff">100000000</span>
-
-<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">decimalPrec</span> = <span style="color:#a6e22e">decimal</span>.<span style="color:#a6e22e">NewFromFloat</span>(<span style="color:#a6e22e">prec</span>)
-
-<span style="color:#66d9ef">func</span> <span style="color:#a6e22e">float2Int</span>(<span style="color:#a6e22e">f</span> <span style="color:#66d9ef">float64</span>) <span style="color:#66d9ef">int64</span> {
-	<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">decimal</span>.<span style="color:#a6e22e">NewFromFloat</span>(<span style="color:#a6e22e">f</span>).<span style="color:#a6e22e">Mul</span>(<span style="color:#a6e22e">decimalPrec</span>).<span style="color:#a6e22e">IntPart</span>()
-}
-
-<span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
-	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">float2Int</span>(<span style="color:#ae81ff">2.3</span>)) <span style="color:#75715e">// 输出：230000000
-</span><span style="color:#75715e"></span>}
-</code></pre></div><p>此时结果符合预期，系统内部的浮点运算(加法、减法、乘法)均可转换为整型运算，而运算结果只需要一次浮点转换即可。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#75715e">// 表示小数位保留8位精度
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">const</span> <span style="color:#a6e22e">prec</span> = <span style="color:#ae81ff">100000000</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">var</span> <span style="color:#a6e22e">decimalPrec</span> = <span style="color:#a6e22e">decimal</span>.<span style="color:#a6e22e">NewFromFloat</span>(<span style="color:#a6e22e">prec</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">float2Int</span>(<span style="color:#a6e22e">f</span> <span style="color:#66d9ef">float64</span>) <span style="color:#66d9ef">int64</span> {
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">decimal</span>.<span style="color:#a6e22e">NewFromFloat</span>(<span style="color:#a6e22e">f</span>).<span style="color:#a6e22e">Mul</span>(<span style="color:#a6e22e">decimalPrec</span>).<span style="color:#a6e22e">IntPart</span>()
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">float2Int</span>(<span style="color:#ae81ff">2.3</span>)) <span style="color:#75715e">// 输出：230000000
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>}
+</span></span></code></pre></div><p>此时结果符合预期，系统内部的浮点运算(加法、减法、乘法)均可转换为整型运算，而运算结果只需要一次浮点转换即可。</p>
 <p>到这里，用整型计算基本能满足大部分场景，但仍有两个问题尚需注意。</p>
 <p>1、整型表示浮点数的范围是否满足系统需求。</p>
 <p>2、整型表示浮点数时除法依旧需要转换为浮点数运算。</p>
@@ -276,73 +271,73 @@ https://www.h-schmidt.net/FloatConverter/IEEE754.html
 <p><code>float64</code>根据IEEE754标准，并参考维基百科知其整数部分和小数部分的有效十进制位为<code>15-17</code>位。</p>
 <p><img src="https://note.youdao.com/yws/api/personal/file/WEBb978e1253b122cb3d36f2db17ede350d?method=download&amp;shareKey=c34eac96cb76f0e7f4b1acc3da4aabac" alt=""></p>
 <p>我们看下面的例子。</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">var</span> (
-	<span style="color:#a6e22e">a</span> <span style="color:#66d9ef">float64</span> = <span style="color:#ae81ff">123456789012345.678</span>
-	<span style="color:#a6e22e">b</span> <span style="color:#66d9ef">float64</span> = <span style="color:#ae81ff">1.23456789012345678</span>
-)
-
-<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">a</span>, <span style="color:#a6e22e">b</span>, <span style="color:#a6e22e">decimal</span>.<span style="color:#a6e22e">NewFromFloat</span>(<span style="color:#a6e22e">a</span>), <span style="color:#a6e22e">a</span> <span style="color:#f92672">==</span> <span style="color:#ae81ff">123456789012345.67</span>)
-<span style="color:#66d9ef">return</span>
-</code></pre></div><p>上述代码输出结果如下：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">var</span> (
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">a</span> <span style="color:#66d9ef">float64</span> = <span style="color:#ae81ff">123456789012345.678</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">b</span> <span style="color:#66d9ef">float64</span> = <span style="color:#ae81ff">1.23456789012345678</span>
+</span></span><span style="display:flex;"><span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">a</span>, <span style="color:#a6e22e">b</span>, <span style="color:#a6e22e">decimal</span>.<span style="color:#a6e22e">NewFromFloat</span>(<span style="color:#a6e22e">a</span>), <span style="color:#a6e22e">a</span> <span style="color:#f92672">==</span> <span style="color:#ae81ff">123456789012345.67</span>)
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">return</span>
+</span></span></code></pre></div><p>上述代码输出结果如下：</p>
 <p><img src="https://note.youdao.com/yws/api/personal/file/WEB1c85da3c9f69f02b709dc1f3b3efda68?method=download&amp;shareKey=e4d4c9207af46a31a3dfab77119ce4ae" alt=""></p>
 <p>根据输出结果知，<code>float64</code>无法表示有效位数超过17位的十进制数。从有效十进制位来讲，老许更加推荐使用整型表示浮点数。</p>
 <h2 id="计算中尽量保留更多的精度">计算中尽量保留更多的精度</h2>
 <p>前面提到了精度的重要性，以及整型和浮点型可表示的最大精度，下面我们以一个实际例子来探讨计算过程中是否要保留指定的精度。</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">var</span> (
-	<span style="color:#75715e">// 广告平台总共收入7.11美元
-</span><span style="color:#75715e"></span>	<span style="color:#a6e22e">fee</span> <span style="color:#66d9ef">float64</span> = <span style="color:#ae81ff">7.1100</span>
-	<span style="color:#75715e">// 以下是不同渠道带来的点击数
-</span><span style="color:#75715e"></span>	<span style="color:#a6e22e">clkDetails</span> = []<span style="color:#66d9ef">int64</span>{<span style="color:#ae81ff">220</span>, <span style="color:#ae81ff">127</span>, <span style="color:#ae81ff">172</span>, <span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">17</span>, <span style="color:#ae81ff">1039</span>, <span style="color:#ae81ff">1596</span>, <span style="color:#ae81ff">200</span>, <span style="color:#ae81ff">236</span>, <span style="color:#ae81ff">151</span>, <span style="color:#ae81ff">91</span>, <span style="color:#ae81ff">87</span>, <span style="color:#ae81ff">378</span>, <span style="color:#ae81ff">289</span>, <span style="color:#ae81ff">2</span>, <span style="color:#ae81ff">14</span>, <span style="color:#ae81ff">4</span>, <span style="color:#ae81ff">439</span>, <span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">2373</span>, <span style="color:#ae81ff">90</span>}
-	<span style="color:#a6e22e">totalClk</span>   <span style="color:#66d9ef">int64</span>
-)
-<span style="color:#75715e">// 计算所有渠道带来的总点击数
-</span><span style="color:#75715e"></span><span style="color:#66d9ef">for</span> <span style="color:#a6e22e">_</span>, <span style="color:#a6e22e">c</span> <span style="color:#f92672">:=</span> <span style="color:#66d9ef">range</span> <span style="color:#a6e22e">clkDetails</span> {
-	<span style="color:#a6e22e">totalClk</span> <span style="color:#f92672">+=</span> <span style="color:#a6e22e">c</span>
-}
-<span style="color:#66d9ef">var</span> (
-	<span style="color:#a6e22e">floatTotal</span> <span style="color:#66d9ef">float64</span>
-	<span style="color:#75715e">// 以浮点数计算每次点击的收益
-</span><span style="color:#75715e"></span>	<span style="color:#a6e22e">floatCPC</span> <span style="color:#66d9ef">float64</span> = <span style="color:#a6e22e">fee</span> <span style="color:#f92672">/</span> float64(<span style="color:#a6e22e">totalClk</span>)
-	<span style="color:#a6e22e">intTotal</span> <span style="color:#66d9ef">int64</span>
-	<span style="color:#75715e">// 以8位精度的整形计算每次点击的收益(每次点击收益转为整形)
-</span><span style="color:#75715e"></span>	<span style="color:#a6e22e">intCPC</span>        <span style="color:#66d9ef">int64</span> = <span style="color:#a6e22e">float2Int</span>(<span style="color:#a6e22e">fee</span> <span style="color:#f92672">/</span> float64(<span style="color:#a6e22e">totalClk</span>))
-	<span style="color:#a6e22e">intFloatTotal</span> <span style="color:#66d9ef">float64</span>
-	<span style="color:#75715e">// 以8位进度的整形计算每次点击的收益(每次点击收益保留为浮点型)
-</span><span style="color:#75715e"></span>	<span style="color:#a6e22e">intFloatCPC</span>  <span style="color:#66d9ef">float64</span> = float64(<span style="color:#a6e22e">float2Int</span>(<span style="color:#a6e22e">fee</span>)) <span style="color:#f92672">/</span> float64(<span style="color:#a6e22e">totalClk</span>)
-	<span style="color:#a6e22e">decimalTotal</span>         = <span style="color:#a6e22e">decimal</span>.<span style="color:#a6e22e">Zero</span>
-	<span style="color:#75715e">// 以decimal计算每次点击收益
-</span><span style="color:#75715e"></span>	<span style="color:#a6e22e">decimalCPC</span> = <span style="color:#a6e22e">decimal</span>.<span style="color:#a6e22e">NewFromFloat</span>(<span style="color:#a6e22e">fee</span>).<span style="color:#a6e22e">Div</span>(<span style="color:#a6e22e">decimal</span>.<span style="color:#a6e22e">NewFromInt</span>(<span style="color:#a6e22e">totalClk</span>))
-)
-<span style="color:#75715e">// 计算各渠道点击收益，并累加
-</span><span style="color:#75715e"></span><span style="color:#66d9ef">for</span> <span style="color:#a6e22e">_</span>, <span style="color:#a6e22e">c</span> <span style="color:#f92672">:=</span> <span style="color:#66d9ef">range</span> <span style="color:#a6e22e">clkDetails</span> {
-	<span style="color:#a6e22e">floatTotal</span> <span style="color:#f92672">+=</span> <span style="color:#a6e22e">floatCPC</span> <span style="color:#f92672">*</span> float64(<span style="color:#a6e22e">c</span>)
-	<span style="color:#a6e22e">intTotal</span> <span style="color:#f92672">+=</span> <span style="color:#a6e22e">intCPC</span> <span style="color:#f92672">*</span> <span style="color:#a6e22e">c</span>
-	<span style="color:#a6e22e">intFloatTotal</span> <span style="color:#f92672">+=</span> <span style="color:#a6e22e">intFloatCPC</span> <span style="color:#f92672">*</span> float64(<span style="color:#a6e22e">c</span>)
-	<span style="color:#a6e22e">decimalTotal</span> = <span style="color:#a6e22e">decimalTotal</span>.<span style="color:#a6e22e">Add</span>(<span style="color:#a6e22e">decimalCPC</span>.<span style="color:#a6e22e">Mul</span>(<span style="color:#a6e22e">decimal</span>.<span style="color:#a6e22e">NewFromInt</span>(<span style="color:#a6e22e">c</span>)))
-}
-<span style="color:#75715e">// 累加结果对比
-</span><span style="color:#75715e"></span><span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">floatTotal</span>) <span style="color:#75715e">// 7.11
-</span><span style="color:#75715e"></span><span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">intTotal</span>) <span style="color:#75715e">// 710992893
-</span><span style="color:#75715e"></span><span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">decimal</span>.<span style="color:#a6e22e">NewFromFloat</span>(<span style="color:#a6e22e">intFloatTotal</span>).<span style="color:#a6e22e">IntPart</span>()) <span style="color:#75715e">// 711000000
-</span><span style="color:#75715e"></span><span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">decimalTotal</span>.<span style="color:#a6e22e">InexactFloat64</span>()) <span style="color:#75715e">// 7.1100000000002375
-</span></code></pre></div><p>对比上面的计算结果，只有第二种精度最低，而造成该精度丢失的主要原因是<code>float2Int(fee / float64(totalClk))</code>将中间计算结果的精度也只保留了<code>8</code>位，因此在结果上面产生了误差。其他计算方式在中间计算过程中尽可能的保留了精度因此结果符合预期。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">var</span> (
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// 广告平台总共收入7.11美元
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#a6e22e">fee</span> <span style="color:#66d9ef">float64</span> = <span style="color:#ae81ff">7.1100</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// 以下是不同渠道带来的点击数
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#a6e22e">clkDetails</span> = []<span style="color:#66d9ef">int64</span>{<span style="color:#ae81ff">220</span>, <span style="color:#ae81ff">127</span>, <span style="color:#ae81ff">172</span>, <span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">17</span>, <span style="color:#ae81ff">1039</span>, <span style="color:#ae81ff">1596</span>, <span style="color:#ae81ff">200</span>, <span style="color:#ae81ff">236</span>, <span style="color:#ae81ff">151</span>, <span style="color:#ae81ff">91</span>, <span style="color:#ae81ff">87</span>, <span style="color:#ae81ff">378</span>, <span style="color:#ae81ff">289</span>, <span style="color:#ae81ff">2</span>, <span style="color:#ae81ff">14</span>, <span style="color:#ae81ff">4</span>, <span style="color:#ae81ff">439</span>, <span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">2373</span>, <span style="color:#ae81ff">90</span>}
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">totalClk</span>   <span style="color:#66d9ef">int64</span>
+</span></span><span style="display:flex;"><span>)
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// 计算所有渠道带来的总点击数
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">for</span> <span style="color:#a6e22e">_</span>, <span style="color:#a6e22e">c</span> <span style="color:#f92672">:=</span> <span style="color:#66d9ef">range</span> <span style="color:#a6e22e">clkDetails</span> {
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">totalClk</span> <span style="color:#f92672">+=</span> <span style="color:#a6e22e">c</span>
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">var</span> (
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">floatTotal</span> <span style="color:#66d9ef">float64</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// 以浮点数计算每次点击的收益
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#a6e22e">floatCPC</span> <span style="color:#66d9ef">float64</span> = <span style="color:#a6e22e">fee</span> <span style="color:#f92672">/</span> float64(<span style="color:#a6e22e">totalClk</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">intTotal</span> <span style="color:#66d9ef">int64</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// 以8位精度的整形计算每次点击的收益(每次点击收益转为整形)
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#a6e22e">intCPC</span>        <span style="color:#66d9ef">int64</span> = <span style="color:#a6e22e">float2Int</span>(<span style="color:#a6e22e">fee</span> <span style="color:#f92672">/</span> float64(<span style="color:#a6e22e">totalClk</span>))
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">intFloatTotal</span> <span style="color:#66d9ef">float64</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// 以8位进度的整形计算每次点击的收益(每次点击收益保留为浮点型)
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#a6e22e">intFloatCPC</span>  <span style="color:#66d9ef">float64</span> = float64(<span style="color:#a6e22e">float2Int</span>(<span style="color:#a6e22e">fee</span>)) <span style="color:#f92672">/</span> float64(<span style="color:#a6e22e">totalClk</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">decimalTotal</span>         = <span style="color:#a6e22e">decimal</span>.<span style="color:#a6e22e">Zero</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// 以decimal计算每次点击收益
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#a6e22e">decimalCPC</span> = <span style="color:#a6e22e">decimal</span>.<span style="color:#a6e22e">NewFromFloat</span>(<span style="color:#a6e22e">fee</span>).<span style="color:#a6e22e">Div</span>(<span style="color:#a6e22e">decimal</span>.<span style="color:#a6e22e">NewFromInt</span>(<span style="color:#a6e22e">totalClk</span>))
+</span></span><span style="display:flex;"><span>)
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// 计算各渠道点击收益，并累加
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">for</span> <span style="color:#a6e22e">_</span>, <span style="color:#a6e22e">c</span> <span style="color:#f92672">:=</span> <span style="color:#66d9ef">range</span> <span style="color:#a6e22e">clkDetails</span> {
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">floatTotal</span> <span style="color:#f92672">+=</span> <span style="color:#a6e22e">floatCPC</span> <span style="color:#f92672">*</span> float64(<span style="color:#a6e22e">c</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">intTotal</span> <span style="color:#f92672">+=</span> <span style="color:#a6e22e">intCPC</span> <span style="color:#f92672">*</span> <span style="color:#a6e22e">c</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">intFloatTotal</span> <span style="color:#f92672">+=</span> <span style="color:#a6e22e">intFloatCPC</span> <span style="color:#f92672">*</span> float64(<span style="color:#a6e22e">c</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">decimalTotal</span> = <span style="color:#a6e22e">decimalTotal</span>.<span style="color:#a6e22e">Add</span>(<span style="color:#a6e22e">decimalCPC</span>.<span style="color:#a6e22e">Mul</span>(<span style="color:#a6e22e">decimal</span>.<span style="color:#a6e22e">NewFromInt</span>(<span style="color:#a6e22e">c</span>)))
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// 累加结果对比
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">floatTotal</span>) <span style="color:#75715e">// 7.11
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">intTotal</span>) <span style="color:#75715e">// 710992893
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">decimal</span>.<span style="color:#a6e22e">NewFromFloat</span>(<span style="color:#a6e22e">intFloatTotal</span>).<span style="color:#a6e22e">IntPart</span>()) <span style="color:#75715e">// 711000000
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">decimalTotal</span>.<span style="color:#a6e22e">InexactFloat64</span>()) <span style="color:#75715e">// 7.1100000000002375
+</span></span></span></code></pre></div><p>对比上面的计算结果，只有第二种精度最低，而造成该精度丢失的主要原因是<code>float2Int(fee / float64(totalClk))</code>将中间计算结果的精度也只保留了<code>8</code>位，因此在结果上面产生了误差。其他计算方式在中间计算过程中尽可能的保留了精度因此结果符合预期。</p>
 <h2 id="除法和减法的结合">除法和减法的结合</h2>
 <p>根据前面的描述，在计算除法的过程中要使用浮点数且尽可能保留更多的精度。这依旧不能解决所有问题，我们看下面的例子。</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#75715e">// 1元钱分给3个人，每个人分多少？
-</span><span style="color:#75715e"></span><span style="color:#66d9ef">var</span> <span style="color:#a6e22e">m</span> <span style="color:#66d9ef">float64</span> = float64(<span style="color:#ae81ff">1</span>) <span style="color:#f92672">/</span> <span style="color:#ae81ff">3</span>
-<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">m</span>, <span style="color:#a6e22e">m</span><span style="color:#f92672">+</span><span style="color:#a6e22e">m</span><span style="color:#f92672">+</span><span style="color:#a6e22e">m</span>)
-</code></pre></div><p>上述代码输出结果如下：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#75715e">// 1元钱分给3个人，每个人分多少？
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">var</span> <span style="color:#a6e22e">m</span> <span style="color:#66d9ef">float64</span> = float64(<span style="color:#ae81ff">1</span>) <span style="color:#f92672">/</span> <span style="color:#ae81ff">3</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">m</span>, <span style="color:#a6e22e">m</span><span style="color:#f92672">+</span><span style="color:#a6e22e">m</span><span style="color:#f92672">+</span><span style="color:#a6e22e">m</span>)
+</span></span></code></pre></div><p>上述代码输出结果如下：</p>
 <p><img src="https://note.youdao.com/yws/api/personal/file/WEB4f1cb1ac8d81826e284b9a111085e239?method=download&amp;shareKey=c521e6d17a3a73ff778842e10fcd1736" alt=""></p>
 <p>由计算结果知，每人分得<code>0.3333333333333333</code>元，而将每人分得的钱再次汇总时又变成了<code>1</code>元，那么
 这<code>0.0000000000000001</code>元是从石头里面蹦出来的嘛！有些时候我真的搞不懂这些计算机。</p>
 <p>这个结果很明显不符合人类的直觉，为了更加符合直觉我们结合减法来完成本次计算。</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#75715e">// 1元钱分给3个人，每个人分多少？
-</span><span style="color:#75715e"></span><span style="color:#66d9ef">var</span> <span style="color:#a6e22e">m</span> <span style="color:#66d9ef">float64</span> = float64(<span style="color:#ae81ff">1</span>) <span style="color:#f92672">/</span> <span style="color:#ae81ff">3</span>
-<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">m</span>, <span style="color:#a6e22e">m</span><span style="color:#f92672">+</span><span style="color:#a6e22e">m</span><span style="color:#f92672">+</span><span style="color:#a6e22e">m</span>)
-<span style="color:#75715e">// 最后一人分得的钱使用减法
-</span><span style="color:#75715e"></span><span style="color:#a6e22e">m3</span> <span style="color:#f92672">:=</span> <span style="color:#ae81ff">1</span> <span style="color:#f92672">-</span> <span style="color:#a6e22e">m</span> <span style="color:#f92672">-</span> <span style="color:#a6e22e">m</span>
-<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">m3</span>, <span style="color:#a6e22e">m</span><span style="color:#f92672">+</span><span style="color:#a6e22e">m</span><span style="color:#f92672">+</span><span style="color:#a6e22e">m3</span>)
-</code></pre></div><p>上述代码输出结果如下：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#75715e">// 1元钱分给3个人，每个人分多少？
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">var</span> <span style="color:#a6e22e">m</span> <span style="color:#66d9ef">float64</span> = float64(<span style="color:#ae81ff">1</span>) <span style="color:#f92672">/</span> <span style="color:#ae81ff">3</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">m</span>, <span style="color:#a6e22e">m</span><span style="color:#f92672">+</span><span style="color:#a6e22e">m</span><span style="color:#f92672">+</span><span style="color:#a6e22e">m</span>)
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// 最后一人分得的钱使用减法
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#a6e22e">m3</span> <span style="color:#f92672">:=</span> <span style="color:#ae81ff">1</span> <span style="color:#f92672">-</span> <span style="color:#a6e22e">m</span> <span style="color:#f92672">-</span> <span style="color:#a6e22e">m</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">m3</span>, <span style="color:#a6e22e">m</span><span style="color:#f92672">+</span><span style="color:#a6e22e">m</span><span style="color:#f92672">+</span><span style="color:#a6e22e">m3</span>)
+</span></span></code></pre></div><p>上述代码输出结果如下：</p>
 <p><img src="https://note.youdao.com/yws/api/personal/file/WEBe8a9929dbaded2c1aa2f8e0e65eacce2?method=download&amp;shareKey=8fbef3b6e5cb8520149b4ad62c3f753c" alt=""></p>
 <p>通过减法我们终于找回了那丢失的<code>0.0000000000000001</code>元。当然上面仅是老许举的一个例子，在实际的计算过程中可能需要通过<code>decimal</code>库进行减法以保证钱不凭空消失也不凭空增加。</p>
 <p>以上均为老许的浅薄之见，有任何疑虑和错误请及时指出，衷心希望本文能够对各位读者有一定的帮助。</p>
@@ -364,7 +359,7 @@ https://www.h-schmidt.net/FloatConverter/IEEE754.html
           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-tag meta-icon">
             <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path>
             <line x1="7" y1="7" x2="7" y2="7"></line>
-          </svg><span class="tag"><a href="https://isites.github.io/tags/go/">Go</a></span>
+          </svg><span class="tag"><a href="https://isites.gitlab.io/gopher/tags/go/">Go</a></span>
         </p>
 
       <p>
@@ -399,10 +394,17 @@ https://www.h-schmidt.net/FloatConverter/IEEE754.html
 
         <div class="pagination__buttons">
           
+            <span class="button previous">
+              <a href="https://isites.gitlab.io/gopher/timeline/version-compare/">
+                <span class="button__icon">←</span>
+                <span class="button__text">一顿骚操作版本号比较性能提升300%</span>
+              </a>
+            </span>
+          
 
           
             <span class="button next">
-              <a href="https://isites.github.io/timeline/defer-sync-pool/">
+              <a href="https://isites.gitlab.io/gopher/timeline/defer-sync-pool/">
                 <span class="button__text">终于解决了这个线上偶现的panic问题</span>
                 <span class="button__icon">→</span>
               </a>
@@ -491,7 +493,7 @@ https://www.h-schmidt.net/FloatConverter/IEEE754.html
 
 
 
-<script type="text/javascript" src="/bundle.min.dc716e9092c9820b77f96da294d0120aeeb189b5bcea9752309ebea27fd53bbe6b13cffb2aca8ecf32525647ceb7001f76091de4199ac5a3caa432c070247f5b.js" integrity="sha512-3HFukJLJggt3&#43;W2ilNASCu6xibW86pdSMJ6&#43;on/VO75rE8/7KsqOzzJSVkfOtwAfdgkd5BmaxaPKpDLAcCR/Ww=="></script>
+<script type="text/javascript" src="/gopher/bundle.min.e2a9675ced043d06ad6d3f13fafb0203d96c89eb2484878d5eb89d6da19559cbed55fb05ca9eae7be1e975cab83e3b2a1193afc357019620a509327c5a6a9c0f.js" integrity="sha512-4qlnXO0EPQatbT8T&#43;vsCA9lsieskhIeNXridbaGVWcvtVfsFyp6ue&#43;Hpdcq4PjsqEZOvw1cBliClCTJ8WmqcDw=="></script>
 
 
     

@@ -12,7 +12,7 @@ cp config.template config.toml
 sed -i "" 's,BASE_URL,https://isites.github.io/,g' config.toml
 
 # Build the project, and output to ../
-/opt/repos/GO_REPO/bin/hugo -t timeline -D # if using a theme, replace with `hugo -t <YOURTHEME>`
+`go env GOPATH`/bin/hugo -t timeline -D # if using a theme, replace with `hugo -t <YOURTHEME>`
 
 rm -rf ../categories ../fonts ../tags ../timeline ../js
 mv public/* ../

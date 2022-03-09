@@ -18,13 +18,13 @@ httptrace 有时候不得不吹一波Go对http trace的良好支持。老许也�
 我司的框架为TarsGo，我们在线上设置handletimeout为1500ms，该参数主要用于控制某一接口总耗时不超过1500ms，而我们的超时告警均为3s，因此即使带宽已满这个百分百超时告警也不应出现。
 为了研究这个原因，老许只好花些零碎的时间去阅读源码，最终发现了TarsGo@v1.1.6的handletimeout控制是无效的。
 下面看一下有问题的源码:
-func (s *TarsProtocol) InvokeTimeout(pkg []byte) []byte { rspPackage := requestf.ResponsePacket{} rspPackage.IRet = 1 rspPackage.SResultDesc = &amp;#34;server invoke timeout&amp;#34; return s.rsp2Byte(&amp;amp;rspPackage) } 当某接口总执行时间超过handletimeout时，会调用InvokeTimeout方法告知client调用超时，而上述的逻辑中忽略了IRequestId的响应，这就导致client收到响应包时无法将响应包和某次的请求对应起来，从而导致客户端一直等待响应直至超时。
+func (s *TarsProtocol) InvokeTimeout(pkg []byte) []byte { 	rspPackage := requestf.ResponsePacket{} 	rspPackage.IRet = 1 	rspPackage.SResultDesc = &amp;#34;server invoke timeout&amp;#34; 	return s.rsp2Byte(&amp;amp;rspPackage) } 当某接口总执行时间超过handletimeout时，会调用InvokeTimeout方法告知client调用超时，而上述的逻辑中忽略了IRequestId的响应，这就导致client收到响应包时无法将响应包和某次的请求对应起来，从而导致客户端一直等待响应直至超时。
 最终修改如下：
-func (s *TarsProtocol) InvokeTimeout(pkg []byte) []byte { rspPackage := requestf.ResponsePacket{} // invoketimeout need to return IRequestId 	reqPackage := requestf.RequestPacket{} is := codec.NewReader(pkg[4:]) reqPackage.ReadFrom(is) rspPackage.IRequestId = reqPackage." />
+func (s *TarsProtocol) InvokeTimeout(pkg []byte) []byte { 	rspPackage := requestf.ResponsePacket{} 	// invoketimeout need to return IRequestId 	reqPackage := requestf.RequestPacket{} 	is := codec." />
 <meta name="keywords" content=", Go" />
 <meta name="robots" content="noodp" />
 <meta name="theme-color" content="" />
-<link rel="canonical" href="https://isites.github.io/timeline/net-bandwidth/" />
+<link rel="canonical" href="https://isites.gitlab.io/gopher/timeline/net-bandwidth/" />
 
 
     <title>
@@ -41,7 +41,7 @@ func (s *TarsProtocol) InvokeTimeout(pkg []byte) []byte { rspPackage := requestf
 
 
 
-<link rel="stylesheet" href="/main.805b1025016494ee5fd67b55b8ecd5e2b7c4a9f0bdda42e300c62b85ddfef68f.css">
+<link rel="stylesheet" href="/gopher/main.805b1025016494ee5fd67b55b8ecd5e2b7c4a9f0bdda42e300c62b85ddfef68f.css">
 
 
   
@@ -71,17 +71,12 @@ httptrace 有时候不得不吹一波Go对http trace的良好支持。老许也�
 我司的框架为TarsGo，我们在线上设置handletimeout为1500ms，该参数主要用于控制某一接口总耗时不超过1500ms，而我们的超时告警均为3s，因此即使带宽已满这个百分百超时告警也不应出现。
 为了研究这个原因，老许只好花些零碎的时间去阅读源码，最终发现了TarsGo@v1.1.6的handletimeout控制是无效的。
 下面看一下有问题的源码:
-func (s *TarsProtocol) InvokeTimeout(pkg []byte) []byte { rspPackage := requestf.ResponsePacket{} rspPackage.IRet = 1 rspPackage.SResultDesc = &#34;server invoke timeout&#34; return s.rsp2Byte(&amp;rspPackage) } 当某接口总执行时间超过handletimeout时，会调用InvokeTimeout方法告知client调用超时，而上述的逻辑中忽略了IRequestId的响应，这就导致client收到响应包时无法将响应包和某次的请求对应起来，从而导致客户端一直等待响应直至超时。
+func (s *TarsProtocol) InvokeTimeout(pkg []byte) []byte { 	rspPackage := requestf.ResponsePacket{} 	rspPackage.IRet = 1 	rspPackage.SResultDesc = &#34;server invoke timeout&#34; 	return s.rsp2Byte(&amp;rspPackage) } 当某接口总执行时间超过handletimeout时，会调用InvokeTimeout方法告知client调用超时，而上述的逻辑中忽略了IRequestId的响应，这就导致client收到响应包时无法将响应包和某次的请求对应起来，从而导致客户端一直等待响应直至超时。
 最终修改如下：
-func (s *TarsProtocol) InvokeTimeout(pkg []byte) []byte { rspPackage := requestf.ResponsePacket{} // invoketimeout need to return IRequestId 	reqPackage := requestf.RequestPacket{} is := codec.NewReader(pkg[4:]) reqPackage.ReadFrom(is) rspPackage.IRequestId = reqPackage.">
-<meta itemprop="datePublished" content="2021-09-05T12:20:38+08:00" />
+func (s *TarsProtocol) InvokeTimeout(pkg []byte) []byte { 	rspPackage := requestf.ResponsePacket{} 	// invoketimeout need to return IRequestId 	reqPackage := requestf.RequestPacket{} 	is := codec."><meta itemprop="datePublished" content="2021-09-05T12:20:38+08:00" />
 <meta itemprop="dateModified" content="2021-09-05T12:20:38+08:00" />
 <meta itemprop="wordCount" content="91">
-
-
-
 <meta itemprop="keywords" content="Go," />
-
 <meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="一次带宽拉满引发的百分百超时血案！"/>
 <meta name="twitter:description" content="偈语: 未经他人苦,莫劝他人善
@@ -97,9 +92,9 @@ httptrace 有时候不得不吹一波Go对http trace的良好支持。老许也�
 我司的框架为TarsGo，我们在线上设置handletimeout为1500ms，该参数主要用于控制某一接口总耗时不超过1500ms，而我们的超时告警均为3s，因此即使带宽已满这个百分百超时告警也不应出现。
 为了研究这个原因，老许只好花些零碎的时间去阅读源码，最终发现了TarsGo@v1.1.6的handletimeout控制是无效的。
 下面看一下有问题的源码:
-func (s *TarsProtocol) InvokeTimeout(pkg []byte) []byte { rspPackage := requestf.ResponsePacket{} rspPackage.IRet = 1 rspPackage.SResultDesc = &#34;server invoke timeout&#34; return s.rsp2Byte(&amp;rspPackage) } 当某接口总执行时间超过handletimeout时，会调用InvokeTimeout方法告知client调用超时，而上述的逻辑中忽略了IRequestId的响应，这就导致client收到响应包时无法将响应包和某次的请求对应起来，从而导致客户端一直等待响应直至超时。
+func (s *TarsProtocol) InvokeTimeout(pkg []byte) []byte { 	rspPackage := requestf.ResponsePacket{} 	rspPackage.IRet = 1 	rspPackage.SResultDesc = &#34;server invoke timeout&#34; 	return s.rsp2Byte(&amp;rspPackage) } 当某接口总执行时间超过handletimeout时，会调用InvokeTimeout方法告知client调用超时，而上述的逻辑中忽略了IRequestId的响应，这就导致client收到响应包时无法将响应包和某次的请求对应起来，从而导致客户端一直等待响应直至超时。
 最终修改如下：
-func (s *TarsProtocol) InvokeTimeout(pkg []byte) []byte { rspPackage := requestf.ResponsePacket{} // invoketimeout need to return IRequestId 	reqPackage := requestf.RequestPacket{} is := codec.NewReader(pkg[4:]) reqPackage.ReadFrom(is) rspPackage.IRequestId = reqPackage."/>
+func (s *TarsProtocol) InvokeTimeout(pkg []byte) []byte { 	rspPackage := requestf.ResponsePacket{} 	// invoketimeout need to return IRequestId 	reqPackage := requestf.RequestPacket{} 	is := codec."/>
 
 
 
@@ -122,7 +117,7 @@ func (s *TarsProtocol) InvokeTimeout(pkg []byte) []byte { rspPackage := requestf
         <div class="container">
             <header class="header">
     <span class="header__inner">
-        <a href="https://isites.github.io/" style="text-decoration: none;">
+        <a href="https://isites.gitlab.io/gopher/" style="text-decoration: none;">
     <div class="logo">
         
             <span class="logo__mark">Gopher指北</span>
@@ -168,7 +163,7 @@ func (s *TarsProtocol) InvokeTimeout(pkg []byte) []byte { rspPackage := requestf
 
     <article>
       <h1 class="post-title">
-        <a href="https://isites.github.io/timeline/net-bandwidth/">一次带宽拉满引发的百分百超时血案！</a>
+        <a href="https://isites.gitlab.io/gopher/timeline/net-bandwidth/">一次带宽拉满引发的百分百超时血案！</a>
       </h1>
         <hr />
         <aside id="toc">
@@ -206,26 +201,26 @@ func (s *TarsProtocol) InvokeTimeout(pkg []byte) []byte { rspPackage := requestf
 <p>我司的框架为TarsGo，我们在线上设置<code>handletimeout</code>为1500ms，该参数主要用于控制某一接口总耗时不超过1500ms，而我们的超时告警均为3s，因此即使带宽已满这个百分百超时告警也不应出现。</p>
 <p>为了研究这个原因，老许只好花些零碎的时间去阅读源码，最终发现了<code>TarsGo@v1.1.6</code>的<code>handletimeout</code>控制是无效的。</p>
 <p>下面看一下有问题的源码:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">s</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">TarsProtocol</span>) <span style="color:#a6e22e">InvokeTimeout</span>(<span style="color:#a6e22e">pkg</span> []<span style="color:#66d9ef">byte</span>) []<span style="color:#66d9ef">byte</span> {
-	<span style="color:#a6e22e">rspPackage</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">requestf</span>.<span style="color:#a6e22e">ResponsePacket</span>{}
-	<span style="color:#a6e22e">rspPackage</span>.<span style="color:#a6e22e">IRet</span> = <span style="color:#ae81ff">1</span>
-	<span style="color:#a6e22e">rspPackage</span>.<span style="color:#a6e22e">SResultDesc</span> = <span style="color:#e6db74">&#34;server invoke timeout&#34;</span>
-	<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">s</span>.<span style="color:#a6e22e">rsp2Byte</span>(<span style="color:#f92672">&amp;</span><span style="color:#a6e22e">rspPackage</span>)
-}
-</code></pre></div><p>当某接口总执行时间超过<code>handletimeout</code>时，会调用<code>InvokeTimeout</code>方法告知client调用超时，而上述的逻辑中忽略了<code>IRequestId</code>的响应，这就导致client收到响应包时无法将响应包和某次的请求对应起来，从而导致客户端一直等待响应直至超时。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">s</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">TarsProtocol</span>) <span style="color:#a6e22e">InvokeTimeout</span>(<span style="color:#a6e22e">pkg</span> []<span style="color:#66d9ef">byte</span>) []<span style="color:#66d9ef">byte</span> {
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">rspPackage</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">requestf</span>.<span style="color:#a6e22e">ResponsePacket</span>{}
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">rspPackage</span>.<span style="color:#a6e22e">IRet</span> = <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">rspPackage</span>.<span style="color:#a6e22e">SResultDesc</span> = <span style="color:#e6db74">&#34;server invoke timeout&#34;</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">s</span>.<span style="color:#a6e22e">rsp2Byte</span>(<span style="color:#f92672">&amp;</span><span style="color:#a6e22e">rspPackage</span>)
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>当某接口总执行时间超过<code>handletimeout</code>时，会调用<code>InvokeTimeout</code>方法告知client调用超时，而上述的逻辑中忽略了<code>IRequestId</code>的响应，这就导致client收到响应包时无法将响应包和某次的请求对应起来，从而导致客户端一直等待响应直至超时。</p>
 <p>最终修改如下：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">s</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">TarsProtocol</span>) <span style="color:#a6e22e">InvokeTimeout</span>(<span style="color:#a6e22e">pkg</span> []<span style="color:#66d9ef">byte</span>) []<span style="color:#66d9ef">byte</span> {
-	<span style="color:#a6e22e">rspPackage</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">requestf</span>.<span style="color:#a6e22e">ResponsePacket</span>{}
-	<span style="color:#75715e">//  invoketimeout need to return IRequestId
-</span><span style="color:#75715e"></span>	<span style="color:#a6e22e">reqPackage</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">requestf</span>.<span style="color:#a6e22e">RequestPacket</span>{}
-	<span style="color:#a6e22e">is</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">codec</span>.<span style="color:#a6e22e">NewReader</span>(<span style="color:#a6e22e">pkg</span>[<span style="color:#ae81ff">4</span>:])
-	<span style="color:#a6e22e">reqPackage</span>.<span style="color:#a6e22e">ReadFrom</span>(<span style="color:#a6e22e">is</span>)
-	<span style="color:#a6e22e">rspPackage</span>.<span style="color:#a6e22e">IRequestId</span> = <span style="color:#a6e22e">reqPackage</span>.<span style="color:#a6e22e">IRequestId</span>
-	<span style="color:#a6e22e">rspPackage</span>.<span style="color:#a6e22e">IRet</span> = <span style="color:#ae81ff">1</span>
-	<span style="color:#a6e22e">rspPackage</span>.<span style="color:#a6e22e">SResultDesc</span> = <span style="color:#e6db74">&#34;server invoke timeout&#34;</span>
-	<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">s</span>.<span style="color:#a6e22e">rsp2Byte</span>(<span style="color:#f92672">&amp;</span><span style="color:#a6e22e">rspPackage</span>)
-}
-</code></pre></div><p>后来老许在本地用demo验证<code>handletimeout</code>终于可以控制生效。当然本次修改老许已经在github上面提交issue和pr，目前已被合入master。相关issue和pr如下：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">s</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">TarsProtocol</span>) <span style="color:#a6e22e">InvokeTimeout</span>(<span style="color:#a6e22e">pkg</span> []<span style="color:#66d9ef">byte</span>) []<span style="color:#66d9ef">byte</span> {
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">rspPackage</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">requestf</span>.<span style="color:#a6e22e">ResponsePacket</span>{}
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">//  invoketimeout need to return IRequestId
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#a6e22e">reqPackage</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">requestf</span>.<span style="color:#a6e22e">RequestPacket</span>{}
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">is</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">codec</span>.<span style="color:#a6e22e">NewReader</span>(<span style="color:#a6e22e">pkg</span>[<span style="color:#ae81ff">4</span>:])
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">reqPackage</span>.<span style="color:#a6e22e">ReadFrom</span>(<span style="color:#a6e22e">is</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">rspPackage</span>.<span style="color:#a6e22e">IRequestId</span> = <span style="color:#a6e22e">reqPackage</span>.<span style="color:#a6e22e">IRequestId</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">rspPackage</span>.<span style="color:#a6e22e">IRet</span> = <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">rspPackage</span>.<span style="color:#a6e22e">SResultDesc</span> = <span style="color:#e6db74">&#34;server invoke timeout&#34;</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">s</span>.<span style="color:#a6e22e">rsp2Byte</span>(<span style="color:#f92672">&amp;</span><span style="color:#a6e22e">rspPackage</span>)
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>后来老许在本地用demo验证<code>handletimeout</code>终于可以控制生效。当然本次修改老许已经在github上面提交issue和pr，目前已被合入master。相关issue和pr如下：</p>
 <p><a href="https://github.com/TarsCloud/TarsGo/issues/294">https://github.com/TarsCloud/TarsGo/issues/294</a></p>
 <p><a href="https://github.com/TarsCloud/TarsGo/pull/295">https://github.com/TarsCloud/TarsGo/pull/295</a></p>
 <h1 id="仍有疑虑">仍有疑虑</h1>
@@ -253,7 +248,7 @@ func (s *TarsProtocol) InvokeTimeout(pkg []byte) []byte { rspPackage := requestf
           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-tag meta-icon">
             <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path>
             <line x1="7" y1="7" x2="7" y2="7"></line>
-          </svg><span class="tag"><a href="https://isites.github.io/tags/go/">Go</a></span>
+          </svg><span class="tag"><a href="https://isites.gitlab.io/gopher/tags/go/">Go</a></span>
         </p>
 
       <p>
@@ -289,7 +284,7 @@ func (s *TarsProtocol) InvokeTimeout(pkg []byte) []byte { rspPackage := requestf
         <div class="pagination__buttons">
           
             <span class="button previous">
-              <a href="https://isites.github.io/timeline/sync-once/">
+              <a href="https://isites.gitlab.io/gopher/timeline/sync-once/">
                 <span class="button__icon">←</span>
                 <span class="button__text">sync.Once化作一道光让我顿悟</span>
               </a>
@@ -298,7 +293,7 @@ func (s *TarsProtocol) InvokeTimeout(pkg []byte) []byte { rspPackage := requestf
 
           
             <span class="button next">
-              <a href="https://isites.github.io/timeline/go-share/">
+              <a href="https://isites.gitlab.io/gopher/timeline/go-share/">
                 <span class="button__text">公司内一次分享-Go并发编程</span>
                 <span class="button__icon">→</span>
               </a>
@@ -387,7 +382,7 @@ func (s *TarsProtocol) InvokeTimeout(pkg []byte) []byte { rspPackage := requestf
 
 
 
-<script type="text/javascript" src="/bundle.min.dc716e9092c9820b77f96da294d0120aeeb189b5bcea9752309ebea27fd53bbe6b13cffb2aca8ecf32525647ceb7001f76091de4199ac5a3caa432c070247f5b.js" integrity="sha512-3HFukJLJggt3&#43;W2ilNASCu6xibW86pdSMJ6&#43;on/VO75rE8/7KsqOzzJSVkfOtwAfdgkd5BmaxaPKpDLAcCR/Ww=="></script>
+<script type="text/javascript" src="/gopher/bundle.min.e2a9675ced043d06ad6d3f13fafb0203d96c89eb2484878d5eb89d6da19559cbed55fb05ca9eae7be1e975cab83e3b2a1193afc357019620a509327c5a6a9c0f.js" integrity="sha512-4qlnXO0EPQatbT8T&#43;vsCA9lsieskhIeNXridbaGVWcvtVfsFyp6ue&#43;Hpdcq4PjsqEZOvw1cBliClCTJ8WmqcDw=="></script>
 
 
     

@@ -12,12 +12,11 @@
 大地为什么还没有裂开一条缝&amp;hellip;
 当时的心情历历在目，而老许此刻写下的文字却是另外一种想法。肤浅！简直太肤浅了！不要只浮于文字本身的魅力，请多关注老许分享的知识点（手动狗头）。另外一方面，老许觉得他们通过文章对我的认知有违我在公司树立的老实本分人设，但请不要奇怪也不要声张，毕竟我就是大部分程序员的缩影——“沉默寡言，心有一片海”。
 我们高中物理老师常说，透过现象看本质，所以形式不重要，重要的是我想分享什么。这还要从一段有并发问题的代码说起（下面为公司部分源码简化后的模拟例子）。
-type test struct { fff string } var resource *test func doSomething() error { if test == nil { n, e := rand.Int(rand.Reader, big.NewInt(3)) // 通过随机数模拟发生错误 	if e != nil || n.Int64() &amp;gt; 0 { retur fmt.Errorf(&amp;#34;random [%w] err(%d)&amp;#34;, e, n.Int64()) } // 未发生错误，则赋值 	resource = &amp;amp;test{&amp;#34;关注公众号：Gopher指北&amp;#34;} } // do something  return nil } 老许微微一笑，这道题我会，反手利用sync.Once一顿改造。
-var ( resource *test loadOnce sync." />
+type test struct { 	fff string }  var resource *test  func doSomething() error {  if test == nil {  n, e := rand.Int(rand.Reader, big.NewInt(3))  // 通过随机数模拟发生错误 	if e != nil || n.Int64() &amp;gt; 0 { 	retur fmt.Errorf(&amp;#34;random [%w] err(%d)&amp;#34;, e, n.Int64()) 	} 	// 未发生错误，则赋值 	resource = &amp;amp;test{&amp;#34;关注公众号：Gopher指北&amp;#34;}  }  // do something  return nil } 老许微微一笑，这道题我会，反手利用sync." />
 <meta name="keywords" content=", Go" />
 <meta name="robots" content="noodp" />
 <meta name="theme-color" content="" />
-<link rel="canonical" href="https://isites.github.io/timeline/sync-once/" />
+<link rel="canonical" href="https://isites.gitlab.io/gopher/timeline/sync-once/" />
 
 
     <title>
@@ -34,7 +33,7 @@ var ( resource *test loadOnce sync." />
 
 
 
-<link rel="stylesheet" href="/main.805b1025016494ee5fd67b55b8ecd5e2b7c4a9f0bdda42e300c62b85ddfef68f.css">
+<link rel="stylesheet" href="/gopher/main.805b1025016494ee5fd67b55b8ecd5e2b7c4a9f0bdda42e300c62b85ddfef68f.css">
 
 
   
@@ -58,16 +57,10 @@ var ( resource *test loadOnce sync." />
 大地为什么还没有裂开一条缝&hellip;
 当时的心情历历在目，而老许此刻写下的文字却是另外一种想法。肤浅！简直太肤浅了！不要只浮于文字本身的魅力，请多关注老许分享的知识点（手动狗头）。另外一方面，老许觉得他们通过文章对我的认知有违我在公司树立的老实本分人设，但请不要奇怪也不要声张，毕竟我就是大部分程序员的缩影——“沉默寡言，心有一片海”。
 我们高中物理老师常说，透过现象看本质，所以形式不重要，重要的是我想分享什么。这还要从一段有并发问题的代码说起（下面为公司部分源码简化后的模拟例子）。
-type test struct { fff string } var resource *test func doSomething() error { if test == nil { n, e := rand.Int(rand.Reader, big.NewInt(3)) // 通过随机数模拟发生错误 	if e != nil || n.Int64() &gt; 0 { retur fmt.Errorf(&#34;random [%w] err(%d)&#34;, e, n.Int64()) } // 未发生错误，则赋值 	resource = &amp;test{&#34;关注公众号：Gopher指北&#34;} } // do something  return nil } 老许微微一笑，这道题我会，反手利用sync.Once一顿改造。
-var ( resource *test loadOnce sync.">
-<meta itemprop="datePublished" content="2021-09-20T12:20:38+08:00" />
+type test struct { 	fff string }  var resource *test  func doSomething() error {  if test == nil {  n, e := rand.Int(rand.Reader, big.NewInt(3))  // 通过随机数模拟发生错误 	if e != nil || n.Int64() &gt; 0 { 	retur fmt.Errorf(&#34;random [%w] err(%d)&#34;, e, n.Int64()) 	} 	// 未发生错误，则赋值 	resource = &amp;test{&#34;关注公众号：Gopher指北&#34;}  }  // do something  return nil } 老许微微一笑，这道题我会，反手利用sync."><meta itemprop="datePublished" content="2021-09-20T12:20:38+08:00" />
 <meta itemprop="dateModified" content="2021-09-20T12:20:38+08:00" />
 <meta itemprop="wordCount" content="295">
-
-
-
 <meta itemprop="keywords" content="Go," />
-
 <meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="sync.Once化作一道光让我顿悟"/>
 <meta name="twitter:description" content="前几天和公司同事吃饭直接社死，同事直言我写的文章很骚。
@@ -77,8 +70,7 @@ var ( resource *test loadOnce sync.">
 大地为什么还没有裂开一条缝&hellip;
 当时的心情历历在目，而老许此刻写下的文字却是另外一种想法。肤浅！简直太肤浅了！不要只浮于文字本身的魅力，请多关注老许分享的知识点（手动狗头）。另外一方面，老许觉得他们通过文章对我的认知有违我在公司树立的老实本分人设，但请不要奇怪也不要声张，毕竟我就是大部分程序员的缩影——“沉默寡言，心有一片海”。
 我们高中物理老师常说，透过现象看本质，所以形式不重要，重要的是我想分享什么。这还要从一段有并发问题的代码说起（下面为公司部分源码简化后的模拟例子）。
-type test struct { fff string } var resource *test func doSomething() error { if test == nil { n, e := rand.Int(rand.Reader, big.NewInt(3)) // 通过随机数模拟发生错误 	if e != nil || n.Int64() &gt; 0 { retur fmt.Errorf(&#34;random [%w] err(%d)&#34;, e, n.Int64()) } // 未发生错误，则赋值 	resource = &amp;test{&#34;关注公众号：Gopher指北&#34;} } // do something  return nil } 老许微微一笑，这道题我会，反手利用sync.Once一顿改造。
-var ( resource *test loadOnce sync."/>
+type test struct { 	fff string }  var resource *test  func doSomething() error {  if test == nil {  n, e := rand.Int(rand.Reader, big.NewInt(3))  // 通过随机数模拟发生错误 	if e != nil || n.Int64() &gt; 0 { 	retur fmt.Errorf(&#34;random [%w] err(%d)&#34;, e, n.Int64()) 	} 	// 未发生错误，则赋值 	resource = &amp;test{&#34;关注公众号：Gopher指北&#34;}  }  // do something  return nil } 老许微微一笑，这道题我会，反手利用sync."/>
 
 
 
@@ -101,7 +93,7 @@ var ( resource *test loadOnce sync."/>
         <div class="container">
             <header class="header">
     <span class="header__inner">
-        <a href="https://isites.github.io/" style="text-decoration: none;">
+        <a href="https://isites.gitlab.io/gopher/" style="text-decoration: none;">
     <div class="logo">
         
             <span class="logo__mark">Gopher指北</span>
@@ -147,7 +139,7 @@ var ( resource *test loadOnce sync."/>
 
     <article>
       <h1 class="post-title">
-        <a href="https://isites.github.io/timeline/sync-once/">sync.Once化作一道光让我顿悟</a>
+        <a href="https://isites.gitlab.io/gopher/timeline/sync-once/">sync.Once化作一道光让我顿悟</a>
       </h1>
         <hr />
         <aside id="toc">
@@ -167,57 +159,56 @@ var ( resource *test loadOnce sync."/>
 <p>大地为什么还没有裂开一条缝&hellip;</p>
 <p>当时的心情历历在目，而老许此刻写下的文字却是另外一种想法。肤浅！简直太肤浅了！不要只浮于文字本身的魅力，请多关注老许分享的知识点（手动狗头）。另外一方面，老许觉得他们通过文章对我的认知有违我在公司树立的老实本分人设，但请不要奇怪也不要声张，毕竟我就是大部分程序员的缩影——“沉默寡言，心有一片海”。</p>
 <p>我们高中物理老师常说，透过现象看本质，所以形式不重要，重要的是我想分享什么。这还要从一段有并发问题的代码说起（下面为公司部分源码简化后的模拟例子）。</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">test</span> <span style="color:#66d9ef">struct</span> {
-	<span style="color:#a6e22e">fff</span> <span style="color:#66d9ef">string</span>
-}
-
-<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">resource</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">test</span>
-
-<span style="color:#66d9ef">func</span> <span style="color:#a6e22e">doSomething</span>() <span style="color:#66d9ef">error</span> {
-    <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">test</span> <span style="color:#f92672">==</span> <span style="color:#66d9ef">nil</span> {
-        <span style="color:#a6e22e">n</span>, <span style="color:#a6e22e">e</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">rand</span>.<span style="color:#a6e22e">Int</span>(<span style="color:#a6e22e">rand</span>.<span style="color:#a6e22e">Reader</span>, <span style="color:#a6e22e">big</span>.<span style="color:#a6e22e">NewInt</span>(<span style="color:#ae81ff">3</span>))
-        <span style="color:#75715e">// 通过随机数模拟发生错误
-</span><span style="color:#75715e"></span>		<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">e</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> <span style="color:#f92672">||</span> <span style="color:#a6e22e">n</span>.<span style="color:#a6e22e">Int64</span>() &gt; <span style="color:#ae81ff">0</span> {
-		    <span style="color:#a6e22e">retur</span> <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Errorf</span>(<span style="color:#e6db74">&#34;random [%w] err(%d)&#34;</span>, <span style="color:#a6e22e">e</span>, <span style="color:#a6e22e">n</span>.<span style="color:#a6e22e">Int64</span>())
-		}
-		<span style="color:#75715e">// 未发生错误，则赋值
-</span><span style="color:#75715e"></span>		<span style="color:#a6e22e">resource</span> = <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">test</span>{<span style="color:#e6db74">&#34;关注公众号：Gopher指北&#34;</span>}
-    }
-    <span style="color:#75715e">// do something
-</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">nil</span>
-}
-
-</code></pre></div><p>老许微微一笑，这道题我会，反手利用<code>sync.Once</code>一顿改造。</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">var</span> (
-	<span style="color:#a6e22e">resource</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">test</span>
-	<span style="color:#a6e22e">loadOnce</span> <span style="color:#a6e22e">sync</span>.<span style="color:#a6e22e">Once</span>
-)
-
-<span style="color:#66d9ef">func</span> <span style="color:#a6e22e">doSomething</span>() <span style="color:#66d9ef">error</span> {
-    <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">err</span> <span style="color:#66d9ef">error</span>
-	<span style="color:#a6e22e">loadOnce</span>.<span style="color:#a6e22e">Do</span>(<span style="color:#66d9ef">func</span>() {
-		<span style="color:#a6e22e">n</span>, <span style="color:#a6e22e">e</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">rand</span>.<span style="color:#a6e22e">Int</span>(<span style="color:#a6e22e">rand</span>.<span style="color:#a6e22e">Reader</span>, <span style="color:#a6e22e">big</span>.<span style="color:#a6e22e">NewInt</span>(<span style="color:#ae81ff">3</span>))
-		<span style="color:#75715e">// 通过随机数模拟发生错误
-</span><span style="color:#75715e"></span>		<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">e</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> <span style="color:#f92672">||</span> <span style="color:#a6e22e">n</span>.<span style="color:#a6e22e">Int64</span>() &gt; <span style="color:#ae81ff">0</span> {
-			<span style="color:#a6e22e">err</span> = <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Errorf</span>(<span style="color:#e6db74">&#34;random [%w] err(%d)&#34;</span>, <span style="color:#a6e22e">e</span>, <span style="color:#a6e22e">n</span>.<span style="color:#a6e22e">Int64</span>())
-			<span style="color:#66d9ef">return</span>
-		}
-		<span style="color:#75715e">// 未发生错误，则赋值
-</span><span style="color:#75715e"></span>		<span style="color:#a6e22e">resource</span> = <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">test</span>{<span style="color:#e6db74">&#34;关注公众号：Gopher指北&#34;</span>}
-	})
-	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
-		<span style="color:#75715e">// 如果因为某些原因导致初始化失败，则重新赋值以便可以重入
-</span><span style="color:#75715e"></span>		<span style="color:#a6e22e">loadOnce</span> = <span style="color:#a6e22e">sync</span>.<span style="color:#a6e22e">Once</span>{}
-		<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">err</span>
-	}
-	<span style="color:#75715e">// double check
-</span><span style="color:#75715e"></span>	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">resource</span> <span style="color:#f92672">==</span> <span style="color:#66d9ef">nil</span> {
-		<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Errorf</span>(<span style="color:#e6db74">&#34;assign failed&#34;</span>)
-	}
-	<span style="color:#75715e">// do something
-</span><span style="color:#75715e"></span>	<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">err</span>
-}
-</code></pre></div><p>写下这段代码时，老许一顿沾沾自喜：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">test</span> <span style="color:#66d9ef">struct</span> {
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">fff</span> <span style="color:#66d9ef">string</span>
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">var</span> <span style="color:#a6e22e">resource</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">test</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">doSomething</span>() <span style="color:#66d9ef">error</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">test</span> <span style="color:#f92672">==</span> <span style="color:#66d9ef">nil</span> {
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">n</span>, <span style="color:#a6e22e">e</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">rand</span>.<span style="color:#a6e22e">Int</span>(<span style="color:#a6e22e">rand</span>.<span style="color:#a6e22e">Reader</span>, <span style="color:#a6e22e">big</span>.<span style="color:#a6e22e">NewInt</span>(<span style="color:#ae81ff">3</span>))
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e">// 通过随机数模拟发生错误
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>		<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">e</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> <span style="color:#f92672">||</span> <span style="color:#a6e22e">n</span>.<span style="color:#a6e22e">Int64</span>() &gt; <span style="color:#ae81ff">0</span> {
+</span></span><span style="display:flex;"><span>		    <span style="color:#a6e22e">retur</span> <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Errorf</span>(<span style="color:#e6db74">&#34;random [%w] err(%d)&#34;</span>, <span style="color:#a6e22e">e</span>, <span style="color:#a6e22e">n</span>.<span style="color:#a6e22e">Int64</span>())
+</span></span><span style="display:flex;"><span>		}
+</span></span><span style="display:flex;"><span>		<span style="color:#75715e">// 未发生错误，则赋值
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>		<span style="color:#a6e22e">resource</span> = <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">test</span>{<span style="color:#e6db74">&#34;关注公众号：Gopher指北&#34;</span>}
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// do something
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">nil</span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>老许微微一笑，这道题我会，反手利用<code>sync.Once</code>一顿改造。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">var</span> (
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">resource</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">test</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">loadOnce</span> <span style="color:#a6e22e">sync</span>.<span style="color:#a6e22e">Once</span>
+</span></span><span style="display:flex;"><span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">doSomething</span>() <span style="color:#66d9ef">error</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">err</span> <span style="color:#66d9ef">error</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">loadOnce</span>.<span style="color:#a6e22e">Do</span>(<span style="color:#66d9ef">func</span>() {
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">n</span>, <span style="color:#a6e22e">e</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">rand</span>.<span style="color:#a6e22e">Int</span>(<span style="color:#a6e22e">rand</span>.<span style="color:#a6e22e">Reader</span>, <span style="color:#a6e22e">big</span>.<span style="color:#a6e22e">NewInt</span>(<span style="color:#ae81ff">3</span>))
+</span></span><span style="display:flex;"><span>		<span style="color:#75715e">// 通过随机数模拟发生错误
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>		<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">e</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> <span style="color:#f92672">||</span> <span style="color:#a6e22e">n</span>.<span style="color:#a6e22e">Int64</span>() &gt; <span style="color:#ae81ff">0</span> {
+</span></span><span style="display:flex;"><span>			<span style="color:#a6e22e">err</span> = <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Errorf</span>(<span style="color:#e6db74">&#34;random [%w] err(%d)&#34;</span>, <span style="color:#a6e22e">e</span>, <span style="color:#a6e22e">n</span>.<span style="color:#a6e22e">Int64</span>())
+</span></span><span style="display:flex;"><span>			<span style="color:#66d9ef">return</span>
+</span></span><span style="display:flex;"><span>		}
+</span></span><span style="display:flex;"><span>		<span style="color:#75715e">// 未发生错误，则赋值
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>		<span style="color:#a6e22e">resource</span> = <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">test</span>{<span style="color:#e6db74">&#34;关注公众号：Gopher指北&#34;</span>}
+</span></span><span style="display:flex;"><span>	})
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+</span></span><span style="display:flex;"><span>		<span style="color:#75715e">// 如果因为某些原因导致初始化失败，则重新赋值以便可以重入
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>		<span style="color:#a6e22e">loadOnce</span> = <span style="color:#a6e22e">sync</span>.<span style="color:#a6e22e">Once</span>{}
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">err</span>
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// double check
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">resource</span> <span style="color:#f92672">==</span> <span style="color:#66d9ef">nil</span> {
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Errorf</span>(<span style="color:#e6db74">&#34;assign failed&#34;</span>)
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// do something
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">err</span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>写下这段代码时，老许一顿沾沾自喜：</p>
 <ul>
 <li>
 <p><code>sync.Once</code>底层通过<code>defer</code>标记初始化完成，所以无论初始化是否成功都会标记初始化完成，即不可重入。上面的代码老许通过重新赋值的方式保证<code>sync.Once</code>可重入。</p>
@@ -238,64 +229,61 @@ var ( resource *test loadOnce sync."/>
 <p>夜深人静思考时，就是这一次犯错，也是这一次灵光一闪，让我思考良多，关于思考的内容稍后缓缓到来。</p>
 <p>知道了问题和目标解决起来就容易多了。</p>
 <p><strong>可重入且并发安全的sync.Once</strong></p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#75715e">// 基本结构和官方sync.Once完全一致
-</span><span style="color:#75715e"></span><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">IOnce</span> <span style="color:#66d9ef">struct</span> {
-	<span style="color:#a6e22e">done</span> <span style="color:#66d9ef">uint32</span>
-	<span style="color:#a6e22e">m</span>    <span style="color:#a6e22e">sync</span>.<span style="color:#a6e22e">Mutex</span>
-}
-<span style="color:#75715e">// Do方法传递的函数增加一个error返回值
-</span><span style="color:#75715e"></span><span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">o</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">IOnce</span>) <span style="color:#a6e22e">Do</span>(<span style="color:#a6e22e">f</span> <span style="color:#66d9ef">func</span>() <span style="color:#66d9ef">error</span>) {
-	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">atomic</span>.<span style="color:#a6e22e">LoadUint32</span>(<span style="color:#f92672">&amp;</span><span style="color:#a6e22e">o</span>.<span style="color:#a6e22e">done</span>) <span style="color:#f92672">==</span> <span style="color:#ae81ff">0</span> {
-		<span style="color:#a6e22e">o</span>.<span style="color:#a6e22e">doSlow</span>(<span style="color:#a6e22e">f</span>)
-	}
-}
-
-<span style="color:#75715e">// 不使用defer控制don标识，而通过也无妨的返回值来控制
-</span><span style="color:#75715e"></span><span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">o</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">IOnce</span>) <span style="color:#a6e22e">doSlow</span>(<span style="color:#a6e22e">f</span> <span style="color:#66d9ef">func</span>() <span style="color:#66d9ef">error</span>) {
-	<span style="color:#a6e22e">o</span>.<span style="color:#a6e22e">m</span>.<span style="color:#a6e22e">Lock</span>()
-	<span style="color:#66d9ef">defer</span> <span style="color:#a6e22e">o</span>.<span style="color:#a6e22e">m</span>.<span style="color:#a6e22e">Unlock</span>()
-	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">o</span>.<span style="color:#a6e22e">done</span> <span style="color:#f92672">==</span> <span style="color:#ae81ff">0</span> {
-		<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">f</span>() <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
-			<span style="color:#66d9ef">return</span>
-		}
-		<span style="color:#75715e">// 执行成功后才将done置为1
-</span><span style="color:#75715e"></span>		<span style="color:#a6e22e">atomic</span>.<span style="color:#a6e22e">StoreUint32</span>(<span style="color:#f92672">&amp;</span><span style="color:#a6e22e">o</span>.<span style="color:#a6e22e">done</span>, <span style="color:#ae81ff">1</span>)
-	}
-}
-
-</code></pre></div><p><strong>最终版代码</strong></p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">var</span> (
-	<span style="color:#a6e22e">resource</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">test</span>
-	<span style="color:#a6e22e">ionce</span> <span style="color:#a6e22e">IOnce</span>
-)
-
-<span style="color:#66d9ef">func</span> <span style="color:#a6e22e">doSomething</span>() <span style="color:#66d9ef">error</span> {
-    <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">err</span> <span style="color:#66d9ef">error</span>
-    <span style="color:#a6e22e">ionce</span>.<span style="color:#a6e22e">Do</span>(<span style="color:#66d9ef">func</span>() <span style="color:#66d9ef">error</span> {
-		<span style="color:#a6e22e">n</span>, <span style="color:#a6e22e">e</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">rand</span>.<span style="color:#a6e22e">Int</span>(<span style="color:#a6e22e">rand</span>.<span style="color:#a6e22e">Reader</span>, <span style="color:#a6e22e">big</span>.<span style="color:#a6e22e">NewInt</span>(<span style="color:#ae81ff">3</span>))
-		<span style="color:#75715e">// 通过随机数模拟发生错误
-</span><span style="color:#75715e"></span>		<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">e</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> <span style="color:#f92672">||</span> <span style="color:#a6e22e">n</span>.<span style="color:#a6e22e">Int64</span>() &gt; <span style="color:#ae81ff">0</span> {
-			<span style="color:#a6e22e">err</span> = <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Errorf</span>(<span style="color:#e6db74">&#34;random [%w] err(%d)&#34;</span>, <span style="color:#a6e22e">e</span>, <span style="color:#a6e22e">n</span>.<span style="color:#a6e22e">Int64</span>())
-			<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">err</span>
-		}
-		<span style="color:#a6e22e">resource</span> = <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">test</span>{<span style="color:#e6db74">&#34;关注公众号：Gopher指北&#34;</span>}
-		<span style="color:#66d9ef">return</span> <span style="color:#66d9ef">nil</span>
-	})
-	<span style="color:#75715e">// do something
-</span><span style="color:#75715e"></span>	<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">err</span>
-}
-
-
-</code></pre></div><p>其实不只老许魔改过<code>sync.Once</code>，老许还在github上面看到过另一个魔改版本（很遗憾现在已经不记得是哪个仓库了无法贴出地址）。</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">o</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">Once</span>) <span style="color:#a6e22e">doSlow</span>(<span style="color:#a6e22e">f</span> <span style="color:#66d9ef">func</span>()) {
-	<span style="color:#a6e22e">o</span>.<span style="color:#a6e22e">m</span>.<span style="color:#a6e22e">Lock</span>()
-	<span style="color:#66d9ef">defer</span> <span style="color:#a6e22e">o</span>.<span style="color:#a6e22e">m</span>.<span style="color:#a6e22e">Unlock</span>()
-	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">o</span>.<span style="color:#a6e22e">done</span> <span style="color:#f92672">==</span> <span style="color:#ae81ff">0</span> {
-	    <span style="color:#a6e22e">atomic</span>.<span style="color:#a6e22e">StoreUint32</span>(<span style="color:#f92672">&amp;</span><span style="color:#a6e22e">o</span>.<span style="color:#a6e22e">done</span>, <span style="color:#ae81ff">1</span>)
-		<span style="color:#a6e22e">f</span>() 
-	}
-}
-</code></pre></div><p>和官方实现的版本相比，仅仅是将<code>defer atomic.StoreUint32(&amp;o.done, 1)</code>修改为<code>atomic.StoreUint32(&amp;o.done, 1)</code>，老许推测此实现是想尽可能早的返回，避免锁的竞争，但是目前尚未发现适用场景所以记忆深刻。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#75715e">// 基本结构和官方sync.Once完全一致
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">IOnce</span> <span style="color:#66d9ef">struct</span> {
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">done</span> <span style="color:#66d9ef">uint32</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">m</span>    <span style="color:#a6e22e">sync</span>.<span style="color:#a6e22e">Mutex</span>
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// Do方法传递的函数增加一个error返回值
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">o</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">IOnce</span>) <span style="color:#a6e22e">Do</span>(<span style="color:#a6e22e">f</span> <span style="color:#66d9ef">func</span>() <span style="color:#66d9ef">error</span>) {
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">atomic</span>.<span style="color:#a6e22e">LoadUint32</span>(<span style="color:#f92672">&amp;</span><span style="color:#a6e22e">o</span>.<span style="color:#a6e22e">done</span>) <span style="color:#f92672">==</span> <span style="color:#ae81ff">0</span> {
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">o</span>.<span style="color:#a6e22e">doSlow</span>(<span style="color:#a6e22e">f</span>)
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// 不使用defer控制don标识，而通过也无妨的返回值来控制
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">o</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">IOnce</span>) <span style="color:#a6e22e">doSlow</span>(<span style="color:#a6e22e">f</span> <span style="color:#66d9ef">func</span>() <span style="color:#66d9ef">error</span>) {
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">o</span>.<span style="color:#a6e22e">m</span>.<span style="color:#a6e22e">Lock</span>()
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">defer</span> <span style="color:#a6e22e">o</span>.<span style="color:#a6e22e">m</span>.<span style="color:#a6e22e">Unlock</span>()
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">o</span>.<span style="color:#a6e22e">done</span> <span style="color:#f92672">==</span> <span style="color:#ae81ff">0</span> {
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">f</span>() <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+</span></span><span style="display:flex;"><span>			<span style="color:#66d9ef">return</span>
+</span></span><span style="display:flex;"><span>		}
+</span></span><span style="display:flex;"><span>		<span style="color:#75715e">// 执行成功后才将done置为1
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>		<span style="color:#a6e22e">atomic</span>.<span style="color:#a6e22e">StoreUint32</span>(<span style="color:#f92672">&amp;</span><span style="color:#a6e22e">o</span>.<span style="color:#a6e22e">done</span>, <span style="color:#ae81ff">1</span>)
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p><strong>最终版代码</strong></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">var</span> (
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">resource</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">test</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">ionce</span> <span style="color:#a6e22e">IOnce</span>
+</span></span><span style="display:flex;"><span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">doSomething</span>() <span style="color:#66d9ef">error</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">err</span> <span style="color:#66d9ef">error</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">ionce</span>.<span style="color:#a6e22e">Do</span>(<span style="color:#66d9ef">func</span>() <span style="color:#66d9ef">error</span> {
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">n</span>, <span style="color:#a6e22e">e</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">rand</span>.<span style="color:#a6e22e">Int</span>(<span style="color:#a6e22e">rand</span>.<span style="color:#a6e22e">Reader</span>, <span style="color:#a6e22e">big</span>.<span style="color:#a6e22e">NewInt</span>(<span style="color:#ae81ff">3</span>))
+</span></span><span style="display:flex;"><span>		<span style="color:#75715e">// 通过随机数模拟发生错误
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>		<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">e</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> <span style="color:#f92672">||</span> <span style="color:#a6e22e">n</span>.<span style="color:#a6e22e">Int64</span>() &gt; <span style="color:#ae81ff">0</span> {
+</span></span><span style="display:flex;"><span>			<span style="color:#a6e22e">err</span> = <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Errorf</span>(<span style="color:#e6db74">&#34;random [%w] err(%d)&#34;</span>, <span style="color:#a6e22e">e</span>, <span style="color:#a6e22e">n</span>.<span style="color:#a6e22e">Int64</span>())
+</span></span><span style="display:flex;"><span>			<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">err</span>
+</span></span><span style="display:flex;"><span>		}
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">resource</span> = <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">test</span>{<span style="color:#e6db74">&#34;关注公众号：Gopher指北&#34;</span>}
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">return</span> <span style="color:#66d9ef">nil</span>
+</span></span><span style="display:flex;"><span>	})
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// do something
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">err</span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>其实不只老许魔改过<code>sync.Once</code>，老许还在github上面看到过另一个魔改版本（很遗憾现在已经不记得是哪个仓库了无法贴出地址）。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">o</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">Once</span>) <span style="color:#a6e22e">doSlow</span>(<span style="color:#a6e22e">f</span> <span style="color:#66d9ef">func</span>()) {
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">o</span>.<span style="color:#a6e22e">m</span>.<span style="color:#a6e22e">Lock</span>()
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">defer</span> <span style="color:#a6e22e">o</span>.<span style="color:#a6e22e">m</span>.<span style="color:#a6e22e">Unlock</span>()
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">o</span>.<span style="color:#a6e22e">done</span> <span style="color:#f92672">==</span> <span style="color:#ae81ff">0</span> {
+</span></span><span style="display:flex;"><span>	    <span style="color:#a6e22e">atomic</span>.<span style="color:#a6e22e">StoreUint32</span>(<span style="color:#f92672">&amp;</span><span style="color:#a6e22e">o</span>.<span style="color:#a6e22e">done</span>, <span style="color:#ae81ff">1</span>)
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">f</span>() 
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>和官方实现的版本相比，仅仅是将<code>defer atomic.StoreUint32(&amp;o.done, 1)</code>修改为<code>atomic.StoreUint32(&amp;o.done, 1)</code>，老许推测此实现是想尽可能早的返回，避免锁的竞争，但是目前尚未发现适用场景所以记忆深刻。</p>
 <p>前面内容并不复杂，但它确确实实给老许提了个醒，让老许有了下面一段感悟。</p>
 <p>回成都之后深刻感受到了这个新一线城市的忙碌，很多时候都是时间紧任务重，而我受周围氛围和环境的影响渐渐丢失了一份&quot;不急不缓，不骄不躁，回归本心&quot;的态度。有位读者曾经告诉我“世界那么大，你才看到多少”。当老许看到这个留言时犹如当头棒喝，余生那么长，世界那么大，我们有什么好着急的又何须给自己那么大的压力（再次感谢这位读者～）。</p>
 <p><img src="https://note.youdao.com/yws/api/personal/file/WEBf21418759ed0be65e748ee41f3ca9d11?method=download&amp;shareKey=26d3e2d6de1dcdce4c6c1f5b5672731a" alt=""></p>
@@ -317,7 +305,7 @@ var ( resource *test loadOnce sync."/>
           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-tag meta-icon">
             <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path>
             <line x1="7" y1="7" x2="7" y2="7"></line>
-          </svg><span class="tag"><a href="https://isites.github.io/tags/go/">Go</a></span>
+          </svg><span class="tag"><a href="https://isites.gitlab.io/gopher/tags/go/">Go</a></span>
         </p>
 
       <p>
@@ -353,7 +341,7 @@ var ( resource *test loadOnce sync."/>
         <div class="pagination__buttons">
           
             <span class="button previous">
-              <a href="https://isites.github.io/timeline/http-url/">
+              <a href="https://isites.gitlab.io/gopher/timeline/http-url/">
                 <span class="button__icon">←</span>
                 <span class="button__text">URL中的空格、加号究竟应该使用何种方式编码</span>
               </a>
@@ -362,7 +350,7 @@ var ( resource *test loadOnce sync."/>
 
           
             <span class="button next">
-              <a href="https://isites.github.io/timeline/net-bandwidth/">
+              <a href="https://isites.gitlab.io/gopher/timeline/net-bandwidth/">
                 <span class="button__text">一次带宽拉满引发的百分百超时血案！</span>
                 <span class="button__icon">→</span>
               </a>
@@ -451,7 +439,7 @@ var ( resource *test loadOnce sync."/>
 
 
 
-<script type="text/javascript" src="/bundle.min.dc716e9092c9820b77f96da294d0120aeeb189b5bcea9752309ebea27fd53bbe6b13cffb2aca8ecf32525647ceb7001f76091de4199ac5a3caa432c070247f5b.js" integrity="sha512-3HFukJLJggt3&#43;W2ilNASCu6xibW86pdSMJ6&#43;on/VO75rE8/7KsqOzzJSVkfOtwAfdgkd5BmaxaPKpDLAcCR/Ww=="></script>
+<script type="text/javascript" src="/gopher/bundle.min.e2a9675ced043d06ad6d3f13fafb0203d96c89eb2484878d5eb89d6da19559cbed55fb05ca9eae7be1e975cab83e3b2a1193afc357019620a509327c5a6a9c0f.js" integrity="sha512-4qlnXO0EPQatbT8T&#43;vsCA9lsieskhIeNXridbaGVWcvtVfsFyp6ue&#43;Hpdcq4PjsqEZOvw1cBliClCTJ8WmqcDw=="></script>
 
 
     

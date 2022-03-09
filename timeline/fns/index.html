@@ -9,15 +9,15 @@
 首先老许要感谢他人的认同，这是我乐此不彼的动力，同时我也需要反思。这位小姐姐还是比较委婉， 但用我们四川话来说，前一篇文章的标题是真的cuo。
 老许反复思考后决定哗众取宠一波，感叹号双连取名曰“惊！Go里面居然有这样精妙的小函数！”。下面就让我们来看看和标题没那么符合的一些小函数。
 返回a/b向上舍入最接近的整数
-func divRoundUp(n, a uintptr) uintptr { return (n &#43; a - 1) / a } 这个方法用过的人应该不少，最典型的就是分页计算。
+func divRoundUp(n, a uintptr) uintptr { 	return (n &#43; a - 1) / a } 这个方法用过的人应该不少，最典型的就是分页计算。
 判断x是否为2的n次幂
-func isPowerOfTwo(x uintptr) bool { return x&amp;amp;(x-1) == 0 } 这个也挺容易理解的，唯一需要注意的是x需要大于0，因为该等式0也是成立的。
+func isPowerOfTwo(x uintptr) bool { 	return x&amp;amp;(x-1) == 0 } 这个也挺容易理解的，唯一需要注意的是x需要大于0，因为该等式0也是成立的。
 向上/下将x舍入为a的倍数，且a必须是2的n次幂
-// 向上将x舍入为a的倍数，例如：x=6，a=4则返回值为8 func alignUp(x, a uintptr) uintptr { return (x &#43; a - 1) &amp;amp;^ (a - 1) } // 向上将x舍入为a的倍数，例如：x=6，a=4则返回值为4 func alignDown(x, a uintptr) uintptr { return x &amp;amp;^ (a - 1) } 在这里老许再次明确一个概念，2的n次幂即为1左移n位。然后上述代码中^为单目运算法按位取反，则^ (a - 1)的运算结果是除了最低n位为0其余位全为1。剩余的部分则是一个简单的加减运算以及按位与。" />
+// 向上将x舍入为a的倍数，例如：x=6，a=4则返回值为8 func alignUp(x, a uintptr) uintptr { 	return (x &#43; a - 1) &amp;amp;^ (a - 1) }  // 向上将x舍入为a的倍数，例如：x=6，a=4则返回值为4 func alignDown(x, a uintptr) uintptr { 	return x &amp;amp;^ (a - 1) } 在这里老许再次明确一个概念，2的n次幂即为1左移n位。然后上述代码中^为单目运算法按位取反，则^ (a - 1)的运算结果是除了最低n位为0其余位全为1。剩余的部分则是一个简单的加减运算以及按位与。" />
 <meta name="keywords" content=", Go" />
 <meta name="robots" content="noodp" />
 <meta name="theme-color" content="" />
-<link rel="canonical" href="https://isites.github.io/timeline/fns/" />
+<link rel="canonical" href="https://isites.gitlab.io/gopher/timeline/fns/" />
 
 
     <title>
@@ -34,7 +34,7 @@ func isPowerOfTwo(x uintptr) bool { return x&amp;amp;(x-1) == 0 } 这个也挺�
 
 
 
-<link rel="stylesheet" href="/main.805b1025016494ee5fd67b55b8ecd5e2b7c4a9f0bdda42e300c62b85ddfef68f.css">
+<link rel="stylesheet" href="/gopher/main.805b1025016494ee5fd67b55b8ecd5e2b7c4a9f0bdda42e300c62b85ddfef68f.css">
 
 
   
@@ -55,30 +55,25 @@ func isPowerOfTwo(x uintptr) bool { return x&amp;amp;(x-1) == 0 } 这个也挺�
 首先老许要感谢他人的认同，这是我乐此不彼的动力，同时我也需要反思。这位小姐姐还是比较委婉， 但用我们四川话来说，前一篇文章的标题是真的cuo。
 老许反复思考后决定哗众取宠一波，感叹号双连取名曰“惊！Go里面居然有这样精妙的小函数！”。下面就让我们来看看和标题没那么符合的一些小函数。
 返回a/b向上舍入最接近的整数
-func divRoundUp(n, a uintptr) uintptr { return (n &#43; a - 1) / a } 这个方法用过的人应该不少，最典型的就是分页计算。
+func divRoundUp(n, a uintptr) uintptr { 	return (n &#43; a - 1) / a } 这个方法用过的人应该不少，最典型的就是分页计算。
 判断x是否为2的n次幂
-func isPowerOfTwo(x uintptr) bool { return x&amp;(x-1) == 0 } 这个也挺容易理解的，唯一需要注意的是x需要大于0，因为该等式0也是成立的。
+func isPowerOfTwo(x uintptr) bool { 	return x&amp;(x-1) == 0 } 这个也挺容易理解的，唯一需要注意的是x需要大于0，因为该等式0也是成立的。
 向上/下将x舍入为a的倍数，且a必须是2的n次幂
-// 向上将x舍入为a的倍数，例如：x=6，a=4则返回值为8 func alignUp(x, a uintptr) uintptr { return (x &#43; a - 1) &amp;^ (a - 1) } // 向上将x舍入为a的倍数，例如：x=6，a=4则返回值为4 func alignDown(x, a uintptr) uintptr { return x &amp;^ (a - 1) } 在这里老许再次明确一个概念，2的n次幂即为1左移n位。然后上述代码中^为单目运算法按位取反，则^ (a - 1)的运算结果是除了最低n位为0其余位全为1。剩余的部分则是一个简单的加减运算以及按位与。">
-<meta itemprop="datePublished" content="2021-08-03T21:00:00+08:00" />
+// 向上将x舍入为a的倍数，例如：x=6，a=4则返回值为8 func alignUp(x, a uintptr) uintptr { 	return (x &#43; a - 1) &amp;^ (a - 1) }  // 向上将x舍入为a的倍数，例如：x=6，a=4则返回值为4 func alignDown(x, a uintptr) uintptr { 	return x &amp;^ (a - 1) } 在这里老许再次明确一个概念，2的n次幂即为1左移n位。然后上述代码中^为单目运算法按位取反，则^ (a - 1)的运算结果是除了最低n位为0其余位全为1。剩余的部分则是一个简单的加减运算以及按位与。"><meta itemprop="datePublished" content="2021-08-03T21:00:00+08:00" />
 <meta itemprop="dateModified" content="2021-08-03T21:00:00+08:00" />
 <meta itemprop="wordCount" content="518">
-
-
-
 <meta itemprop="keywords" content="Go," />
-
 <meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="惊！Go里面居然有这样精妙的小函数！"/>
 <meta name="twitter:description" content="各位哥麻烦腾个道，前面是大型装逼现场。
 首先老许要感谢他人的认同，这是我乐此不彼的动力，同时我也需要反思。这位小姐姐还是比较委婉， 但用我们四川话来说，前一篇文章的标题是真的cuo。
 老许反复思考后决定哗众取宠一波，感叹号双连取名曰“惊！Go里面居然有这样精妙的小函数！”。下面就让我们来看看和标题没那么符合的一些小函数。
 返回a/b向上舍入最接近的整数
-func divRoundUp(n, a uintptr) uintptr { return (n &#43; a - 1) / a } 这个方法用过的人应该不少，最典型的就是分页计算。
+func divRoundUp(n, a uintptr) uintptr { 	return (n &#43; a - 1) / a } 这个方法用过的人应该不少，最典型的就是分页计算。
 判断x是否为2的n次幂
-func isPowerOfTwo(x uintptr) bool { return x&amp;(x-1) == 0 } 这个也挺容易理解的，唯一需要注意的是x需要大于0，因为该等式0也是成立的。
+func isPowerOfTwo(x uintptr) bool { 	return x&amp;(x-1) == 0 } 这个也挺容易理解的，唯一需要注意的是x需要大于0，因为该等式0也是成立的。
 向上/下将x舍入为a的倍数，且a必须是2的n次幂
-// 向上将x舍入为a的倍数，例如：x=6，a=4则返回值为8 func alignUp(x, a uintptr) uintptr { return (x &#43; a - 1) &amp;^ (a - 1) } // 向上将x舍入为a的倍数，例如：x=6，a=4则返回值为4 func alignDown(x, a uintptr) uintptr { return x &amp;^ (a - 1) } 在这里老许再次明确一个概念，2的n次幂即为1左移n位。然后上述代码中^为单目运算法按位取反，则^ (a - 1)的运算结果是除了最低n位为0其余位全为1。剩余的部分则是一个简单的加减运算以及按位与。"/>
+// 向上将x舍入为a的倍数，例如：x=6，a=4则返回值为8 func alignUp(x, a uintptr) uintptr { 	return (x &#43; a - 1) &amp;^ (a - 1) }  // 向上将x舍入为a的倍数，例如：x=6，a=4则返回值为4 func alignDown(x, a uintptr) uintptr { 	return x &amp;^ (a - 1) } 在这里老许再次明确一个概念，2的n次幂即为1左移n位。然后上述代码中^为单目运算法按位取反，则^ (a - 1)的运算结果是除了最低n位为0其余位全为1。剩余的部分则是一个简单的加减运算以及按位与。"/>
 
 
 
@@ -101,7 +96,7 @@ func isPowerOfTwo(x uintptr) bool { return x&amp;(x-1) == 0 } 这个也挺容易
         <div class="container">
             <header class="header">
     <span class="header__inner">
-        <a href="https://isites.github.io/" style="text-decoration: none;">
+        <a href="https://isites.gitlab.io/gopher/" style="text-decoration: none;">
     <div class="logo">
         
             <span class="logo__mark">Gopher指北</span>
@@ -147,7 +142,7 @@ func isPowerOfTwo(x uintptr) bool { return x&amp;(x-1) == 0 } 这个也挺容易
 
     <article>
       <h1 class="post-title">
-        <a href="https://isites.github.io/timeline/fns/">惊！Go里面居然有这样精妙的小函数！</a>
+        <a href="https://isites.gitlab.io/gopher/timeline/fns/">惊！Go里面居然有这样精妙的小函数！</a>
       </h1>
         <hr />
         <aside id="toc">
@@ -164,93 +159,91 @@ func isPowerOfTwo(x uintptr) bool { return x&amp;(x-1) == 0 } 这个也挺容易
 <p>首先老许要感谢他人的认同，这是我乐此不彼的动力，同时我也需要反思。这位小姐姐还是比较委婉， 但用我们四川话来说，<a href="https://mp.weixin.qq.com/s/2MGYuqT_Xzy2_MwteQruQw">前一篇文章</a>的标题是真的<code>cuo</code>。</p>
 <p>老许反复思考后决定哗众取宠一波，感叹号双连取名曰“<strong>惊！Go里面居然有这样精妙的小函数！</strong>”。下面就让我们来看看和标题没那么符合的一些小函数。</p>
 <p><strong>返回a/b向上舍入最接近的整数</strong></p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">divRoundUp</span>(<span style="color:#a6e22e">n</span>, <span style="color:#a6e22e">a</span> <span style="color:#66d9ef">uintptr</span>) <span style="color:#66d9ef">uintptr</span> {
-	<span style="color:#66d9ef">return</span> (<span style="color:#a6e22e">n</span> <span style="color:#f92672">+</span> <span style="color:#a6e22e">a</span> <span style="color:#f92672">-</span> <span style="color:#ae81ff">1</span>) <span style="color:#f92672">/</span> <span style="color:#a6e22e">a</span>
-}
-</code></pre></div><p>这个方法用过的人应该不少，最典型的就是分页计算。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">divRoundUp</span>(<span style="color:#a6e22e">n</span>, <span style="color:#a6e22e">a</span> <span style="color:#66d9ef">uintptr</span>) <span style="color:#66d9ef">uintptr</span> {
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">return</span> (<span style="color:#a6e22e">n</span> <span style="color:#f92672">+</span> <span style="color:#a6e22e">a</span> <span style="color:#f92672">-</span> <span style="color:#ae81ff">1</span>) <span style="color:#f92672">/</span> <span style="color:#a6e22e">a</span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>这个方法用过的人应该不少，最典型的就是分页计算。</p>
 <p><strong>判断x是否为2的n次幂</strong></p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">isPowerOfTwo</span>(<span style="color:#a6e22e">x</span> <span style="color:#66d9ef">uintptr</span>) <span style="color:#66d9ef">bool</span> {
-	<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">x</span><span style="color:#f92672">&amp;</span>(<span style="color:#a6e22e">x</span><span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>) <span style="color:#f92672">==</span> <span style="color:#ae81ff">0</span>
-}
-</code></pre></div><p>这个也挺容易理解的，唯一需要注意的是x需要大于0，因为该等式0也是成立的。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">isPowerOfTwo</span>(<span style="color:#a6e22e">x</span> <span style="color:#66d9ef">uintptr</span>) <span style="color:#66d9ef">bool</span> {
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">x</span><span style="color:#f92672">&amp;</span>(<span style="color:#a6e22e">x</span><span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>) <span style="color:#f92672">==</span> <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>这个也挺容易理解的，唯一需要注意的是x需要大于0，因为该等式0也是成立的。</p>
 <p><strong>向上/下将x舍入为a的倍数，且a必须是2的n次幂</strong></p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#75715e">// 向上将x舍入为a的倍数，例如：x=6，a=4则返回值为8
-</span><span style="color:#75715e"></span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">alignUp</span>(<span style="color:#a6e22e">x</span>, <span style="color:#a6e22e">a</span> <span style="color:#66d9ef">uintptr</span>) <span style="color:#66d9ef">uintptr</span> {
-	<span style="color:#66d9ef">return</span> (<span style="color:#a6e22e">x</span> <span style="color:#f92672">+</span> <span style="color:#a6e22e">a</span> <span style="color:#f92672">-</span> <span style="color:#ae81ff">1</span>) <span style="color:#f92672">&amp;^</span> (<span style="color:#a6e22e">a</span> <span style="color:#f92672">-</span> <span style="color:#ae81ff">1</span>)
-}
-
-<span style="color:#75715e">// 向上将x舍入为a的倍数，例如：x=6，a=4则返回值为4
-</span><span style="color:#75715e"></span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">alignDown</span>(<span style="color:#a6e22e">x</span>, <span style="color:#a6e22e">a</span> <span style="color:#66d9ef">uintptr</span>) <span style="color:#66d9ef">uintptr</span> {
-	<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">x</span> <span style="color:#f92672">&amp;^</span> (<span style="color:#a6e22e">a</span> <span style="color:#f92672">-</span> <span style="color:#ae81ff">1</span>)
-}
-
-</code></pre></div><p>在这里老许再次明确一个概念，<code>2的n次幂即为1左移n位</code>。然后上述代码中<code>^</code>为单目运算法按位取反，则<code>^ (a - 1)</code>的运算结果是除了最低n位为0其余位全为1。剩余的部分则是一个简单的加减运算以及按位与。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#75715e">// 向上将x舍入为a的倍数，例如：x=6，a=4则返回值为8
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">alignUp</span>(<span style="color:#a6e22e">x</span>, <span style="color:#a6e22e">a</span> <span style="color:#66d9ef">uintptr</span>) <span style="color:#66d9ef">uintptr</span> {
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">return</span> (<span style="color:#a6e22e">x</span> <span style="color:#f92672">+</span> <span style="color:#a6e22e">a</span> <span style="color:#f92672">-</span> <span style="color:#ae81ff">1</span>) <span style="color:#f92672">&amp;^</span> (<span style="color:#a6e22e">a</span> <span style="color:#f92672">-</span> <span style="color:#ae81ff">1</span>)
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// 向上将x舍入为a的倍数，例如：x=6，a=4则返回值为4
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">alignDown</span>(<span style="color:#a6e22e">x</span>, <span style="color:#a6e22e">a</span> <span style="color:#66d9ef">uintptr</span>) <span style="color:#66d9ef">uintptr</span> {
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">x</span> <span style="color:#f92672">&amp;^</span> (<span style="color:#a6e22e">a</span> <span style="color:#f92672">-</span> <span style="color:#ae81ff">1</span>)
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>在这里老许再次明确一个概念，<code>2的n次幂即为1左移n位</code>。然后上述代码中<code>^</code>为单目运算法按位取反，则<code>^ (a - 1)</code>的运算结果是除了最低n位为0其余位全为1。剩余的部分则是一个简单的加减运算以及按位与。</p>
 <p>上述代码分开来看每一部分都认识，合在一起就一脸懵逼了。幸运的是，经过老许的不懈努力终于找到了一种能够理解的方式。</p>
 <p>以<code>x=10，a=4</code>为例。<code>a</code>为2的2次幂即1左移2位。<code>x</code>可看作两部分之和，第一部分x1为<code>0b1000</code>,第二部分x2为<code>0b0011</code>。<code>x</code>的拆分方式是1左移<code>n</code>位可得到<code>a</code>来决定的，即x的最低n位为x2，x1则为x-x2。因此x1相当于0b10左移2位得到，即x1已经是a的整数倍，此时x2只要大于0则x2+a-1一定会向前进1，<code>x1+1</code>或<code>x1</code>不就是x向上舍入的a的整数倍嘛，最后和<code>^ (a - 1)</code>进行与运算将最低2位清零得到最终的返回结果。</p>
 <p>有一说一，我肯定是写不出这样的逻辑，这也令我不得不感叹大佬们对计算机的理解简直出神入化。这样的函数牛逼归牛逼，但是在实际开发中还是尽量少用。一是有使用场景的限制（a必须为2的n次幂），二是不易理解，当然炫技和装逼除外（性能要求极高也除外）。</p>
 <p><strong>布尔转整形</strong></p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#75715e">// bool2int returns 0 if x is false or 1 if x is true.
-</span><span style="color:#75715e"></span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">bool2int</span>(<span style="color:#a6e22e">x</span> <span style="color:#66d9ef">bool</span>) <span style="color:#66d9ef">int</span> {
-	<span style="color:#66d9ef">return</span> int(uint8(<span style="color:#f92672">*</span>(<span style="color:#f92672">*</span><span style="color:#66d9ef">uint8</span>)(<span style="color:#a6e22e">unsafe</span>.<span style="color:#a6e22e">Pointer</span>(<span style="color:#f92672">&amp;</span><span style="color:#a6e22e">x</span>))))
-}
-
-</code></pre></div><p>如果让我来写这个函数，一个稀松平常的<code>switch</code>就完事儿，而现在我又多了一种装逼的套路。老许在这里特别友情提示，字节切片和字符串也可使用上述方式进行相互转换。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#75715e">// bool2int returns 0 if x is false or 1 if x is true.
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">bool2int</span>(<span style="color:#a6e22e">x</span> <span style="color:#66d9ef">bool</span>) <span style="color:#66d9ef">int</span> {
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">return</span> int(uint8(<span style="color:#f92672">*</span>(<span style="color:#f92672">*</span><span style="color:#66d9ef">uint8</span>)(<span style="color:#a6e22e">unsafe</span>.<span style="color:#a6e22e">Pointer</span>(<span style="color:#f92672">&amp;</span><span style="color:#a6e22e">x</span>))))
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>如果让我来写这个函数，一个稀松平常的<code>switch</code>就完事儿，而现在我又多了一种装逼的套路。老许在这里特别友情提示，字节切片和字符串也可使用上述方式进行相互转换。</p>
 <p><strong>计算不同类型最低位0的位数</strong></p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">var</span> <span style="color:#a6e22e">ntz8tab</span> = [<span style="color:#ae81ff">256</span>]<span style="color:#66d9ef">uint8</span>{
-	<span style="color:#ae81ff">0x08</span>, <span style="color:#f92672">...</span>, <span style="color:#ae81ff">0x00</span>,
-}
-<span style="color:#75715e">// Ctz8 returns the number of trailing zero bits in x; the result is 8 for x == 0.
-</span><span style="color:#75715e"></span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">Ctz8</span>(<span style="color:#a6e22e">x</span> <span style="color:#66d9ef">uint8</span>) <span style="color:#66d9ef">int</span> {
-	<span style="color:#66d9ef">return</span> int(<span style="color:#a6e22e">ntz8tab</span>[<span style="color:#a6e22e">x</span>])
-}
-
-<span style="color:#66d9ef">const</span> <span style="color:#a6e22e">deBruijn32ctz</span> = <span style="color:#ae81ff">0x04653adf</span>
-
-<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">deBruijnIdx32ctz</span> = [<span style="color:#ae81ff">32</span>]<span style="color:#66d9ef">byte</span>{
-	<span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">2</span>, <span style="color:#ae81ff">6</span>, <span style="color:#ae81ff">3</span>, <span style="color:#ae81ff">11</span>, <span style="color:#ae81ff">7</span>, <span style="color:#ae81ff">16</span>,
-	<span style="color:#ae81ff">4</span>, <span style="color:#ae81ff">14</span>, <span style="color:#ae81ff">12</span>, <span style="color:#ae81ff">21</span>, <span style="color:#ae81ff">8</span>, <span style="color:#ae81ff">23</span>, <span style="color:#ae81ff">17</span>, <span style="color:#ae81ff">26</span>,
-	<span style="color:#ae81ff">31</span>, <span style="color:#ae81ff">5</span>, <span style="color:#ae81ff">10</span>, <span style="color:#ae81ff">15</span>, <span style="color:#ae81ff">13</span>, <span style="color:#ae81ff">20</span>, <span style="color:#ae81ff">22</span>, <span style="color:#ae81ff">25</span>,
-	<span style="color:#ae81ff">30</span>, <span style="color:#ae81ff">9</span>, <span style="color:#ae81ff">19</span>, <span style="color:#ae81ff">24</span>, <span style="color:#ae81ff">29</span>, <span style="color:#ae81ff">18</span>, <span style="color:#ae81ff">28</span>, <span style="color:#ae81ff">27</span>,
-}
-
-<span style="color:#75715e">// Ctz32 counts trailing (low-order) zeroes,
-</span><span style="color:#75715e">// and if all are zero, then 32.
-</span><span style="color:#75715e"></span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">Ctz32</span>(<span style="color:#a6e22e">x</span> <span style="color:#66d9ef">uint32</span>) <span style="color:#66d9ef">int</span> {
-	<span style="color:#a6e22e">x</span> <span style="color:#f92672">&amp;=</span> <span style="color:#f92672">-</span><span style="color:#a6e22e">x</span>                       <span style="color:#75715e">// isolate low-order bit
-</span><span style="color:#75715e"></span>	<span style="color:#a6e22e">y</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">x</span> <span style="color:#f92672">*</span> <span style="color:#a6e22e">deBruijn32ctz</span> <span style="color:#f92672">&gt;&gt;</span> <span style="color:#ae81ff">27</span>  <span style="color:#75715e">// extract part of deBruijn sequence
-</span><span style="color:#75715e"></span>	<span style="color:#a6e22e">i</span> <span style="color:#f92672">:=</span> int(<span style="color:#a6e22e">deBruijnIdx32ctz</span>[<span style="color:#a6e22e">y</span>]) <span style="color:#75715e">// convert to bit index
-</span><span style="color:#75715e"></span>	<span style="color:#a6e22e">z</span> <span style="color:#f92672">:=</span> int((<span style="color:#a6e22e">x</span> <span style="color:#f92672">-</span> <span style="color:#ae81ff">1</span>) <span style="color:#f92672">&gt;&gt;</span> <span style="color:#ae81ff">26</span> <span style="color:#f92672">&amp;</span> <span style="color:#ae81ff">32</span>)  <span style="color:#75715e">// adjustment if zero
-</span><span style="color:#75715e"></span>	<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">i</span> <span style="color:#f92672">+</span> <span style="color:#a6e22e">z</span>
-}
-
-<span style="color:#66d9ef">const</span> <span style="color:#a6e22e">deBruijn64ctz</span> = <span style="color:#ae81ff">0x0218a392cd3d5dbf</span>
-
-<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">deBruijnIdx64ctz</span> = [<span style="color:#ae81ff">64</span>]<span style="color:#66d9ef">byte</span>{
-	<span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">2</span>, <span style="color:#ae81ff">7</span>, <span style="color:#ae81ff">3</span>, <span style="color:#ae81ff">13</span>, <span style="color:#ae81ff">8</span>, <span style="color:#ae81ff">19</span>,
-	<span style="color:#ae81ff">4</span>, <span style="color:#ae81ff">25</span>, <span style="color:#ae81ff">14</span>, <span style="color:#ae81ff">28</span>, <span style="color:#ae81ff">9</span>, <span style="color:#ae81ff">34</span>, <span style="color:#ae81ff">20</span>, <span style="color:#ae81ff">40</span>,
-	<span style="color:#ae81ff">5</span>, <span style="color:#ae81ff">17</span>, <span style="color:#ae81ff">26</span>, <span style="color:#ae81ff">38</span>, <span style="color:#ae81ff">15</span>, <span style="color:#ae81ff">46</span>, <span style="color:#ae81ff">29</span>, <span style="color:#ae81ff">48</span>,
-	<span style="color:#ae81ff">10</span>, <span style="color:#ae81ff">31</span>, <span style="color:#ae81ff">35</span>, <span style="color:#ae81ff">54</span>, <span style="color:#ae81ff">21</span>, <span style="color:#ae81ff">50</span>, <span style="color:#ae81ff">41</span>, <span style="color:#ae81ff">57</span>,
-	<span style="color:#ae81ff">63</span>, <span style="color:#ae81ff">6</span>, <span style="color:#ae81ff">12</span>, <span style="color:#ae81ff">18</span>, <span style="color:#ae81ff">24</span>, <span style="color:#ae81ff">27</span>, <span style="color:#ae81ff">33</span>, <span style="color:#ae81ff">39</span>,
-	<span style="color:#ae81ff">16</span>, <span style="color:#ae81ff">37</span>, <span style="color:#ae81ff">45</span>, <span style="color:#ae81ff">47</span>, <span style="color:#ae81ff">30</span>, <span style="color:#ae81ff">53</span>, <span style="color:#ae81ff">49</span>, <span style="color:#ae81ff">56</span>,
-	<span style="color:#ae81ff">62</span>, <span style="color:#ae81ff">11</span>, <span style="color:#ae81ff">23</span>, <span style="color:#ae81ff">32</span>, <span style="color:#ae81ff">36</span>, <span style="color:#ae81ff">44</span>, <span style="color:#ae81ff">52</span>, <span style="color:#ae81ff">55</span>,
-	<span style="color:#ae81ff">61</span>, <span style="color:#ae81ff">22</span>, <span style="color:#ae81ff">43</span>, <span style="color:#ae81ff">51</span>, <span style="color:#ae81ff">60</span>, <span style="color:#ae81ff">42</span>, <span style="color:#ae81ff">59</span>, <span style="color:#ae81ff">58</span>,
-}
-
-<span style="color:#75715e">// Ctz64 counts trailing (low-order) zeroes,
-</span><span style="color:#75715e">// and if all are zero, then 64.
-</span><span style="color:#75715e"></span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">Ctz64</span>(<span style="color:#a6e22e">x</span> <span style="color:#66d9ef">uint64</span>) <span style="color:#66d9ef">int</span> {
-	<span style="color:#a6e22e">x</span> <span style="color:#f92672">&amp;=</span> <span style="color:#f92672">-</span><span style="color:#a6e22e">x</span>                       <span style="color:#75715e">// isolate low-order bit
-</span><span style="color:#75715e"></span>	<span style="color:#a6e22e">y</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">x</span> <span style="color:#f92672">*</span> <span style="color:#a6e22e">deBruijn64ctz</span> <span style="color:#f92672">&gt;&gt;</span> <span style="color:#ae81ff">58</span>  <span style="color:#75715e">// extract part of deBruijn sequence
-</span><span style="color:#75715e"></span>	<span style="color:#a6e22e">i</span> <span style="color:#f92672">:=</span> int(<span style="color:#a6e22e">deBruijnIdx64ctz</span>[<span style="color:#a6e22e">y</span>]) <span style="color:#75715e">// convert to bit index
-</span><span style="color:#75715e"></span>	<span style="color:#a6e22e">z</span> <span style="color:#f92672">:=</span> int((<span style="color:#a6e22e">x</span> <span style="color:#f92672">-</span> <span style="color:#ae81ff">1</span>) <span style="color:#f92672">&gt;&gt;</span> <span style="color:#ae81ff">57</span> <span style="color:#f92672">&amp;</span> <span style="color:#ae81ff">64</span>)  <span style="color:#75715e">// adjustment if zero
-</span><span style="color:#75715e"></span>	<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">i</span> <span style="color:#f92672">+</span> <span style="color:#a6e22e">z</span>
-}
-</code></pre></div><p><code>Ctz8</code>、<code>Ctz32</code>和<code>Ctz64</code>分别计算无符号8、32、64位数最低位为0的个数，即某个数左移的位数。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">var</span> <span style="color:#a6e22e">ntz8tab</span> = [<span style="color:#ae81ff">256</span>]<span style="color:#66d9ef">uint8</span>{
+</span></span><span style="display:flex;"><span>	<span style="color:#ae81ff">0x08</span>, <span style="color:#f92672">...</span>, <span style="color:#ae81ff">0x00</span>,
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// Ctz8 returns the number of trailing zero bits in x; the result is 8 for x == 0.
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">Ctz8</span>(<span style="color:#a6e22e">x</span> <span style="color:#66d9ef">uint8</span>) <span style="color:#66d9ef">int</span> {
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">return</span> int(<span style="color:#a6e22e">ntz8tab</span>[<span style="color:#a6e22e">x</span>])
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">const</span> <span style="color:#a6e22e">deBruijn32ctz</span> = <span style="color:#ae81ff">0x04653adf</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">var</span> <span style="color:#a6e22e">deBruijnIdx32ctz</span> = [<span style="color:#ae81ff">32</span>]<span style="color:#66d9ef">byte</span>{
+</span></span><span style="display:flex;"><span>	<span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">2</span>, <span style="color:#ae81ff">6</span>, <span style="color:#ae81ff">3</span>, <span style="color:#ae81ff">11</span>, <span style="color:#ae81ff">7</span>, <span style="color:#ae81ff">16</span>,
+</span></span><span style="display:flex;"><span>	<span style="color:#ae81ff">4</span>, <span style="color:#ae81ff">14</span>, <span style="color:#ae81ff">12</span>, <span style="color:#ae81ff">21</span>, <span style="color:#ae81ff">8</span>, <span style="color:#ae81ff">23</span>, <span style="color:#ae81ff">17</span>, <span style="color:#ae81ff">26</span>,
+</span></span><span style="display:flex;"><span>	<span style="color:#ae81ff">31</span>, <span style="color:#ae81ff">5</span>, <span style="color:#ae81ff">10</span>, <span style="color:#ae81ff">15</span>, <span style="color:#ae81ff">13</span>, <span style="color:#ae81ff">20</span>, <span style="color:#ae81ff">22</span>, <span style="color:#ae81ff">25</span>,
+</span></span><span style="display:flex;"><span>	<span style="color:#ae81ff">30</span>, <span style="color:#ae81ff">9</span>, <span style="color:#ae81ff">19</span>, <span style="color:#ae81ff">24</span>, <span style="color:#ae81ff">29</span>, <span style="color:#ae81ff">18</span>, <span style="color:#ae81ff">28</span>, <span style="color:#ae81ff">27</span>,
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// Ctz32 counts trailing (low-order) zeroes,
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// and if all are zero, then 32.
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">Ctz32</span>(<span style="color:#a6e22e">x</span> <span style="color:#66d9ef">uint32</span>) <span style="color:#66d9ef">int</span> {
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">x</span> <span style="color:#f92672">&amp;=</span> <span style="color:#f92672">-</span><span style="color:#a6e22e">x</span>                       <span style="color:#75715e">// isolate low-order bit
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#a6e22e">y</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">x</span> <span style="color:#f92672">*</span> <span style="color:#a6e22e">deBruijn32ctz</span> <span style="color:#f92672">&gt;&gt;</span> <span style="color:#ae81ff">27</span>  <span style="color:#75715e">// extract part of deBruijn sequence
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#a6e22e">i</span> <span style="color:#f92672">:=</span> int(<span style="color:#a6e22e">deBruijnIdx32ctz</span>[<span style="color:#a6e22e">y</span>]) <span style="color:#75715e">// convert to bit index
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#a6e22e">z</span> <span style="color:#f92672">:=</span> int((<span style="color:#a6e22e">x</span> <span style="color:#f92672">-</span> <span style="color:#ae81ff">1</span>) <span style="color:#f92672">&gt;&gt;</span> <span style="color:#ae81ff">26</span> <span style="color:#f92672">&amp;</span> <span style="color:#ae81ff">32</span>)  <span style="color:#75715e">// adjustment if zero
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">i</span> <span style="color:#f92672">+</span> <span style="color:#a6e22e">z</span>
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">const</span> <span style="color:#a6e22e">deBruijn64ctz</span> = <span style="color:#ae81ff">0x0218a392cd3d5dbf</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">var</span> <span style="color:#a6e22e">deBruijnIdx64ctz</span> = [<span style="color:#ae81ff">64</span>]<span style="color:#66d9ef">byte</span>{
+</span></span><span style="display:flex;"><span>	<span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">2</span>, <span style="color:#ae81ff">7</span>, <span style="color:#ae81ff">3</span>, <span style="color:#ae81ff">13</span>, <span style="color:#ae81ff">8</span>, <span style="color:#ae81ff">19</span>,
+</span></span><span style="display:flex;"><span>	<span style="color:#ae81ff">4</span>, <span style="color:#ae81ff">25</span>, <span style="color:#ae81ff">14</span>, <span style="color:#ae81ff">28</span>, <span style="color:#ae81ff">9</span>, <span style="color:#ae81ff">34</span>, <span style="color:#ae81ff">20</span>, <span style="color:#ae81ff">40</span>,
+</span></span><span style="display:flex;"><span>	<span style="color:#ae81ff">5</span>, <span style="color:#ae81ff">17</span>, <span style="color:#ae81ff">26</span>, <span style="color:#ae81ff">38</span>, <span style="color:#ae81ff">15</span>, <span style="color:#ae81ff">46</span>, <span style="color:#ae81ff">29</span>, <span style="color:#ae81ff">48</span>,
+</span></span><span style="display:flex;"><span>	<span style="color:#ae81ff">10</span>, <span style="color:#ae81ff">31</span>, <span style="color:#ae81ff">35</span>, <span style="color:#ae81ff">54</span>, <span style="color:#ae81ff">21</span>, <span style="color:#ae81ff">50</span>, <span style="color:#ae81ff">41</span>, <span style="color:#ae81ff">57</span>,
+</span></span><span style="display:flex;"><span>	<span style="color:#ae81ff">63</span>, <span style="color:#ae81ff">6</span>, <span style="color:#ae81ff">12</span>, <span style="color:#ae81ff">18</span>, <span style="color:#ae81ff">24</span>, <span style="color:#ae81ff">27</span>, <span style="color:#ae81ff">33</span>, <span style="color:#ae81ff">39</span>,
+</span></span><span style="display:flex;"><span>	<span style="color:#ae81ff">16</span>, <span style="color:#ae81ff">37</span>, <span style="color:#ae81ff">45</span>, <span style="color:#ae81ff">47</span>, <span style="color:#ae81ff">30</span>, <span style="color:#ae81ff">53</span>, <span style="color:#ae81ff">49</span>, <span style="color:#ae81ff">56</span>,
+</span></span><span style="display:flex;"><span>	<span style="color:#ae81ff">62</span>, <span style="color:#ae81ff">11</span>, <span style="color:#ae81ff">23</span>, <span style="color:#ae81ff">32</span>, <span style="color:#ae81ff">36</span>, <span style="color:#ae81ff">44</span>, <span style="color:#ae81ff">52</span>, <span style="color:#ae81ff">55</span>,
+</span></span><span style="display:flex;"><span>	<span style="color:#ae81ff">61</span>, <span style="color:#ae81ff">22</span>, <span style="color:#ae81ff">43</span>, <span style="color:#ae81ff">51</span>, <span style="color:#ae81ff">60</span>, <span style="color:#ae81ff">42</span>, <span style="color:#ae81ff">59</span>, <span style="color:#ae81ff">58</span>,
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// Ctz64 counts trailing (low-order) zeroes,
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// and if all are zero, then 64.
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">Ctz64</span>(<span style="color:#a6e22e">x</span> <span style="color:#66d9ef">uint64</span>) <span style="color:#66d9ef">int</span> {
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">x</span> <span style="color:#f92672">&amp;=</span> <span style="color:#f92672">-</span><span style="color:#a6e22e">x</span>                       <span style="color:#75715e">// isolate low-order bit
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#a6e22e">y</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">x</span> <span style="color:#f92672">*</span> <span style="color:#a6e22e">deBruijn64ctz</span> <span style="color:#f92672">&gt;&gt;</span> <span style="color:#ae81ff">58</span>  <span style="color:#75715e">// extract part of deBruijn sequence
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#a6e22e">i</span> <span style="color:#f92672">:=</span> int(<span style="color:#a6e22e">deBruijnIdx64ctz</span>[<span style="color:#a6e22e">y</span>]) <span style="color:#75715e">// convert to bit index
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#a6e22e">z</span> <span style="color:#f92672">:=</span> int((<span style="color:#a6e22e">x</span> <span style="color:#f92672">-</span> <span style="color:#ae81ff">1</span>) <span style="color:#f92672">&gt;&gt;</span> <span style="color:#ae81ff">57</span> <span style="color:#f92672">&amp;</span> <span style="color:#ae81ff">64</span>)  <span style="color:#75715e">// adjustment if zero
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">i</span> <span style="color:#f92672">+</span> <span style="color:#a6e22e">z</span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p><code>Ctz8</code>、<code>Ctz32</code>和<code>Ctz64</code>分别计算无符号8、32、64位数最低位为0的个数，即某个数左移的位数。</p>
 <p>函数的作用通过翻译倒是能理解，我也能深刻的明白这是典型的空间换时间，然而要问一句为什么我是万万答不上来的。不过老许已经替你们找好了答案，答案就藏在这篇<a href="http://supertech.csail.mit.edu/papers/debruijn.pdf">Using de Bruijn Sequences to Index a 1 in a Computer Word</a>论文中。欢迎巨佬们去挑战一下，而我只想坐享其成，那么在巨佬们分析完这篇论文之前就让这些函数安家在我的收藏栏里方便以后炫技。</p>
 <p>这里特别说明，术业有专攻，我们不一定要所有东西都会，但要尽可能知道有这么一个东西存在。这即是老许为自己找的一个不去研究此论文的接口，也是写下此篇文章的意义之一（万一有人提到了<code>Bruijn Sequences</code>关键词，我们也不至于显得过分无知）。</p>
 <p><strong>math/bits包中的部分函数</strong></p>
 <p>如果有人知道这个包，那请原谅我的无知直接跳过本部分即可。老许发现这个包是源于<code>ntz8tab</code>变量所在文件<code>runtime/internal/sys/intrinsics_common.go</code>中的一句注释。</p>
-<pre><code>// Copied from math/bits to avoid dependence.
+<pre tabindex="0"><code>// Copied from math/bits to avoid dependence.
 </code></pre><p>作为一个资深的CV工程师， 看到这句的第一反应就是我终于可以挺直腰杆了。适当Copy代码不丢人！</p>
 <p><code>math/bits</code>这个包函数较多，老许挑几个介绍即可，其余的还请各位读者自行挖掘。</p>
 <p><code>LeadingZeros(x uint) int</code>: 返回x所有高位为0的个数。</p>
@@ -260,30 +253,29 @@ func isPowerOfTwo(x uintptr) bool { return x&amp;(x-1) == 0 } 这个也挺容易
 <p><code>Len(x uint) int</code>: 返回表示x的有效bit位个数（高位中的0不计数）。</p>
 <p><code>ReverseBytes(x uint) uint</code>: 将x按照每8位一组倒序后返回。</p>
 <p><strong>将x逃逸至堆</strong></p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#75715e">// Dummy annotation marking that the value x escapes,
-</span><span style="color:#75715e">// for use in cases where the reflect code is so clever that
-</span><span style="color:#75715e">// the compiler cannot follow.
-</span><span style="color:#75715e"></span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">escapes</span>(<span style="color:#a6e22e">x</span> <span style="color:#66d9ef">interface</span>{}) {
-	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">dummy</span>.<span style="color:#a6e22e">b</span> {
-		<span style="color:#a6e22e">dummy</span>.<span style="color:#a6e22e">x</span> = <span style="color:#a6e22e">x</span>
-	}
-}
-
-<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">dummy</span> <span style="color:#66d9ef">struct</span> {
-	<span style="color:#a6e22e">b</span> <span style="color:#66d9ef">bool</span>
-	<span style="color:#a6e22e">x</span> <span style="color:#66d9ef">interface</span>{}
-}
-</code></pre></div><p>老许是在<code>reflect.ValueOf</code>函数中发现此函数的调用，当时就觉着挺有意思。如今再次回顾也依旧佩服不已。读书是和作者的对话，阅读源码是和开发者的对话，看到此函数就仿佛看到Go语言开发者们和编译器斗智斗勇的场景。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#75715e">// Dummy annotation marking that the value x escapes,
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// for use in cases where the reflect code is so clever that
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// the compiler cannot follow.
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">escapes</span>(<span style="color:#a6e22e">x</span> <span style="color:#66d9ef">interface</span>{}) {
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">dummy</span>.<span style="color:#a6e22e">b</span> {
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">dummy</span>.<span style="color:#a6e22e">x</span> = <span style="color:#a6e22e">x</span>
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">var</span> <span style="color:#a6e22e">dummy</span> <span style="color:#66d9ef">struct</span> {
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">b</span> <span style="color:#66d9ef">bool</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">x</span> <span style="color:#66d9ef">interface</span>{}
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>老许是在<code>reflect.ValueOf</code>函数中发现此函数的调用，当时就觉着挺有意思。如今再次回顾也依旧佩服不已。读书是和作者的对话，阅读源码是和开发者的对话，看到此函数就仿佛看到Go语言开发者们和编译器斗智斗勇的场景。</p>
 <p><strong>让出当前Processor</strong></p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">
-<span style="color:#75715e">// Gosched yields the processor, allowing other goroutines to run. It does not
-</span><span style="color:#75715e">// suspend the current goroutine, so execution resumes automatically.
-</span><span style="color:#75715e"></span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">Gosched</span>() {
-	<span style="color:#a6e22e">checkTimeouts</span>()
-	<span style="color:#a6e22e">mcall</span>(<span style="color:#a6e22e">gosched_m</span>)
-}
-
-</code></pre></div><p>让出当前的Processor，允许其他goroutine执行。在实际的开发当中老许还未遇到需要使用此函数的场景，但多了解总是有备无患。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// Gosched yields the processor, allowing other goroutines to run. It does not
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// suspend the current goroutine, so execution resumes automatically.
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">Gosched</span>() {
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">checkTimeouts</span>()
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">mcall</span>(<span style="color:#a6e22e">gosched_m</span>)
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>让出当前的Processor，允许其他goroutine执行。在实际的开发当中老许还未遇到需要使用此函数的场景，但多了解总是有备无患。</p>
 <p>最后，衷心希望本文能够对各位读者有一定的帮助。</p>
 <blockquote>
 <p><strong>注</strong>：</p>
@@ -304,7 +296,7 @@ func isPowerOfTwo(x uintptr) bool { return x&amp;(x-1) == 0 } 这个也挺容易
           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-tag meta-icon">
             <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path>
             <line x1="7" y1="7" x2="7" y2="7"></line>
-          </svg><span class="tag"><a href="https://isites.github.io/tags/go/">Go</a></span>
+          </svg><span class="tag"><a href="https://isites.gitlab.io/gopher/tags/go/">Go</a></span>
         </p>
 
       <p>
@@ -340,7 +332,7 @@ func isPowerOfTwo(x uintptr) bool { return x&amp;(x-1) == 0 } 这个也挺容易
         <div class="pagination__buttons">
           
             <span class="button previous">
-              <a href="https://isites.github.io/timeline/go-share/">
+              <a href="https://isites.gitlab.io/gopher/timeline/go-share/">
                 <span class="button__icon">←</span>
                 <span class="button__text">公司内一次分享-Go并发编程</span>
               </a>
@@ -349,7 +341,7 @@ func isPowerOfTwo(x uintptr) bool { return x&amp;(x-1) == 0 } 这个也挺容易
 
           
             <span class="button next">
-              <a href="https://isites.github.io/timeline/slice/">
+              <a href="https://isites.gitlab.io/gopher/timeline/slice/">
                 <span class="button__text">讲的是切片，但好像又不只是切片？</span>
                 <span class="button__icon">→</span>
               </a>
@@ -438,7 +430,7 @@ func isPowerOfTwo(x uintptr) bool { return x&amp;(x-1) == 0 } 这个也挺容易
 
 
 
-<script type="text/javascript" src="/bundle.min.dc716e9092c9820b77f96da294d0120aeeb189b5bcea9752309ebea27fd53bbe6b13cffb2aca8ecf32525647ceb7001f76091de4199ac5a3caa432c070247f5b.js" integrity="sha512-3HFukJLJggt3&#43;W2ilNASCu6xibW86pdSMJ6&#43;on/VO75rE8/7KsqOzzJSVkfOtwAfdgkd5BmaxaPKpDLAcCR/Ww=="></script>
+<script type="text/javascript" src="/gopher/bundle.min.e2a9675ced043d06ad6d3f13fafb0203d96c89eb2484878d5eb89d6da19559cbed55fb05ca9eae7be1e975cab83e3b2a1193afc357019620a509327c5a6a9c0f.js" integrity="sha512-4qlnXO0EPQatbT8T&#43;vsCA9lsieskhIeNXridbaGVWcvtVfsFyp6ue&#43;Hpdcq4PjsqEZOvw1cBliClCTJ8WmqcDw=="></script>
 
 
     

@@ -26,7 +26,7 @@ encodeURIComponent(&amp;#39; &#43;Gopher指北&amp;#39;) // 输出：%20%2BGophe
 <meta name="keywords" content=", 网络篇" />
 <meta name="robots" content="noodp" />
 <meta name="theme-color" content="" />
-<link rel="canonical" href="https://isites.github.io/timeline/http-url/" />
+<link rel="canonical" href="https://isites.gitlab.io/gopher/timeline/http-url/" />
 
 
     <title>
@@ -43,7 +43,7 @@ encodeURIComponent(&amp;#39; &#43;Gopher指北&amp;#39;) // 输出：%20%2BGophe
 
 
 
-<link rel="stylesheet" href="/main.805b1025016494ee5fd67b55b8ecd5e2b7c4a9f0bdda42e300c62b85ddfef68f.css">
+<link rel="stylesheet" href="/gopher/main.805b1025016494ee5fd67b55b8ecd5e2b7c4a9f0bdda42e300c62b85ddfef68f.css">
 
 
   
@@ -77,15 +77,10 @@ JS中的URL编码 encodeURI
 encodeURI(&#39; &#43;Gopher指北&#39;) // 输出：%20&#43;Gopher%E6%8C%87%E5%8C%97 encodeURIComponent
 encodeURIComponent(&#39; &#43;Gopher指北&#39;) // 输出：%20%2BGopher%E6%8C%87%E5%8C%97 JS的encodeURI和Go的url.PathEscape函数效果一致，而encodeURIComponent则将空格和&#43;均进行编码。
 我们应该怎么做 更推荐使用url.PathEscape函数编码 在前文中已经总结了Go、PHP和JS对 &#43;Gopher指北的编码操作，下面总结一下其对应的解码操作是否可行的二维表。
-   编码/解码 url.QueryUnescape url.PathUnescape urldecode rawurldecode decodeURI decodeURIComponent     url.">
-<meta itemprop="datePublished" content="2021-10-10T12:20:38+08:00" />
+   编码/解码 url.QueryUnescape url.PathUnescape urldecode rawurldecode decodeURI decodeURIComponent     url."><meta itemprop="datePublished" content="2021-10-10T12:20:38+08:00" />
 <meta itemprop="dateModified" content="2021-10-10T12:20:38+08:00" />
 <meta itemprop="wordCount" content="126">
-
-
-
 <meta itemprop="keywords" content="网络篇," />
-
 <meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="URL中的空格、加号究竟应该使用何种方式编码"/>
 <meta name="twitter:description" content="URL中不能显示地包含空格这已经是一个共识，而空格以何种形式存在，在不同的标准中又不完全一致，以致于不同的语言也有了不同的实现。
@@ -128,7 +123,7 @@ encodeURIComponent(&#39; &#43;Gopher指北&#39;) // 输出：%20%2BGopher%E6%8C%
         <div class="container">
             <header class="header">
     <span class="header__inner">
-        <a href="https://isites.github.io/" style="text-decoration: none;">
+        <a href="https://isites.gitlab.io/gopher/" style="text-decoration: none;">
     <div class="logo">
         
             <span class="logo__mark">Gopher指北</span>
@@ -174,7 +169,7 @@ encodeURIComponent(&#39; &#43;Gopher指北&#39;) // 输出：%20%2BGopher%E6%8C%
 
     <article>
       <h1 class="post-title">
-        <a href="https://isites.github.io/timeline/http-url/">URL中的空格、加号究竟应该使用何种方式编码</a>
+        <a href="https://isites.gitlab.io/gopher/timeline/http-url/">URL中的空格、加号究竟应该使用何种方式编码</a>
       </h1>
         <hr />
         <aside id="toc">
@@ -211,38 +206,38 @@ encodeURIComponent(&#39; &#43;Gopher指北&#39;) // 输出：%20%2BGopher%E6%8C%
 <h1 id="go常用的三种url编码方式">Go常用的三种URL编码方式</h1>
 <p>作为Gopher最先关注的自然是Go语言本身的实现，因此我们首先了解一下Go中常用的三种URL编码方式的异同。</p>
 <h2 id="urlqueryescape">url.QueryEscape</h2>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">url</span>.<span style="color:#a6e22e">QueryEscape</span>(<span style="color:#e6db74">&#34; +Gopher指北&#34;</span>))
-<span style="color:#75715e">// 输出：+%2BGopher%E6%8C%87%E5%8C%97
-</span></code></pre></div><p>使用<code>url.QueryEscape</code>编码时，空格被编码为<code>+</code>，而<code>+</code>本身被编码为<code>%2B</code>。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">url</span>.<span style="color:#a6e22e">QueryEscape</span>(<span style="color:#e6db74">&#34; +Gopher指北&#34;</span>))
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// 输出：+%2BGopher%E6%8C%87%E5%8C%97
+</span></span></span></code></pre></div><p>使用<code>url.QueryEscape</code>编码时，空格被编码为<code>+</code>，而<code>+</code>本身被编码为<code>%2B</code>。</p>
 <h2 id="urlpathescape">url.PathEscape</h2>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">url</span>.<span style="color:#a6e22e">PathEscape</span>(<span style="color:#e6db74">&#34; +Gopher指北&#34;</span>))
-<span style="color:#75715e">// 输出：%20+Gopher%E6%8C%87%E5%8C%97
-</span></code></pre></div><p>使用<code>url.PathEscape</code>编码时，空格被编码为<code>20%</code>, 而<code>+</code>则未被编码。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">url</span>.<span style="color:#a6e22e">PathEscape</span>(<span style="color:#e6db74">&#34; +Gopher指北&#34;</span>))
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// 输出：%20+Gopher%E6%8C%87%E5%8C%97
+</span></span></span></code></pre></div><p>使用<code>url.PathEscape</code>编码时，空格被编码为<code>20%</code>, 而<code>+</code>则未被编码。</p>
 <h2 id="urlvalues">url.Values</h2>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">var</span> <span style="color:#a6e22e">query</span> = <span style="color:#a6e22e">url</span>.<span style="color:#a6e22e">Values</span>{}
-<span style="color:#a6e22e">query</span>.<span style="color:#a6e22e">Set</span>(<span style="color:#e6db74">&#34;hygz&#34;</span>, <span style="color:#e6db74">&#34; +Gopher指北&#34;</span>)
-<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">query</span>.<span style="color:#a6e22e">Encode</span>())
-<span style="color:#75715e">// 输出：hygz=+%2BGopher%E6%8C%87%E5%8C%97
-</span></code></pre></div><p>使用<code>(Values).Encode</code>方法编码时，空格被编码为<code>+</code>，而<code>+</code>本身被编码为<code>%2B</code>，进一步查看<code>(Values).Encode</code>方法的源码知其内部仍旧调用<code>url.QueryEscape</code>函数。而<code>(Values).Encode</code>方法和<code>url.QueryEscape</code>的区别在于前者仅编码query中的key和value，后者会对<code>=</code>、<code>&amp;</code>均进行编码。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">var</span> <span style="color:#a6e22e">query</span> = <span style="color:#a6e22e">url</span>.<span style="color:#a6e22e">Values</span>{}
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">query</span>.<span style="color:#a6e22e">Set</span>(<span style="color:#e6db74">&#34;hygz&#34;</span>, <span style="color:#e6db74">&#34; +Gopher指北&#34;</span>)
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">query</span>.<span style="color:#a6e22e">Encode</span>())
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// 输出：hygz=+%2BGopher%E6%8C%87%E5%8C%97
+</span></span></span></code></pre></div><p>使用<code>(Values).Encode</code>方法编码时，空格被编码为<code>+</code>，而<code>+</code>本身被编码为<code>%2B</code>，进一步查看<code>(Values).Encode</code>方法的源码知其内部仍旧调用<code>url.QueryEscape</code>函数。而<code>(Values).Encode</code>方法和<code>url.QueryEscape</code>的区别在于前者仅编码query中的key和value，后者会对<code>=</code>、<code>&amp;</code>均进行编码。</p>
 <p>对我们开发者而言，这三种编码方式到底应该使用哪一种，请继续阅读后文相信你可以在后面的文章中找到答案。</p>
 <h1 id="不同语言中的实现">不同语言中的实现</h1>
 <p>既然空格和<code>+</code>在Go中的URL编码方式有不同的实现，那在其他语言中是否也存在这样的情况呢，下面以PHP和JS为例。</p>
 <h2 id="php中的url编码">PHP中的URL编码</h2>
 <p><strong>urlencode</strong></p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-php" data-lang="php"><span style="color:#66d9ef">echo</span> <span style="color:#a6e22e">urlencode</span>(<span style="color:#e6db74">&#39; +Gopher指北&#39;</span>);
-<span style="color:#75715e">// 输出：+%2BGopher%E6%8C%87%E5%8C%97
-</span></code></pre></div><p><strong>rawurlencode</strong></p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-php" data-lang="php"><span style="color:#66d9ef">echo</span> <span style="color:#a6e22e">rawurlencode</span>(<span style="color:#e6db74">&#34; +Gopher指北&#34;</span>);
-<span style="color:#75715e">// 输出：%20%2BGopher%E6%8C%87%E5%8C%97
-</span></code></pre></div><p>PHP的<code>urlencode</code>和Go的<code>url.QueryEscape</code>函数效果一致，而<code>rawurlencode</code>则将空格和<code>+</code>均进行编码。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-php" data-lang="php"><span style="display:flex;"><span><span style="color:#66d9ef">echo</span> <span style="color:#a6e22e">urlencode</span>(<span style="color:#e6db74">&#39; +Gopher指北&#39;</span>);
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// 输出：+%2BGopher%E6%8C%87%E5%8C%97
+</span></span></span></code></pre></div><p><strong>rawurlencode</strong></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-php" data-lang="php"><span style="display:flex;"><span><span style="color:#66d9ef">echo</span> <span style="color:#a6e22e">rawurlencode</span>(<span style="color:#e6db74">&#34; +Gopher指北&#34;</span>);
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// 输出：%20%2BGopher%E6%8C%87%E5%8C%97
+</span></span></span></code></pre></div><p>PHP的<code>urlencode</code>和Go的<code>url.QueryEscape</code>函数效果一致，而<code>rawurlencode</code>则将空格和<code>+</code>均进行编码。</p>
 <h2 id="js中的url编码">JS中的URL编码</h2>
 <p><strong>encodeURI</strong></p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript">encodeURI(<span style="color:#e6db74">&#39; +Gopher指北&#39;</span>)
-<span style="color:#75715e">// 输出：%20+Gopher%E6%8C%87%E5%8C%97
-</span></code></pre></div><p><strong>encodeURIComponent</strong></p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript">encodeURIComponent(<span style="color:#e6db74">&#39; +Gopher指北&#39;</span>)
-<span style="color:#75715e">// 输出：%20%2BGopher%E6%8C%87%E5%8C%97
-</span></code></pre></div><p>JS的<code>encodeURI</code>和Go的<code>url.PathEscape</code>函数效果一致，而<code>encodeURIComponent</code>则将空格和<code>+</code>均进行编码。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-javascript" data-lang="javascript"><span style="display:flex;"><span>encodeURI(<span style="color:#e6db74">&#39; +Gopher指北&#39;</span>)
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// 输出：%20+Gopher%E6%8C%87%E5%8C%97
+</span></span></span></code></pre></div><p><strong>encodeURIComponent</strong></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-javascript" data-lang="javascript"><span style="display:flex;"><span>encodeURIComponent(<span style="color:#e6db74">&#39; +Gopher指北&#39;</span>)
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// 输出：%20%2BGopher%E6%8C%87%E5%8C%97
+</span></span></span></code></pre></div><p>JS的<code>encodeURI</code>和Go的<code>url.PathEscape</code>函数效果一致，而<code>encodeURIComponent</code>则将空格和<code>+</code>均进行编码。</p>
 <h1 id="我们应该怎么做">我们应该怎么做</h1>
 <h2 id="更推荐使用urlpathescape函数编码">更推荐使用url.PathEscape函数编码</h2>
 <p>在前文中已经总结了<code>Go</code>、<code>PHP</code>和<code>JS</code>对<code> +Gopher指北</code>的编码操作，下面总结一下其对应的解码操作是否可行的二维表。</p>
@@ -341,7 +336,7 @@ encodeURIComponent(&#39; &#43;Gopher指北&#39;) // 输出：%20%2BGopher%E6%8C%
           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-tag meta-icon">
             <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path>
             <line x1="7" y1="7" x2="7" y2="7"></line>
-          </svg><span class="tag"><a href="https://isites.github.io/tags/%E7%BD%91%E7%BB%9C%E7%AF%87/">网络篇</a></span>
+          </svg><span class="tag"><a href="https://isites.gitlab.io/gopher/tags/%E7%BD%91%E7%BB%9C%E7%AF%87/">网络篇</a></span>
         </p>
 
       <p>
@@ -377,7 +372,7 @@ encodeURIComponent(&#39; &#43;Gopher指北&#39;) // 输出：%20%2BGopher%E6%8C%
         <div class="pagination__buttons">
           
             <span class="button previous">
-              <a href="https://isites.github.io/timeline/ad-msvv/">
+              <a href="https://isites.gitlab.io/gopher/timeline/ad-msvv/">
                 <span class="button__icon">←</span>
                 <span class="button__text">浅谈在线广告分配策略</span>
               </a>
@@ -386,7 +381,7 @@ encodeURIComponent(&#39; &#43;Gopher指北&#39;) // 输出：%20%2BGopher%E6%8C%
 
           
             <span class="button next">
-              <a href="https://isites.github.io/timeline/sync-once/">
+              <a href="https://isites.gitlab.io/gopher/timeline/sync-once/">
                 <span class="button__text">sync.Once化作一道光让我顿悟</span>
                 <span class="button__icon">→</span>
               </a>
@@ -475,7 +470,7 @@ encodeURIComponent(&#39; &#43;Gopher指北&#39;) // 输出：%20%2BGopher%E6%8C%
 
 
 
-<script type="text/javascript" src="/bundle.min.dc716e9092c9820b77f96da294d0120aeeb189b5bcea9752309ebea27fd53bbe6b13cffb2aca8ecf32525647ceb7001f76091de4199ac5a3caa432c070247f5b.js" integrity="sha512-3HFukJLJggt3&#43;W2ilNASCu6xibW86pdSMJ6&#43;on/VO75rE8/7KsqOzzJSVkfOtwAfdgkd5BmaxaPKpDLAcCR/Ww=="></script>
+<script type="text/javascript" src="/gopher/bundle.min.e2a9675ced043d06ad6d3f13fafb0203d96c89eb2484878d5eb89d6da19559cbed55fb05ca9eae7be1e975cab83e3b2a1193afc357019620a509327c5a6a9c0f.js" integrity="sha512-4qlnXO0EPQatbT8T&#43;vsCA9lsieskhIeNXridbaGVWcvtVfsFyp6ue&#43;Hpdcq4PjsqEZOvw1cBliClCTJ8WmqcDw=="></script>
 
 
     
