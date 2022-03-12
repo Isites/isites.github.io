@@ -2,17 +2,51 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>网络篇 on Gopher指北</title>
-    <link>https://isites.github.io/tags/%E7%BD%91%E7%BB%9C%E7%AF%87/</link>
+    <link>https://isites.gitlab.io/gopher/tags/%E7%BD%91%E7%BB%9C%E7%AF%87/</link>
     <description>Recent content in 网络篇 on Gopher指北</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sun, 10 Oct 2021 12:20:38 +0800</lastBuildDate><atom:link href="https://isites.github.io/tags/%E7%BD%91%E7%BB%9C%E7%AF%87/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Mon, 28 Feb 2022 08:00:00 +0800</lastBuildDate><atom:link href="https://isites.gitlab.io/gopher/tags/%E7%BD%91%E7%BB%9C%E7%AF%87/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>用Go构建你专属的JA3指纹</title>
+      <link>https://isites.gitlab.io/gopher/timeline/go-ja3/</link>
+      <pubDate>Mon, 28 Feb 2022 08:00:00 +0800</pubDate>
+      
+      <guid>https://isites.gitlab.io/gopher/timeline/go-ja3/</guid>
+      <description>在这篇文章中将会简单回顾https的握手流程，并基于读者的提问题解释什么是JA3指纹以及如何用Go定制专属的JA3指纹。
+本文大纲如下，请各位读者跟着老许的思路逐步构建自己专属的JA3指纹。
+回顾HTTPS握手流程 在正式开始了解什么是JA3指纹之前，我们先回顾一下HTTPS的握手流程，这将有助于对后文的理解。
+在码了2000多行代码就是为了讲清楚TLS握手流程这篇文章中主要分析了HTTPS单向认证和双向认证流程(TLS1.3)。
+在单向认证中，客户端不需要证书，只需验证服务端证书合法即可。其握手流程和交换的msg如下。
+在双向认证中，服务端和客户端均需验证对方证书的合法性。其握手流程和交换的msg如下。
+单向认证和双向认证的对比：
+  单向认证和双向认证中，总的数据收发仅三次，单次发送的数据中包含一个或者多个消息
+  clientHelloMsg和serverHelloMsg未经过加密，之后发送的消息均做了加密处理
+  Client和Server会各自计算两次密钥，计算时机分别是读取到对方的HelloMsg和finishedMsg之后
+  双向认证和单向认证相比，服务端多发送了certificateRequestMsgTLS13消息
+  双向认证和单向认证相比，客户端多发送了certificateMsgTLS13和certificateVerifyMsg两个消息
+  无论是单向认证还是双向认证，Server对于Client的基本信息了解完全依赖于Client主动告知Server，而其中比较关键的信息分别是客户端支持的TLS版本、客户端支持的加密套件（cipherSuites）、客户端支持的签名算法和客户端支持的密钥交换协议以及其对应的公钥。这些信息均在包含clientHelloMsg中，而这些信息也是生成JA3指纹的关键信息，并且clientHelloMsg和serverHelloMsg未经过加密。未加密意味着修改难度降低，这也就为我们定制自己专属的JA3指纹提供了可能。
+ 如果有兴趣了解HTTPS握手流程的更多细节，请阅读下面文章：
+码了2000多行代码就是为了讲清楚TLS握手流程
+码了2000多行代码就是为了讲清楚TLS握手流程（续）
+ 什么是JA3指纹 前面说了这么多，那么到底什么是JA3指纹呢。根据Open Sourcing JA3这篇文章，老许简单将其理解为JA3就是一种在线识别TLS客户端指纹的方法。
+该方法用于收集clientHelloMsg数据包中以下字段的十进制字节值：TLS Version、Accepted Ciphers、List of Extensions、Elliptic Curves和Elliptic Curve Formats。然后，它将这些值串联起来，使用“,”来分隔各个字段，同时使用“-”来分隔各个字段中的值。最后，计算这些字符串的md5哈希值，即得到易于使用和共享的长度为32字符的指纹。
+为了更近一步描述清楚这些数据的来源，老许将John Althouse文章中的抓包图结合Go源码中的clientHelloMsg结构体做了字段一一映射。
+细心的同学可能已经发现了，根据前文描述JA3指纹总共有5个数据字段，而上图却只映射了4个。那是因为TLS的extension字段比较多，老许就不一一整理了。虽然没有一一列举，但老许准备了一个单元测试，有兴趣深入研究的同学可以通过这个单元测试进行调试分析。
+https://github.com/Isites/go-coder/blob/master/http2/tls/handsh/msg_test.go JA3指纹用途 根据前文的描述，JA3指纹就是一个md5字符串。请大家回想一下在平时的开发中md5的用途。
+ 判断内容是否一致 作为唯一标识   md5虽然不安全，但是JA3选择md5作为哈希的主要原因是为了更好的向后兼容
+ 很明显，JA3指纹也有其类似用途。举个简单的例子，攻击者构建了一个可执行文件，那么该文件的JA3指纹很有可能是唯一的。因此，我们能通过JA3指纹识别出一些恶意软件。
+在本小节的最后，老许给大家推荐一个网站，该网站挂出了很多恶意JA3指纹列表。
+https://sslbl.abuse.ch/ja3-fingerprints/ 构建专属的JA3指纹 http1.1的专属指纹 前文提到clientHelloMsg和serverHelloMsg未经过加密，这为定制自己专属的JA3指纹提供了可能，而在github上面有一个库(https://github.com/refraction-networking/utls)可以在一定程度上修改clientHelloMsg。下面我们将通过这个库构建一个自己专属的JA3指纹。
+// 关键import import (  xtls &amp;#34;github.com/refraction-networking/utls&amp;#34;  &amp;#34;crypto/tls&amp;#34; )  // 克隆一个Transport tr := http.</description>
+    </item>
+    
     <item>
       <title>URL中的空格、加号究竟应该使用何种方式编码</title>
-      <link>https://isites.github.io/timeline/http-url/</link>
+      <link>https://isites.gitlab.io/gopher/timeline/http-url/</link>
       <pubDate>Sun, 10 Oct 2021 12:20:38 +0800</pubDate>
       
-      <guid>https://isites.github.io/timeline/http-url/</guid>
+      <guid>https://isites.gitlab.io/gopher/timeline/http-url/</guid>
       <description>URL中不能显示地包含空格这已经是一个共识，而空格以何种形式存在，在不同的标准中又不完全一致，以致于不同的语言也有了不同的实现。
 rfc2396中明确表示空格应该被编码为%20。
 而W3C的标准中却又说空格可以被替换为+或者%20。
@@ -35,10 +69,10 @@ encodeURIComponent(&amp;#39; +Gopher指北&amp;#39;) // 输出：%20%2BGopher%E6
     
     <item>
       <title>有趣！一行代码居然无法获取请求的完整URL</title>
-      <link>https://isites.github.io/timeline/get-full-url/</link>
+      <link>https://isites.gitlab.io/gopher/timeline/get-full-url/</link>
       <pubDate>Mon, 29 Mar 2021 19:36:38 +0800</pubDate>
       
-      <guid>https://isites.github.io/timeline/get-full-url/</guid>
+      <guid>https://isites.gitlab.io/gopher/timeline/get-full-url/</guid>
       <description>缘起 做Web服务的时候，可能会有这样一个业务场景，获取一个HTTP请求的完整URL。很巧，老许就碰到了这样的业务场景。面对如此简单的需求，CV大法根本没有展示才能的机会。啪啪啪，获取请求的完整URL代码就出来了。
 当时离验证只差一步，老许信心满满，很快，打脸来得很快就像龙卷风。。。
 从图中可以知道，req.URL中的Scheme和Host均为空，所以r.URL.String()无法得到完整的请求连接。这个结果让老许一阵激动，万万没想到有一天我也有机会发现Go源码中可能遗漏的赋值。老许强行按耐住心中的激动，准备好好研究一番，万一成为了Go的Contributor呢^ω^。最后发现官方实现没有问题，因此就有了今天这篇文章。
@@ -51,10 +85,10 @@ HTTP1.1中为什么无法获取完整的连接 HTTP1.1的Server读取请求并�
     
     <item>
       <title>Go中的SSRF攻防战</title>
-      <link>https://isites.github.io/timeline/go-ssrf/</link>
+      <link>https://isites.gitlab.io/gopher/timeline/go-ssrf/</link>
       <pubDate>Tue, 19 Jan 2021 20:30:38 +0800</pubDate>
       
-      <guid>https://isites.github.io/timeline/go-ssrf/</guid>
+      <guid>https://isites.gitlab.io/gopher/timeline/go-ssrf/</guid>
       <description>写在最前面 “年年岁岁花相似，岁岁年年人不同”，没有什么是永恒的，很多东西都将成为过去式。比如，我以前在文章中自称“笔者”，细细想来这个称呼还是有一定的距离感，经过一番深思熟虑后，我打算将文章中的自称改为“老许”。
 关于自称，老许就不扯太远了，下面还是回到本篇的主旨。
 什么是SSRF SSRF英文全拼为Server Side Request Forgery，翻译为服务端请求伪造。攻击者在未能取得服务器权限时，利用服务器漏洞以服务器的身份发送一条构造好的请求给服务器所在内网。关于内网资源的访问控制，想必大家心里都有数。
@@ -67,10 +101,10 @@ HTTP1.1中为什么无法获取完整的连接 HTTP1.1的Server读取请求并�
     
     <item>
       <title>码了2000多行代码就是为了讲清楚TLS握手流程（续）</title>
-      <link>https://isites.github.io/timeline/gotls1.2/</link>
+      <link>https://isites.gitlab.io/gopher/timeline/gotls1.2/</link>
       <pubDate>Sun, 13 Dec 2020 23:47:48 +0800</pubDate>
       
-      <guid>https://isites.github.io/timeline/gotls1.2/</guid>
+      <guid>https://isites.gitlab.io/gopher/timeline/gotls1.2/</guid>
       <description>在“码了2000多行代码就是为了讲清楚TLS握手流程”这一篇文章的最后挖了一个坑，今天这篇文章就是为了填坑而来，因此本篇主要分析TLS1.2的握手流程。
 在写前一篇文章时，笔者的Demo只支持解析TLS1.3握手流程中发送的消息，写本篇时，笔者的Demo已经可以解析TLS1.x握手流程中的消息，有兴趣的读者请至文末获取Demo源码。
 结论先行 为保证各位读者对TLS1.2的握手流程有一个大概的框架，本篇依旧结论先行。
