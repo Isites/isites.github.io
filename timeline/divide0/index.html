@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="author" content="">
+<meta name="description" content="有常识的人都知道，在除法运算中不能除以零，而我们在实际的应用中面对大量的上下文，很有可能因为考虑不周就出现除以零的情况。因此，我们有必要知道除以零到底会不会panic？如果不发生panic，又会得到什么样的值？
+下面，我们带着这样的疑问继续阅读本文。相信在读完本文后，这两个疑问会烟消云散。同时，为了能够让读者快速地了解本文的全貌，下面列出本文的大纲。
+除以零值 在Go中，可能除以零的情况分为三种，分别是除以常量0、整形0和浮点数0。下面我们分别看一下这三种情况的实际表现。
+除以常量0 根据上图知道，除以常量0是无法编译通过的。这一点，还是比较令人安心。
+除以整形0 根据上图知，除以整形0会发生panic。这一点，在平时的开发中还需格外注意。
+除以浮点数0 除以浮点数0，情况会略微复杂。请看下代码和输出结果。
+var zero = float64(0) fmt.Println(1024 / zero) // 输出：&#43;Inf fmt.Println(-1024 / zero) // 输出：-Inf fmt.Println(0 / zero) // NaN 上面输出中Inf为单词infinity的缩写，该单词含义为无穷，因此&#43;Inf和-Inf分别表示正无穷和负无穷。
+NaN意味着not a number，即结果不是一个数。
+到这里，老许不得不感叹浮点数确实博大精深，在Go里面除以0确实不会panic（经过老许验证，在python里面会发生错误）。另外，上述中0/zero得到NaN，而整形中0除以0依旧会panic。
+±Inf值 判断是否是±Inf 前面通过正数和负数分别除以浮点数0可到正无穷和负无穷。Go里面math包提供的Inf函数也可以得到正无穷和负无穷，同时还提供了IsInf函数用于判断是正无穷还是负无穷。
+math.Inf函数签名为func(int) float64，当传入的参数大于等于0时返回正无穷，否则返回负无穷。
+math.IsInf函数签名为func(float64, int) bool，第一个参数为待判断的值，第二个参数大于0时，返回第一个参数是否为正无穷，第二个参数小于0时，返回第一个参数是否为负无穷，第二个参数等于0时，返回第一个参数是否为无穷。
+具体验证，请看下面代码和输出。
+positiveInf := math.Inf(1) negativeInf := math.Inf(-1) // 判断是否为正无穷 fmt.Println(math.IsInf(positiveInf, 1)) // 输出：true // 判断是否为负无穷 fmt.Println(math.IsInf(negativeInf, 1)) // 输出：false // 判断是否为正无穷 fmt.Println(math.IsInf(positiveInf, -1)) // 输出：false // 判断是否为负无穷 fmt.Println(math.IsInf(negativeInf, -1)) // 输出：true // 判断是否为无穷 fmt." />
+<meta name="keywords" content=", Go" />
+<meta name="robots" content="noodp" />
+<meta name="theme-color" content="" />
+<link rel="canonical" href="https://isites.gitlab.io/gopher/timeline/divide0/" />
+
+
+    <title>
+        
+            除以零不会panic？ :: Gopher指北 
+        
+    </title>
+
+
+
+<link href="https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/3.2.1/css/flag-icon.min.css" rel="stylesheet"
+    type="text/css"> 
+
+
+
+
+<link rel="stylesheet" href="/gopher/main.805b1025016494ee5fd67b55b8ecd5e2b7c4a9f0bdda42e300c62b85ddfef68f.css">
+
+
+  
+
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest">
+    <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#252627">
+    <link rel="shortcut icon" href="/favicon.ico">
+    <meta name="msapplication-TileColor" content="#252627">
+    <meta name="theme-color" content="#252627">
+
+
+
+<meta itemprop="name" content="除以零不会panic？">
+<meta itemprop="description" content="有常识的人都知道，在除法运算中不能除以零，而我们在实际的应用中面对大量的上下文，很有可能因为考虑不周就出现除以零的情况。因此，我们有必要知道除以零到底会不会panic？如果不发生panic，又会得到什么样的值？
+下面，我们带着这样的疑问继续阅读本文。相信在读完本文后，这两个疑问会烟消云散。同时，为了能够让读者快速地了解本文的全貌，下面列出本文的大纲。
+除以零值 在Go中，可能除以零的情况分为三种，分别是除以常量0、整形0和浮点数0。下面我们分别看一下这三种情况的实际表现。
+除以常量0 根据上图知道，除以常量0是无法编译通过的。这一点，还是比较令人安心。
+除以整形0 根据上图知，除以整形0会发生panic。这一点，在平时的开发中还需格外注意。
+除以浮点数0 除以浮点数0，情况会略微复杂。请看下代码和输出结果。
+var zero = float64(0) fmt.Println(1024 / zero) // 输出：&#43;Inf fmt.Println(-1024 / zero) // 输出：-Inf fmt.Println(0 / zero) // NaN 上面输出中Inf为单词infinity的缩写，该单词含义为无穷，因此&#43;Inf和-Inf分别表示正无穷和负无穷。
+NaN意味着not a number，即结果不是一个数。
+到这里，老许不得不感叹浮点数确实博大精深，在Go里面除以0确实不会panic（经过老许验证，在python里面会发生错误）。另外，上述中0/zero得到NaN，而整形中0除以0依旧会panic。
+±Inf值 判断是否是±Inf 前面通过正数和负数分别除以浮点数0可到正无穷和负无穷。Go里面math包提供的Inf函数也可以得到正无穷和负无穷，同时还提供了IsInf函数用于判断是正无穷还是负无穷。
+math.Inf函数签名为func(int) float64，当传入的参数大于等于0时返回正无穷，否则返回负无穷。
+math.IsInf函数签名为func(float64, int) bool，第一个参数为待判断的值，第二个参数大于0时，返回第一个参数是否为正无穷，第二个参数小于0时，返回第一个参数是否为负无穷，第二个参数等于0时，返回第一个参数是否为无穷。
+具体验证，请看下面代码和输出。
+positiveInf := math.Inf(1) negativeInf := math.Inf(-1) // 判断是否为正无穷 fmt.Println(math.IsInf(positiveInf, 1)) // 输出：true // 判断是否为负无穷 fmt.Println(math.IsInf(negativeInf, 1)) // 输出：false // 判断是否为正无穷 fmt.Println(math.IsInf(positiveInf, -1)) // 输出：false // 判断是否为负无穷 fmt.Println(math.IsInf(negativeInf, -1)) // 输出：true // 判断是否为无穷 fmt."><meta itemprop="datePublished" content="2022-03-08T08:48:00+08:00" />
+<meta itemprop="dateModified" content="2022-03-08T08:48:00+08:00" />
+<meta itemprop="wordCount" content="246">
+<meta itemprop="keywords" content="Go," />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="除以零不会panic？"/>
+<meta name="twitter:description" content="有常识的人都知道，在除法运算中不能除以零，而我们在实际的应用中面对大量的上下文，很有可能因为考虑不周就出现除以零的情况。因此，我们有必要知道除以零到底会不会panic？如果不发生panic，又会得到什么样的值？
+下面，我们带着这样的疑问继续阅读本文。相信在读完本文后，这两个疑问会烟消云散。同时，为了能够让读者快速地了解本文的全貌，下面列出本文的大纲。
+除以零值 在Go中，可能除以零的情况分为三种，分别是除以常量0、整形0和浮点数0。下面我们分别看一下这三种情况的实际表现。
+除以常量0 根据上图知道，除以常量0是无法编译通过的。这一点，还是比较令人安心。
+除以整形0 根据上图知，除以整形0会发生panic。这一点，在平时的开发中还需格外注意。
+除以浮点数0 除以浮点数0，情况会略微复杂。请看下代码和输出结果。
+var zero = float64(0) fmt.Println(1024 / zero) // 输出：&#43;Inf fmt.Println(-1024 / zero) // 输出：-Inf fmt.Println(0 / zero) // NaN 上面输出中Inf为单词infinity的缩写，该单词含义为无穷，因此&#43;Inf和-Inf分别表示正无穷和负无穷。
+NaN意味着not a number，即结果不是一个数。
+到这里，老许不得不感叹浮点数确实博大精深，在Go里面除以0确实不会panic（经过老许验证，在python里面会发生错误）。另外，上述中0/zero得到NaN，而整形中0除以0依旧会panic。
+±Inf值 判断是否是±Inf 前面通过正数和负数分别除以浮点数0可到正无穷和负无穷。Go里面math包提供的Inf函数也可以得到正无穷和负无穷，同时还提供了IsInf函数用于判断是正无穷还是负无穷。
+math.Inf函数签名为func(int) float64，当传入的参数大于等于0时返回正无穷，否则返回负无穷。
+math.IsInf函数签名为func(float64, int) bool，第一个参数为待判断的值，第二个参数大于0时，返回第一个参数是否为正无穷，第二个参数小于0时，返回第一个参数是否为负无穷，第二个参数等于0时，返回第一个参数是否为无穷。
+具体验证，请看下面代码和输出。
+positiveInf := math.Inf(1) negativeInf := math.Inf(-1) // 判断是否为正无穷 fmt.Println(math.IsInf(positiveInf, 1)) // 输出：true // 判断是否为负无穷 fmt.Println(math.IsInf(negativeInf, 1)) // 输出：false // 判断是否为正无穷 fmt.Println(math.IsInf(positiveInf, -1)) // 输出：false // 判断是否为负无穷 fmt.Println(math.IsInf(negativeInf, -1)) // 输出：true // 判断是否为无穷 fmt."/>
+
+
+
+
+
+
+
+    <meta property="article:published_time" content="2022-03-08 08:48:00 &#43;0800 CST" />
+
+
+
+
+
+
+
+
+    </head>
+
+    <body class="">
+        <div class="container">
+            <header class="header">
+    <span class="header__inner">
+        <a href="https://isites.gitlab.io/gopher/" style="text-decoration: none;">
+    <div class="logo">
+        
+            <span class="logo__mark">Gopher指北</span>
+            <span class="logo__text"></span>
+            <span class="logo__cursor" style=
+                  "
+                   
+                   ">
+            </span>
+        
+    </div>
+</a>
+
+
+        <span class="header__right">
+             
+            <span class="theme-toggle unselectable"><svg class="theme-toggler" width="24" height="24" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <path d="M22 41C32.4934 41 41 32.4934 41 22C41 11.5066 32.4934 3 22
+  3C11.5066 3 3 11.5066 3 22C3 32.4934 11.5066 41 22 41ZM7 22C7
+  13.7157 13.7157 7 22 7V37C13.7157 37 7 30.2843 7 22Z"/>
+</svg>
+</span>
+        </span>
+    </span>
+</header>
+
+
+            <div class="content">
+                
+  <main class="post">
+
+    <div class="post-info">
+      <p>
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-clock">
+          <circle cx="12" cy="12" r="10"></circle>
+          <polyline points="12 6 12 12 16 14"></polyline>
+        </svg>
+        2 minutes
+
+        
+      </p>
+    </div>
+
+    <article>
+      <h1 class="post-title">
+        <a href="https://isites.gitlab.io/gopher/timeline/divide0/">除以零不会panic？</a>
+      </h1>
+        <hr />
+        <aside id="toc">
+          <div class="toc-title">Table of Contents</div>
+          <nav id="TableOfContents">
+  <ul>
+    <li><a href="#除以零值">除以零值</a>
+      <ul>
+        <li><a href="#除以常量0">除以常量0</a></li>
+        <li><a href="#除以整形0">除以整形0</a></li>
+        <li><a href="#除以浮点数0">除以浮点数0</a></li>
+      </ul>
+    </li>
+    <li><a href="#inf值">±Inf值</a>
+      <ul>
+        <li><a href="#判断是否是inf">判断是否是±Inf</a></li>
+        <li><a href="#inf的比较">±Inf的比较</a></li>
+      </ul>
+    </li>
+    <li><a href="#nan值">NaN值</a>
+      <ul>
+        <li><a href="#判断是否是nan">判断是否是NaN</a></li>
+        <li><a href="#nan的比较">NaN的比较</a></li>
+      </ul>
+    </li>
+    <li><a href="#写在最后">写在最后</a></li>
+  </ul>
+</nav>
+        </aside>
+        <hr />
+
+      
+
+      <div class="post-content">
+        <p>有常识的人都知道，在除法运算中不能除以零，而我们在实际的应用中面对大量的上下文，很有可能因为考虑不周就出现除以零的情况。因此，我们有必要知道除以零到底会不会panic？如果不发生panic，又会得到什么样的值？</p>
+<p>下面，我们带着这样的疑问继续阅读本文。相信在读完本文后，这两个疑问会烟消云散。同时，为了能够让读者快速地了解本文的全貌，下面列出本文的大纲。</p>
+<p><img src="https://note.youdao.com/yws/api/personal/file/WEB5718c1e79d725e9f8b6f9ebab3e0b5c9?method=download&amp;shareKey=99056d16a9d584fdb1da2c0f238c8ff0" alt=""></p>
+<h2 id="除以零值">除以零值</h2>
+<p>在Go中，可能除以零的情况分为三种，分别是除以常量<code>0</code>、整形<code>0</code>和浮点数<code>0</code>。下面我们分别看一下这三种情况的实际表现。</p>
+<h3 id="除以常量0">除以常量0</h3>
+<p><img src="https://note.youdao.com/yws/api/personal/file/WEBda6ad1b2f12eb383ac4c7586800acd7c?method=download&amp;shareKey=c427b280fd6acb79572bce4b75534825" alt=""></p>
+<p>根据上图知道，除以常量0是无法编译通过的。这一点，还是比较令人安心。</p>
+<h3 id="除以整形0">除以整形0</h3>
+<p><img src="https://note.youdao.com/yws/api/personal/file/WEBe2ebdbd291cf28a74e5679d086ce5741?method=download&amp;shareKey=2692f8421bd841e780f4c163cf7017da" alt=""></p>
+<p>根据上图知，除以整形0会发生panic。这一点，在平时的开发中还需格外注意。</p>
+<h3 id="除以浮点数0">除以浮点数0</h3>
+<p>除以浮点数0，情况会略微复杂。请看下代码和输出结果。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">var</span> <span style="color:#a6e22e">zero</span> = float64(<span style="color:#ae81ff">0</span>)
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#ae81ff">1024</span> <span style="color:#f92672">/</span> <span style="color:#a6e22e">zero</span>) <span style="color:#75715e">// 输出：+Inf
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#f92672">-</span><span style="color:#ae81ff">1024</span> <span style="color:#f92672">/</span> <span style="color:#a6e22e">zero</span>) <span style="color:#75715e">// 输出：-Inf
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#ae81ff">0</span> <span style="color:#f92672">/</span> <span style="color:#a6e22e">zero</span>) <span style="color:#75715e">// NaN
+</span></span></span></code></pre></div><p>上面输出中<code>Inf</code>为单词<code>infinity</code>的缩写，该单词含义为无穷，因此<code>+Inf</code>和<code>-Inf</code>分别表示正无穷和负无穷。</p>
+<p><code>NaN</code>意味着<code>not a number</code>，即结果不是一个数。</p>
+<p>到这里，老许不得不感叹浮点数确实博大精深，在Go里面除以0确实不会panic（经过老许验证，在python里面会发生错误）。另外，上述中<code>0/zero</code>得到<code>NaN</code>，而整形中0除以0依旧会panic。</p>
+<h2 id="inf值">±Inf值</h2>
+<h3 id="判断是否是inf">判断是否是±Inf</h3>
+<p>前面通过正数和负数分别除以浮点数0可到正无穷和负无穷。Go里面<code>math</code>包提供的<code>Inf</code>函数也可以得到正无穷和负无穷，同时还提供了<code>IsInf</code>函数用于判断是正无穷还是负无穷。</p>
+<p><code>math.Inf</code>函数签名为<code>func(int) float64</code>，当传入的参数大于等于0时返回正无穷，否则返回负无穷。</p>
+<p><code>math.IsInf</code>函数签名为<code>func(float64, int) bool</code>，第一个参数为待判断的值，第二个参数大于0时，返回第一个参数是否为正无穷，第二个参数小于0时，返回第一个参数是否为负无穷，第二个参数等于0时，返回第一个参数是否为无穷。</p>
+<p>具体验证，请看下面代码和输出。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#a6e22e">positiveInf</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">math</span>.<span style="color:#a6e22e">Inf</span>(<span style="color:#ae81ff">1</span>)
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">negativeInf</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">math</span>.<span style="color:#a6e22e">Inf</span>(<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>)
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// 判断是否为正无穷
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">math</span>.<span style="color:#a6e22e">IsInf</span>(<span style="color:#a6e22e">positiveInf</span>, <span style="color:#ae81ff">1</span>)) <span style="color:#75715e">// 输出：true
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// 判断是否为负无穷
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">math</span>.<span style="color:#a6e22e">IsInf</span>(<span style="color:#a6e22e">negativeInf</span>, <span style="color:#ae81ff">1</span>)) <span style="color:#75715e">// 输出：false
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// 判断是否为正无穷
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">math</span>.<span style="color:#a6e22e">IsInf</span>(<span style="color:#a6e22e">positiveInf</span>, <span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>)) <span style="color:#75715e">// 输出：false
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// 判断是否为负无穷
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">math</span>.<span style="color:#a6e22e">IsInf</span>(<span style="color:#a6e22e">negativeInf</span>, <span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>)) <span style="color:#75715e">// 输出：true
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// 判断是否为无穷
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">math</span>.<span style="color:#a6e22e">IsInf</span>(<span style="color:#a6e22e">positiveInf</span>, <span style="color:#ae81ff">0</span>)) <span style="color:#75715e">// 输出：true
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// 判断是否为无穷
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">math</span>.<span style="color:#a6e22e">IsInf</span>(<span style="color:#a6e22e">negativeInf</span>, <span style="color:#ae81ff">0</span>)) <span style="color:#75715e">// 输出：true
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// 判断是否为无穷
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">math</span>.<span style="color:#a6e22e">IsInf</span>(<span style="color:#ae81ff">1024</span>, <span style="color:#ae81ff">0</span>)) <span style="color:#75715e">// 输出：false
+</span></span></span></code></pre></div><h3 id="inf的比较">±Inf的比较</h3>
+<p>正无穷和负无穷输出结果和我们平时看到数值类型迥然不同，而且也无法直接将<code>±Inf</code>直接赋值给一个浮点类型的变量，那么他们是否可以参与数值之间的比较呢，请看下面代码和输出。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#a6e22e">positiveInf</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">math</span>.<span style="color:#a6e22e">Inf</span>(<span style="color:#ae81ff">1</span>)
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">negativeInf</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">math</span>.<span style="color:#a6e22e">Inf</span>(<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>)
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// 判断正无穷是否可以和自身比较
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">positiveInf</span> <span style="color:#f92672">==</span> <span style="color:#a6e22e">positiveInf</span>) <span style="color:#75715e">// 输出：true
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// 判断负无穷是否可以和自身比较
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">negativeInf</span> <span style="color:#f92672">==</span> <span style="color:#a6e22e">negativeInf</span>) <span style="color:#75715e">// 输出：true
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// 判断正无穷是否大于正数
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">positiveInf</span> &gt; <span style="color:#a6e22e">math</span>.<span style="color:#a6e22e">MaxFloat64</span>) <span style="color:#75715e">// 输出：true
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// 判断负无穷是否小于正数
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">negativeInf</span> &lt; <span style="color:#f92672">-</span><span style="color:#a6e22e">math</span>.<span style="color:#a6e22e">MaxFloat64</span>) <span style="color:#75715e">// 输出：true
+</span></span></span></code></pre></div><p>根据输出结果知，正负无穷可以比较，且表示的值确实暗合无穷这一数学意义。</p>
+<h2 id="nan值">NaN值</h2>
+<h3 id="判断是否是nan">判断是否是NaN</h3>
+<p>在这里加深一下生成<code>NaN</code>值的印象，浮点数零相除即可得到<code>NaN</code>值。同样，<code>math</code>包提供了<code>NaN</code>函数和<code>IsNaN</code>函数分别用于返回一个<code>NaN</code>值和判断一个浮点数是否为<code>NaN</code>。</p>
+<p>请看下面代码和输出。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#a6e22e">nan</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">math</span>.<span style="color:#a6e22e">NaN</span>()
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">math</span>.<span style="color:#a6e22e">IsNaN</span>(<span style="color:#a6e22e">nan</span>))  <span style="color:#75715e">// 输出：true
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">math</span>.<span style="color:#a6e22e">IsNaN</span>(<span style="color:#ae81ff">10.2</span>)) <span style="color:#75715e">// 输出：false
+</span></span></span></code></pre></div><p>其他可生成NaN值的情况：</p>
+<ol>
+<li>任何与NaN一起的运算结果都为NaN</li>
+<li>如果<code>x &lt; -1 || x &gt; 1</code>，则<code>math.Acos(x)</code>、<code>math.Asin(x)</code>、<code>math.Atanh(x)</code>均返回NaN</li>
+<li>如果<code>x &lt; 1</code>，则<code>math.Acosh(x)</code>返回NaN</li>
+<li>如果<code>x &lt; 0</code>，则<code>math.Sqrt(x)</code>返回NaN</li>
+</ol>
+<blockquote>
+<p>应该还有其他返回NaN的情况，老许就不一一总结了。</p>
+</blockquote>
+<h3 id="nan的比较">NaN的比较</h3>
+<p>根据静态检查的提示“<code>no value is equal to NaN, not even NaN itself</code>”，没有值等于<code>NaN</code>甚至于它自己都不是它自己。为了做更进一步的验证，我们看下面代码和输出。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#a6e22e">nan</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">math</span>.<span style="color:#a6e22e">NaN</span>()
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">positiveInf</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">math</span>.<span style="color:#a6e22e">Inf</span>(<span style="color:#ae81ff">1</span>)
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">negativeInf</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">math</span>.<span style="color:#a6e22e">Inf</span>(<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>)
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">nan</span> <span style="color:#f92672">==</span> <span style="color:#a6e22e">nan</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">nan</span> &gt; <span style="color:#ae81ff">1024</span>) <span style="color:#75715e">// 输出：false
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">nan</span> &lt; <span style="color:#ae81ff">1024</span>) <span style="color:#75715e">// 输出：false
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">nan</span> <span style="color:#f92672">==</span> <span style="color:#ae81ff">1024</span>) <span style="color:#75715e">// 输出：false
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">nan</span> &gt; <span style="color:#a6e22e">positiveInf</span>) <span style="color:#75715e">// 输出：false
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">nan</span> &lt; <span style="color:#a6e22e">negativeInf</span>) <span style="color:#75715e">// 输出：false
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">nan</span> <span style="color:#f92672">==</span> <span style="color:#a6e22e">positiveInf</span>) <span style="color:#75715e">// 输出：false
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">nan</span> <span style="color:#f92672">==</span> <span style="color:#a6e22e">negativeInf</span>) <span style="color:#75715e">// 输出：false
+</span></span></span></code></pre></div><p>确实，如提示所说，<code>NaN</code>不等于它自己，且它和任何值比较时都为<code>false</code>。由于<code>NaN</code>的特殊性，所以在实际开发中我们一定要注意边界值的处理。</p>
+<h2 id="写在最后">写在最后</h2>
+<p>本文主要讲解了除以常量<code>0</code>、整形<code>0</code>和浮点数<code>0</code>的各种情况，以及对<code>±Inf</code>和<code>NaN</code>的可比性做了分析。下面是一张各种值是否可比的对照表。</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">是否可比</th>
+<th style="text-align:left">+Inf</th>
+<th style="text-align:left">-Inf</th>
+<th style="text-align:left">NaN</th>
+<th style="text-align:left">Number</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">+Inf</td>
+<td style="text-align:left">Y</td>
+<td style="text-align:left">Y</td>
+<td style="text-align:left">N</td>
+<td style="text-align:left">Y</td>
+</tr>
+<tr>
+<td style="text-align:left">-Inf</td>
+<td style="text-align:left">Y</td>
+<td style="text-align:left">Y</td>
+<td style="text-align:left">N</td>
+<td style="text-align:left">Y</td>
+</tr>
+<tr>
+<td style="text-align:left">Nan</td>
+<td style="text-align:left">N</td>
+<td style="text-align:left">N</td>
+<td style="text-align:left">N</td>
+<td style="text-align:left">N</td>
+</tr>
+<tr>
+<td style="text-align:left">Number</td>
+<td style="text-align:left">Y</td>
+<td style="text-align:left">Y</td>
+<td style="text-align:left">N</td>
+<td style="text-align:left">Y</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>这里说的不可比主要指NaN和任何值比较都返回false</p>
+</blockquote>
+<p>最后，衷心希望本文能够对各位读者有一定的帮助。</p>
+<p>【关注公众号】</p>
+<p><img src="https://note.youdao.com/yws/api/personal/file/WEBa3ee67b2b867e98cb5c587f4adfa6801?method=download&amp;shareKey=0fbb95d0aec6170b854e7b890d50d559" alt=""></p>
+
+      </div>
+    </article>
+
+    <hr />
+
+    <div class="post-info">
+        <p>
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-tag meta-icon">
+            <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path>
+            <line x1="7" y1="7" x2="7" y2="7"></line>
+          </svg><span class="tag"><a href="https://isites.gitlab.io/gopher/tags/go/">Go</a></span>
+        </p>
+
+      <p>
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file-text">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+          <polyline points="14 2 14 8 20 8"></polyline>
+          <line x1="16" y1="13" x2="8" y2="13"></line>
+          <line x1="16" y1="17" x2="8" y2="17"></line>
+          <polyline points="10 9 9 9 8 9"></polyline>
+        </svg>
+        246 Words
+      </p>
+
+      <p>
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-calendar">
+          <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+          <line x1="16" y1="2" x2="16" y2="6"></line>
+          <line x1="8" y1="2" x2="8" y2="6"></line>
+          <line x1="3" y1="10" x2="21" y2="10"></line>
+        </svg>
+        2022-03-08 08:48 &#43;0800
+      </p>
+ 
+    </div>
+
+    
+      <div class="pagination">
+        <div class="pagination__title">
+          <span class="pagination__title-h"></span>
+          <hr />
+        </div>
+
+        <div class="pagination__buttons">
+          
+
+          
+            <span class="button next">
+              <a href="https://isites.gitlab.io/gopher/timeline/go-ja3/">
+                <span class="button__text">用Go构建你专属的JA3指纹</span>
+                <span class="button__icon">→</span>
+              </a>
+            </span>
+          
+        </div>
+      </div>
+    
+
+
+    
+
+  </main>
+
+            </div>
+
+            
+                <footer class="footer">
+    <div class="footer__inner">
+        <div class="footer__content">
+            <span>&copy; 2022</span>
+            
+             
+        </div>
+    </div> 
+</footer>
+<script type="text/javascript">
+    $(function(){
+
+  window.sr = ScrollReveal();
+
+  if ($(window).width() < 768) {
+
+    if ($('.timeline-content').hasClass('js--fadeInLeft')) {
+        $('.timeline-content').removeClass('js--fadeInLeft').addClass('js--fadeInRight');
+    }
+
+    sr.reveal('.js--fadeInRight', {
+        origin: 'right',
+        distance: '300px',
+        easing: 'ease-in-out',
+        duration: 800,
+      });
+
+  } else {
+    
+    sr.reveal('.js--fadeInLeft', {
+        origin: 'left',
+        distance: '300px',
+          easing: 'ease-in-out',
+        duration: 800,
+      });
+
+      sr.reveal('.js--fadeInRight', {
+        origin: 'right',
+        distance: '300px',
+        easing: 'ease-in-out',
+        duration: 800,
+      });
+
+  }
+  
+  sr.reveal('.js--fadeInLeft', {
+        origin: 'left',
+        distance: '300px',
+          easing: 'ease-in-out',
+        duration: 800,
+      });
+
+      sr.reveal('.js--fadeInRight', {
+        origin: 'right',
+        distance: '300px',
+        easing: 'ease-in-out',
+        duration: 800,
+      });
+
+
+});
+
+</script>
+            
+        </div>
+
+        
+
+
+
+
+<script type="text/javascript" src="/gopher/bundle.min.e2a9675ced043d06ad6d3f13fafb0203d96c89eb2484878d5eb89d6da19559cbed55fb05ca9eae7be1e975cab83e3b2a1193afc357019620a509327c5a6a9c0f.js" integrity="sha512-4qlnXO0EPQatbT8T&#43;vsCA9lsieskhIeNXridbaGVWcvtVfsFyp6ue&#43;Hpdcq4PjsqEZOvw1cBliClCTJ8WmqcDw=="></script>
+
+
+    
+        <script src="/js/bd-hm.js"></script>
+    
+
+
+    </body>
+</html>
