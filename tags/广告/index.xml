@@ -2,17 +2,17 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>广告 on Gopher指北</title>
-    <link>https://isites.github.io/tags/%E5%B9%BF%E5%91%8A/</link>
+    <link>https://isites.gitlab.io/gopher/tags/%E5%B9%BF%E5%91%8A/</link>
     <description>Recent content in 广告 on Gopher指北</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sat, 30 Oct 2021 12:20:38 +0800</lastBuildDate><atom:link href="https://isites.github.io/tags/%E5%B9%BF%E5%91%8A/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sat, 30 Oct 2021 12:20:38 +0800</lastBuildDate><atom:link href="https://isites.gitlab.io/gopher/tags/%E5%B9%BF%E5%91%8A/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>浅谈在线广告分配策略</title>
-      <link>https://isites.github.io/timeline/ad-msvv/</link>
+      <link>https://isites.gitlab.io/gopher/timeline/ad-msvv/</link>
       <pubDate>Sat, 30 Oct 2021 12:20:38 +0800</pubDate>
       
-      <guid>https://isites.github.io/timeline/ad-msvv/</guid>
+      <guid>https://isites.gitlab.io/gopher/timeline/ad-msvv/</guid>
       <description>在线广告，也称网络广告、互联网广告，顾名思义，指的是在线媒体上投放的广告。平时我们在刷信息流、短视频、新闻和微博均可以看见它的影子。对于比较大的广告平台，用户定向后依旧会有大量的广告可以下发，而从大量的广告中选择合适的广告展现给用户就是本篇要讨论的主题——在线广告分配策略。
 名词描述 为了更好的理解本文，先提前做一些名词描述。
 eCPM(Effective Cost Per Mille): 指的是每一千次展示可以获得的广告收入。此指标反映盈利能力，不代表实际收入。不同的广告主会选择CPC、CPM等不同出价方式，因此广告分配时无法以纯粹的出价进行比较，所以才有了ecpm这一指标用于评估不同出价方式的广告可以给广告平台带来的收益。
