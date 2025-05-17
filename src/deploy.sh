@@ -17,6 +17,8 @@ sed -i "" 's,BASE_URL,https://isites.github.io/,g' config.toml
 rm -rf ../categories ../fonts ../tags ../timeline ../js
 mv public/* ../
 
+cp ads.txt ../
+
 rm -rf public
 
 cd ..
